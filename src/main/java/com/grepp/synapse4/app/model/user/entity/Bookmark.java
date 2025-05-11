@@ -1,30 +1,29 @@
-package com.grepp.synapse4.app.model.llm.entity;
+package com.grepp.synapse4.app.model.user.entity;
 
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
-import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.infra.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @ToString
-public class LLMResult extends BaseEntity {
-
+public class Bookmark extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "llm_result_id")
+    @Column(name = "bookmark_id")
     private Long id;
-    private String reason;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "llm_question_id")
-    private LLMQuestion lLMQuestion;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id")
+    @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 }

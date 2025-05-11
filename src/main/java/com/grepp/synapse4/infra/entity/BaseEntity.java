@@ -11,14 +11,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
     
-    protected Boolean activated = true;
+//    protected Boolean activated = true;
     
     @CreatedDate
     protected LocalDateTime createdAt = LocalDateTime.now();
-    @LastModifiedDate
-    protected LocalDateTime modifiedAt = LocalDateTime.now();
-    
-    public void unActivated(){
-        this.activated = false;
-    }
+
 }

@@ -1,4 +1,4 @@
-package com.grepp.synapse4.app.model.llm.entity;
+package com.grepp.synapse4.app.model.meeting.entity.vote;
 
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import com.grepp.synapse4.app.model.user.entity.User;
@@ -10,21 +10,24 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@ToString
-public class LLMResult extends BaseEntity {
+@Getter @ToString
+public class VoteMember extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "llm_result_id")
+    @GeneratedValue
+    @Column(name = "vote_member_id")
     private Long id;
-    private String reason;
+    private Boolean isVoted;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "llm_question_id")
-    private LLMQuestion lLMQuestion;
+    @ManyToOne
+    @JoinColumn(name = "vote_id")
+    private Vote meetingVote;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
