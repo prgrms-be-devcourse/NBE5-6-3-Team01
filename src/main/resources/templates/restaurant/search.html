@@ -3,25 +3,31 @@
       layout:decorate="~{layout}">
 <head>
   <meta charset="UTF-8">
-  <title>식당 검색</title>
+  <title>식당 리스트</title>
+  <link rel="stylesheet" href="/css/restaurantList.css">
 </head>
 <body>
 <main layout:fragment="content">
-  <h1>식당 검색</h1>
-  <p>결과 화면입니다.</p>
 
-  <div th:if="${not #lists.isEmpty(results)}">
-    <ul>
-      <li th:each="res : ${results}" class="border p-2 rounded margin-bottom">
-        <a th:href="@{/search/detail/{id}(id=${res.id})}">
-        <p><strong th:text="${res.name}">식당명</strong></p>
-        <p th:text="${res.roadAddress}">주소</p>
-        <p th:text="${res.businessTime}">영업시간</p>
-        </a>
-      </li>
-    </ul>
+  <p class="restaurant-title">🍽️ 식당 검색 결과</p>
+
+  <div th:if="${#lists.isEmpty(results)}" class="no-result">
+    검색 결과가 없습니다.
   </div>
-
+  <ul th:if="${not #lists.isEmpty(results)}" class="restaurant-list">
+  <ul class="restaurant-list">
+    <li th:each="res : ${results}" class="restaurant-card">
+      <a th:href="@{/search/detail/{id}(id=${res.id})}">
+        <div>
+          <span class="restaurant-name" th:text="${res.name}">식당명</span>
+          <span class="restaurant-branch" th:text="${res.branch}">지점명</span>
+          <span class="restaurant-category" th:text="${res.category}">한식</span>
+        </div>
+        <p class="restaurant-time" th:text="${res.businessTime}">영업시간</p>
+        <p class="restaurant-address" th:text="${res.roadAddress}">주소</p>
+      </a>
+    </li>
+  </ul>
 </main>
 </body>
 </html>

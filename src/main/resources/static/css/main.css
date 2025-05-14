@@ -1,0 +1,44 @@
+/* 제목 */
+.main-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #111;
+    margin-top: 30px;
+    margin-bottom: 24px;
+}
+
+/* 검색 바 */
+.search {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    max-width: 600px;
+}
+
+.search input[type="text"] {
+    flex: 1;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.search button {
+    background-color: #7F56D9;
+    color: white;
+    height: 66px;
+    padding: 10px 16px;
+    border: none;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+
+    /* 부드러운 전환 효과 */
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+}
+
+.search button:hover {
+    background-color: #6941C6;           /* 살짝 어두운 파란색 */
+    /*box-shadow: 0 4px 12px rgba(0, 95, 163, 0.3);  !* 약한 그림자 *!*/
+    transform: translateY(-1px);         /* 살짝 위로 뜨는 느낌 */
+}
