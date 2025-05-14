@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>식당 검색</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <h1>식당 검색</h1>
+  <p>결과 화면입니다.</p>
+
+  <div th:if="${not #lists.isEmpty(results)}">
+    <ul>
+      <li th:each="res : ${results}" class="border p-2 rounded margin-bottom">
+        <a th:href="@{/search/detail/{id}(id=${res.id})}">
+        <p><strong th:text="${res.name}">식당명</strong></p>
+        <p th:text="${res.roadAddress}">주소</p>
+        <p th:text="${res.businessTime}">영업시간</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>식당 검색</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <h1>식당 검색</h1>
+  <p>서버는 정상 작동 중입니다 🚀
+  <form method="get" action="/search/result" class="mb-6 flex space-x-2">
+    <input type="text" name="restaurantKeyword" placeholder="식당명 입력"
+           class="border p-2 rounded w-full">
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+      검색
+    </button>
+  </form>
+</main>
+</body>
+</html>
