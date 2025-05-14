@@ -2,16 +2,17 @@ package com.grepp.synapse4.app.model.restaurant.entity;
 
 import com.grepp.synapse4.infra.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @DynamicInsert
 @Getter
 @ToString
+@NoArgsConstructor
 public class Restaurant extends BaseEntity {
 
     @Id
@@ -19,21 +20,58 @@ public class Restaurant extends BaseEntity {
     @Column(name = "restaurant_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "restaurant_name")
     private String name;
 
-    @Column(nullable = false) //공공이 df일 때 사용
-    private String location;
+    @Column(name = "branch")
+    private String branch;
+
+    @Column(name = "restaurant_road_address")
+    private String roadAddress;
+
+    @Column(name = "restaurant_jibun_address")
+    private String jibunAddress;
 
     @Column(nullable = false)
-    private String address;
+    private Double latitude;
 
     @Column(nullable = false)
-    private String latitude;
+    private Double longitude;
 
+    @Column
+    private String category;
+
+    @Setter
     @Column(nullable = false)
-    private String longitude;
+    @ColumnDefault("false")
+    private Boolean activated = false;
 
+    @Setter
     private String kakaoId;
+
     private String publicId;
+
+    @Setter
+    @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private RestaurantDetail detail;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<RestaurantMenu> menus;
+
+    @Builder
+    public Restaurant(Long id, String name, String branch, String roadAddress, String jibunAddress, Double latitude, Double longitude, String category, Boolean activated, String publicId, String kakaoId, RestaurantDetail detail) {
+        this.id = id;
+        this.name = name;
+        this.branch = branch;
+        this.roadAddress = roadAddress;
+        this.jibunAddress = jibunAddress;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.category = category;
+        this.activated = activated;
+        this.publicId = publicId;
+        this.kakaoId = kakaoId;
+        this.detail = detail;
+    }
+
 }
