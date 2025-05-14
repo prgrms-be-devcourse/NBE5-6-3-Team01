@@ -4,13 +4,19 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </head>
 <body>
-<div class="flex">
-  <th:block th:replace="~{fragments :: frg_sidenav}" />
+<div class="flex w-full">
+  <div class="w-1/12">
+    <th:block th:replace="~{fragments :: frg_sidenav}" />
+  </div>
 
-  <main layout:fragment="content" class="flex-1 p-6">
+  <main layout:fragment="content" class="w-11/12">
+
   </main>
 </div>
+
 </body>
 </html>

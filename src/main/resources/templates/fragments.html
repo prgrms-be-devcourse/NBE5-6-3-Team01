@@ -1,63 +1,60 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 <th:block th:fragment="frg_sidenav">
-  <div class="flex">
-    <!-- 사이드바 -->
-    <aside class="w-20 bg-gray-200 min-h-screen flex flex-col items-center py-4">
+    <aside class="p-2 w-24 bg-gray-200 min-h-screen flex flex-col items-center py-10">
 
-      <!-- 상단: 로고 -->
-      <div class="mb-6">
-        <button class="w-[62px] h-[52px] p-[10px] flex flex-col items-center justify-center space-y-1 hover:bg-gray-300 rounded">
-          <span class="text-xl">밥로드</span>
-        </button>
-      </div>
+        <!-- 로고 -->
+        <div class="mb-12">
+            <a href="/" class="flex flex-col text-black items-center justify-center">
+                <span class="text-xl">밥로드</span>
+            </a>
+        </div>
 
-      <!-- 가운데: 메뉴 아이콘들 -->
-      <div class="flex flex-col items-center space-y-4 flex-grow">
-        <button class="w-[62px] h-[52px] p-[10px] flex flex-col items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-          <img src="/img/search.png" alt="검색" class="w-6 h-6" />
-          <span class="text-xs">검색</span>
-        </button>
-        <button class="w-[62px] h-[52px] p-[10px] flex flex-col items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-          <img src="/img/curation.png" alt="큐레이팅" class="w-6 h-6" />
-          <span class="text-xs">큐레이팅</span>
-        </button>
-        <button class="w-[62px] h-[52px] p-[10px] flex flex-col items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-          <img src="/img/llm.png" alt="LLM 추천" class="w-6 h-6" />
-          <span class="text-xs">LLM 추천</span>
-        </button>
-        <button class="w-[62px] h-[52px] p-[10px] flex flex-col items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-          <img src="/img/meeting.png" alt="모임" class="w-6 h-6" />
-          <span class="text-xs">모임</span>
-        </button>
-        <button class="w-[62px] h-[52px] p-[10px] flex flex-col items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-          <img src="/img/bookmark.png" alt="북마크" class="w-6 h-6" />
-          <span class="text-xs">북마크</span>
-        </button>
-        <button class="w-[62px] h-[52px] p-[10px] flex flex-col items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-          <img src="/img/ranking.png" alt="랭킹" class="w-6 h-6" />
-          <span class="text-xs">랭킹</span>
-        </button>
-      </div>
+        <!-- 메뉴 아이콘들 -->
+        <div class="flex flex-col items-center space-y-3 flex-grow w-full">
+            <a href="/search" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+                <img src="/img/search.png" alt="검색" class="w-5 h-5" />
+                <span class="text-xs">검색</span>
+            </a>
+            <a href="/curation" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+                <img src="/img/curation.png" alt="큐레이팅" class="w-6 h-6" />
+                <span class="text-xs">큐레이팅</span>
+            </a>
+            <a href="/recommend" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+                <img src="/img/llm.png" alt="LLM 추천" class="w-6 h-6" />
+                <span class="text-xs">LLM 추천</span>
+            </a>
+            <a href="/meetings" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+                <img src="/img/meeting.png" alt="모임" class="w-6 h-6" />
+                <span class="text-xs">모임</span>
+            </a>
+            <a href="/bookmarks" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+                <img src="/img/bookmark.png" alt="북마크" class="w-6 h-6" />
+                <span class="text-xs">북마크</span>
+            </a>
+            <a href="/ranking" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+                <img src="/img/ranking.png" alt="랭킹" class="w-6 h-6" />
+                <span class="text-xs">랭킹</span>
+            </a>
+        </div>
 
-      <!-- 하단: 로그아웃, 마이페이지 -->
-      <div class="flex flex-col items-center space-y-4 mt-auto">
-        <button class="w-[62px] h-[52px] p-[10px] flex flex-col items-center justify-center space-y-1 hover:bg-gray-300 rounded">
-          <img src="/img/logout.png" alt="로그아웃" class="w-6 h-6" />
-        </button>
-        <button class="w-[62px] h-[52px] p-[10px] flex flex-col items-center justify-center space-y-1 hover:bg-gray-300 rounded">
-          <img src="/img/mypage.png" alt="마이페이지" class="w-6 h-6" />
-        </button>
-      </div>
+        <!-- 로그아웃, 마이페이지 -->
+        <div class="flex flex-col items-center space-y-6 mt-auto">
+            <button class="flex flex-col items-center justify-center space-y-1">
+                <img src="/img/logout.png" alt="로그아웃" class="w-6 h-6"/>
+            </button>
+            <button class="flex flex-col items-center justify-center space-y-1">
+                <img src="/img/mypage.png" alt="마이페이지" class="w-6 h-6"/>
+            </button>
+        </div>
 
     </aside>
-  </div>
 </th:block>
 </body>
 </html>
