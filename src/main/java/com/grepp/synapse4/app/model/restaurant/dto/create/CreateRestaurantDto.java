@@ -1,5 +1,6 @@
 package com.grepp.synapse4.app.model.restaurant.dto.create;
 
+import com.grepp.synapse4.app.model.restaurant.dto.MenuDto;
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import com.grepp.synapse4.app.model.restaurant.entity.RestaurantDetail;
 import com.opencsv.bean.CsvBindByName;
@@ -44,14 +45,10 @@ public class CreateRestaurantDto {
     private String kakaoId;
 
 
+    @Getter
+    @Setter
     private List<MenuDto> menus;
 
-    private static class MenuDto {
-        private String name;
-        private Integer price;
-
-        private List<String> imageURLs;
-    }
 
     public Restaurant toEntity() {
         return Restaurant.builder()

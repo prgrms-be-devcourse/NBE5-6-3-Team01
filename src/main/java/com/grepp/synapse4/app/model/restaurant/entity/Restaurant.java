@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -55,8 +56,9 @@ public class Restaurant extends BaseEntity {
     @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private RestaurantDetail detail;
 
+    @Setter
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
-    private List<RestaurantMenu> menus;
+    private List<RestaurantMenu> menus = new ArrayList<>();
 
     @Builder
     public Restaurant(Long id, String name, String branch, String roadAddress, String jibunAddress, Double latitude, Double longitude, String category, Boolean activated, String publicId, String kakaoId, RestaurantDetail detail) {

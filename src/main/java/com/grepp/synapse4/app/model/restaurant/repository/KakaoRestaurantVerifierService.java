@@ -28,12 +28,14 @@ public class KakaoRestaurantVerifierService {
                     restaurant.getName(),
                     restaurant.getLatitude(),
                     restaurant.getLongitude()
+//                    restaurant.getDetail().getHomePageURL()
             );
 
             kakaoSearchService.search(requestDto).ifPresent(kakaoPlace -> {
                 if (isSimilar(restaurant.getName(), kakaoPlace.getPlace_name())){
                     restaurant.setActivated(true);
                     restaurant.setKakaoId(kakaoPlace.getId());
+//                    restaurant.getDetail().setHomePageURL(kakaoPlace.getPlace_url());
                 }
             });
         }

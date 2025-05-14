@@ -2,9 +2,12 @@ package com.grepp.synapse4.app.model.restaurant.repository;
 
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
@@ -15,4 +18,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     List<Restaurant> findByActivatedFalse();
 
     List<Restaurant> findByNameContainingAndActivatedIsTrue(String restaurantKeyword);
+
+    @Query("select r from Restaurant r left join fetch r.menus where r.id = :id")
+    Optional<Restaurant> findWithMenusById(@Param("id")Long id);
 }

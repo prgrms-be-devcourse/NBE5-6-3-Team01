@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +27,7 @@ public class RestaurantSearchService {
                 .collect(Collectors.toList());
     }
 
-    public Restaurant findById(Long id) {
-        return restaurantRepository.findById(id).orElse(null);
+    public Optional<Restaurant> findById(Long id) {
+        return restaurantRepository.findById(id);
     }
 }

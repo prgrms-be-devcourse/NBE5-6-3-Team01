@@ -14,5 +14,6 @@ public class KakaoSearchRequestDto {
     private String query;
     private Double latitude;
     private Double longitude;
+//    private String url;
 
 }

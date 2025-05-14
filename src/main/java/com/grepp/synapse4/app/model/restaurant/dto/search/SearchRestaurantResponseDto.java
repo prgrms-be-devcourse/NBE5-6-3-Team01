@@ -19,6 +19,7 @@ public class SearchRestaurantResponseDto {
     private String businessTime;
     private String dayOff;
     private String tel;
+    private String branch;
 
     // todo menu db 붙이고 엮기
 //    private List<MenuDto> menus;
@@ -33,7 +34,8 @@ public class SearchRestaurantResponseDto {
                 restaurant.getRoadAddress(),
                 restaurant.getDetail().getRowBusinessTime(),
                 restaurant.getDetail().getDayOff(),
-                restaurant.getDetail().getTel()
+                restaurant.getDetail().getTel(),
+                restaurant.getBranch()
         );
     }
 
