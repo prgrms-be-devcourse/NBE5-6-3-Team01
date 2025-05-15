@@ -21,9 +21,6 @@ public class SearchRestaurantResponseDto {
     private String tel;
     private String branch;
 
-    // todo menu db 붙이고 엮기
-//    private List<MenuDto> menus;
-
     public static SearchRestaurantResponseDto fromEntity(Restaurant restaurant) {
         return new SearchRestaurantResponseDto(
                 restaurant.getId(),

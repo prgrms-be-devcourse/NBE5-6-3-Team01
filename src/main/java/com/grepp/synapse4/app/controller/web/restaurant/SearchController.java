@@ -37,6 +37,7 @@ public class SearchController {
         Restaurant restaurant = restaurantRepository.findWithMenusById(id)
                 .orElseThrow(() -> new IllegalArgumentException("식당 없음"));
 
+        // 메뉴 가장 비싼 메뉴 상위 3개만 노출
         List<RestaurantMenu> topMenus = restaurant.getMenus().stream()
                         .sorted((a, b) -> b.getPrice() - a.getPrice())
                                 .limit(3)
