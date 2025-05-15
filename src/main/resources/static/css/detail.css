@@ -1,5 +1,11 @@
+.restaurant-info {
+    margin-right: 30px;
+
+}
+
 .main-main {
     margin-top: 30px;
+    height: 40px;
 }
 
 .main-title {
@@ -49,13 +55,22 @@
 
 
 
+/*.action-buttons {*/
+/*    display: flex;*/
+/*    border-top: 1px solid #eee;*/
+/*    border-bottom: 1px solid #eee;*/
+/*    padding: 16px 0;*/
+/*    margin-bottom: 24px;*/
+/*    justify-content: space-between;*/
+/*}*/
+
 .action-buttons {
     display: flex;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
-    padding: 16px 0;
-    margin-bottom: 24px;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 40px;
+    margin: 20px 0;
 }
 
 .action-item {
@@ -64,14 +79,25 @@
     font-size: 14px;
     color: #333;
     cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.action-item i {
-    display: block;
-    font-size: 24px;
-    margin-bottom: 4px;
-    color: #444;
+.action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
 }
+
+
+.action-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    margin-bottom: 4px;
+}
+
 
 .info-section {
     margin-bottom: 32px;
@@ -81,6 +107,10 @@
     margin: 6px 0;
     font-size: 15px;
     color: #444;
+}
+
+.info-section a {
+    word-break: break-all;
 }
 
 .info-section i {
@@ -109,12 +139,16 @@
     text-align: center;
 }
 
-.menu-image {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    background-color: #ddd;
+.none-menu-card{
+    width: 450px;
+    height: 93px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .menu-name {
@@ -128,3 +162,4 @@
     color: #777;
     margin-top: 2px;
 }
+
