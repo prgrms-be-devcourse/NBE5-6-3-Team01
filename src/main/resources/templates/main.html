@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>식당 검색</title>
@@ -8,6 +8,13 @@
 </head>
 <body>
 <main layout:fragment="content">
+
+  <!-- 로그인한 사용자 정보 확인용 -->
+  <div sec:authorize="isAuthenticated()">
+    <span class="text-sm font-semibold">
+      <span th:text="${#authentication.principal.user.nickname}">닉네임</span> 님 환영합니다!
+    </span>
+  </div>
 
   <p class="main-title">🍽️ 식당 검색</p>
 

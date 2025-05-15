@@ -1,62 +1,158 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layout}" th:with="contentClass='w-full'">
+
 <head>
     <meta charset="UTF-8">
     <title>식당 상세</title>
     <link rel="stylesheet" href="/css/detail.css">
+    <style>
+        main[layout\:fragment="content"] {
+            width: 100% !important;
+        }
+    </style>
+
+
 </head>
 <body>
-<main layout:fragment="content" class="detail-container">
-    <!-- 식당 이름 -->
-    <span class="main-title" th:text="${restaurant.name}">식당명</span>
-    <span class="main-branch" th:text="${restaurant.branch}">지점명</span>
-    <br>
-    <span class="category-list" th:text="${restaurant.category}">카테고리</span>
+<main layout:fragment="content">
+    <!-- 지도를 표시할 div 입니다 -->
+    <div style="display: flex;">
+        <div style="width: 35%;"> <!-- 왼쪽 상세 정보 -->
 
-    <!-- 버튼 영역 -->
-    <div class="action-buttons">
-        <div class="action-item">
-            <span>위치 보기</span>
-        </div>
-        <div class="action-item">
-            <span>북마크</span>
-        </div>
-        <div class="action-item">
-            <span>공유하기</span>
-        </div>
-    </div>
+            <!-- 식당 이름 -->
+            <div class="main-main">
+            <span class="main-title" th:text="${restaurant.name}">식당명</span>
+            <span class="main-branch" th:text="${restaurant.branch}">지점명</span>
+            <span class="category-list" th:text="${restaurant.category}">카테고리</span>
 
-    <!-- 정보 섹션 -->
-    <div class="info-section">
-        <p>주소 | <span th:text="${restaurant.roadAddress}">주소</span></p>
-        <p>영업시간 | <span th:text="${restaurant.detail.rowBusinessTime}">영업시간</span></p>
-        <p>휴무일 | <span th:text="${restaurant.detail.dayOff}">휴무일</span></p>
-        <p>연락처 | <span th:text="${restaurant.detail.tel}">연락처</span></p>
-        <p>홈페이지 | <span th:text="${restaurant.detail.homePageURL}">홈페이지</span></p>
-    </div>
+            </div>
 
-    <!--            <img th:if="${menu.imageUrl != null}" th:src="${menu.imageUrl}" alt="메뉴 이미지" class="menu-image">-->
-
-    <!--     메뉴 섹션-->
-    <div th:if="${topMenus != null and !topMenus.isEmpty()}">
-        <h2 class="menu-title">메뉴</h2>
-        <div class="menu-list">
-            <div th:each="menu : ${topMenus}" class="menu-card">
-                <div class="menu-info">
-                    <p class="menu-name" th:text="${menu.name}">메뉴명</p>
-                    <p class="menu-price" th:text="${#numbers.formatInteger(menu.price, 3, 'COMMA') + '원'}">가격</p>
+            <!-- 버튼 영역 -->
+            <div class="action-buttons">
+                <div class="action-item">
+                    <span>위치 보기</span>
+                </div>
+                <div class="action-item">
+                    <span>북마크</span>
+                </div>
+                <div class="action-item">
+                    <span>공유하기</span>
                 </div>
             </div>
+
+            <!-- 정보 섹션 -->
+            <div class="info-section">
+                <p th:if="${!#strings.isEmpty(restaurant.address)}">
+                    <strong>주소</strong> <span th:text="${restaurant.address}">주소</span>
+                </p>
+                <p th:if="${restaurant.detail != null and !#strings.isEmpty(restaurant.detail.tel)}">
+                    <strong>연락처</strong> <span th:text="${restaurant.detail.tel}">연락처</span>
+                </p>
+                <p th:if="${restaurant.detail != null and !#strings.isEmpty(restaurant.detail.homePageURL)}">
+                    <strong>홈페이지</strong> <span th:text="${restaurant.detail.homePageURL}">홈페이지</span>
+                </p>
+                <p th:if="${restaurant.detail != null and !#strings.isEmpty(restaurant.detail.dayOff)}">
+                    <strong>휴무일</strong> <span th:text="${restaurant.detail.dayOff}">휴무일</span>
+                </p>
+                <p th:if="${restaurant.detail != null and !#strings.isEmpty(restaurant.detail.rowBusinessTime)}">
+                    <strong>영업시간</strong> <span th:text="${restaurant.detail.rowBusinessTime}">영업시간</span>
+                </p>
+            </div>
+
+
+            <!--            <img th:if="${menu.imageUrl != null}" th:src="${menu.imageUrl}" alt="메뉴 이미지" class="menu-image">-->
+
+            <!--     메뉴 섹션-->
+            <div th:if="${topMenus != null and !topMenus.isEmpty()}">
+                <h2 class="menu-title">메뉴</h2>
+                <div class="menu-list">
+                    <div th:each="menu : ${topMenus}" class="menu-card">
+                        <div class="menu-info">
+                            <p class="menu-name" th:text="${menu.name}">메뉴명</p>
+                            <p class="menu-price" th:text="${#numbers.formatInteger(menu.price, 3, 'COMMA') + '원'}">가격</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
+        <div id="map" style="width: 65%; height: 730px;"></div>
     </div>
+
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=0255612fc11565ab57441d45b33df5be&libraries=services"></script>
+    <script th:inline="javascript">
+        var lat = [[${restaurant.latitude}]];
+        var lng = [[${restaurant.longitude}]];
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
+                level: 1 // 지도의 확대 레벨
+            };
+
+        // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 마커가 표시될 위치입니다
+        var markerPosition  = new kakao.maps.LatLng(lat, lng);
+
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+            position: markerPosition
+        });
+
+        // 마커가 지도 위에 표시되도록 설정합니다
+        marker.setMap(map);
+    </script>
 
 </main>
 </body>
 </html>
 
 
+<!-- 식당 이름 -->
+<!--<span class="main-title" th:text="${restaurant.name}">식당명</span>-->
+<!--<span class="main-branch" th:text="${restaurant.branch}">지점명</span>-->
+<!--<br>-->
+<!--<span class="category-list" th:text="${restaurant.category}">카테고리</span>-->
 
+<!--&lt;!&ndash; 버튼 영역 &ndash;&gt;-->
+<!--<div class="action-buttons">-->
+<!--    <div class="action-item">-->
+<!--        <span>위치 보기</span>-->
+<!--    </div>-->
+<!--    <div class="action-item">-->
+<!--        <span>북마크</span>-->
+<!--    </div>-->
+<!--    <div class="action-item">-->
+<!--        <span>공유하기</span>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; 정보 섹션 &ndash;&gt;-->
+<!--<div class="info-section">-->
+<!--    <p>주소 | <span th:text="${restaurant.address}">주소</span></p>-->
+<!--    <p>영업시간 | <span th:text="${restaurant.detail.rowBusinessTime}">영업시간</span></p>-->
+<!--    <p>휴무일 | <span th:text="${restaurant.detail.dayOff}">휴무일</span></p>-->
+<!--    <p>연락처 | <span th:text="${restaurant.detail.tel}">연락처</span></p>-->
+<!--    <p>홈페이지 | <span th:text="${restaurant.detail.homePageURL}">홈페이지</span></p>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;            <img th:if="${menu.imageUrl != null}" th:src="${menu.imageUrl}" alt="메뉴 이미지" class="menu-image">&ndash;&gt;-->
+
+<!--&lt;!&ndash;     메뉴 섹션&ndash;&gt;-->
+<!--<div th:if="${topMenus != null and !topMenus.isEmpty()}">-->
+<!--    <h2 class="menu-title">메뉴</h2>-->
+<!--    <div class="menu-list">-->
+<!--        <div th:each="menu : ${topMenus}" class="menu-card">-->
+<!--            <div class="menu-info">-->
+<!--                <p class="menu-name" th:text="${menu.name}">메뉴명</p>-->
+<!--                <p class="menu-price" th:text="${#numbers.formatInteger(menu.price, 3, 'COMMA') + '원'}">가격</p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 
 
