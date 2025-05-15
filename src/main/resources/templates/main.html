@@ -1,27 +1,101 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
+      layout:decorate="~{layout}">
 <head>
-  <meta charset="UTF-8">
-  <title>식당 검색</title>
-  <link rel="stylesheet" href="/css/main.css">
+  <meta charset="utf-8">
+  <title>🍘 밥로드</title>
 </head>
 <body>
 <main layout:fragment="content">
+<!-- 지도를 표시할 div 입니다 -->
 
-  <!-- 로그인한 사용자 정보 확인용 -->
-  <div sec:authorize="isAuthenticated()">
-    <span class="text-sm font-semibold">
-      <span th:text="${#authentication.principal.user.nickname}">닉네임</span> 님 환영합니다!
-    </span>
+  <div id="map-wrapper" style="position: relative; width: 100%; height: 100%;">
+
+<div id="map" style="width:100%;height:100%;"></div>
+    <div style="position: absolute; top: 16px; left: 50%; transform: translateX(-50%); background: white; padding: 6px 12px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); z-index: 10;">
+      🍽️ 내 주변 맛집을 찾고 있어요!
+    </div>
+
   </div>
+  <script th:src="@{('https://dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${kakaoMapApiKey})}"></script>
+<script>
+  var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+          mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 2 // 지도의 확대 레벨
+          };
 
-  <p class="main-title">🍽️ 식당 검색</p>
+  // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+  var map = new kakao.maps.Map(mapContainer, mapOption);
 
-  <form method="get" action="/search/result" class="search">
-    <input type="text" name="restaurantKeyword" placeholder="식당명 입력">
-    <button type="submit">검색</button>
-  </form>
-</main>
+
+  // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
+  if (navigator.geolocation) {
+
+    // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+    navigator.geolocation.getCurrentPosition(function(position) {
+
+      var lat = position.coords.latitude, // 위도
+              lon = position.coords.longitude; // 경도
+
+      var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+              message = '<div style="padding:5px;">환영합니다!</div>'; // 인포윈도우에 표시될 내용입니다
+
+      // 마커와 인포윈도우를 표시합니다
+      displayMarker(locPosition, message);
+
+    });
+
+  } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+
+    var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
+            message = '환영합니다!'
+
+    displayMarker(locPosition, message);
+  }
+
+  // 지도에 마커와 인포윈도우를 표시하는 함수입니다
+  function displayMarker(locPosition, message) {
+
+    // 마커를 생성합니다
+    var marker = new kakao.maps.Marker({
+      map: map,
+      position: locPosition
+    });
+
+    var iwContent = message, // 인포윈도우에 표시할 내용
+            iwRemoveable = true;
+
+    // 인포윈도우를 생성합니다
+    var infowindow = new kakao.maps.InfoWindow({
+      content : iwContent,
+      removable : iwRemoveable
+    });
+
+    // 인포윈도우를 마커위에 표시합니다
+    infowindow.open(map, marker);
+
+    // 지도 중심좌표를 접속위치로 변경합니다
+    map.setCenter(locPosition);
+
+    // 커스텀 오버레이 구역...
+    var content = '<div class ="label">' +
+            '<span class="left"></span>' +
+            '<span class="center">커스텀 오버레이 구역...</span>' +
+            '<span class="right"></span>' +
+            '</div>';
+
+// 커스텀 오버레이가 표시될 위치입니다
+    var customOverlay = new kakao.maps.CustomOverlay({
+      position: locPosition,
+      content: content,
+      xAnchor: 0.5,
+      yAnchor: 1.1
+    });
+
+// 커스텀 오버레이를 지도에 표시합니다
+    customOverlay.setMap(map);
+  }
+</script>
 </body>
 </html>

@@ -1,23 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}" th:with="contentClass='w-full'">
+      layout:decorate="~{layout}">
 
 <head>
     <meta charset="UTF-8">
     <title>식당 상세</title>
     <link rel="stylesheet" href="/css/detail.css">
-    <style>
-        main[layout\:fragment="content"] {
-            width: 100% !important;
-        }
-    </style>
 
 
 </head>
 <body>
 <main layout:fragment="content">
     <div style="display: flex;">
-        <div id="dtl" style="width: 35%; height: 730px;">
+        <div id="dtl" style="width: 35%; height: 100%;">
         <div class="restaurant-info"> <!-- 왼쪽 상세 정보 -->
 
             <!-- 식당 이름 -->
@@ -117,7 +112,7 @@
         <div id="map" style="width: 65%; height: 730px;"></div>
     </div>
 
-    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=0255612fc11565ab57441d45b33df5be&libraries=services"></script>
+    <script th:src="@{('https://dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${kakaoMapApiKey} + '&libraries=services')}"></script>
     <script th:inline="javascript">
         var lat = [[${restaurant.latitude}]];
         var lng = [[${restaurant.longitude}]];

@@ -21,6 +21,12 @@ public class SearchController {
     private final RestaurantSearchService restaurantSearchService;
     private final RestaurantRepository restaurantRepository;
 
+    @GetMapping("/search")
+    public String mainSearch() {
+        return "restaurant/search";
+    }
+
+
     @GetMapping("/search/result")
     public String searchResult(@RequestParam(required = false) String restaurantKeyword, Model model) {
         if (restaurantKeyword != null) {
@@ -28,23 +34,7 @@ public class SearchController {
             model.addAttribute("keyword", restaurantKeyword);
             model.addAttribute("results", results);
         }
-        return "restaurant/search";
+        return "restaurant/searchResult";
     }
 
-
-    @GetMapping("search/detail/{id}")
-    public String restaurantDetail(@PathVariable Long id, Model model) {
-        Restaurant restaurant = restaurantRepository.findWithMenusById(id)
-                .orElseThrow(() -> new IllegalArgumentException("식당 없음"));
-
-        // 메뉴 가장 비싼 메뉴 상위 3개만 노출
-        List<RestaurantMenu> topMenus = restaurant.getMenus().stream()
-                        .sorted((a, b) -> b.getPrice() - a.getPrice())
-                                .limit(3)
-                                        .toList();
-
-        model.addAttribute("restaurant", restaurant);
-        model.addAttribute("topMenus", topMenus);
-        return "restaurant/detail";
-    }
 }
