@@ -8,7 +8,6 @@
 <body>
 <th:block th:fragment="frg_sidenav">
     <aside class="p-2 w-24 bg-gray-200 min-h-screen flex flex-col items-center py-10">
-
         <!-- 로고 -->
         <div class="mb-12">
             <a href="/" class="flex flex-col text-black items-center justify-center">
@@ -46,14 +45,13 @@
 
         <!-- 로그아웃, 마이페이지 -->
         <div class="flex flex-col items-center space-y-6 mt-auto">
-            <button class="flex flex-col items-center justify-center space-y-1">
-                <img src="/img/logout.png" alt="로그아웃" class="w-6 h-6"/>
-            </button>
+            <a th:href="@{/logout}" class="flex flex-col items-center justify-center space-y-1">
+                <img src="/img/logout.png" alt="로그아웃" class="w-6 h-6" />
+            </a>
             <button class="flex flex-col items-center justify-center space-y-1">
                 <img src="/img/mypage.png" alt="마이페이지" class="w-6 h-6"/>
             </button>
         </div>
-
     </aside>
 </th:block>
 </body>
