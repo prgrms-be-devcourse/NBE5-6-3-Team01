@@ -22,6 +22,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/search/**").permitAll()
                 .requestMatchers("/", "/curation/**").permitAll()
                 .requestMatchers("/", "/restaurant/**").permitAll()
+                .requestMatchers("/", "/recommend/**").permitAll()      // gemini연결 이슈로 잠깐 켜둠
                 .requestMatchers("/mypage/**").authenticated()
                 .anyRequest().authenticated()
             );

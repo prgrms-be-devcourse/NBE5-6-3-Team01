@@ -16,7 +16,6 @@ public class RestaurantSearchService {
 
     private final RestaurantRepository restaurantRepository;
 
-    // todo 화면 > 검색어 입력 얼랏
     public List<SearchRestaurantResponseDto> searchByName(String restaurantKeyword){
         if (restaurantKeyword == null || restaurantKeyword.trim().isEmpty()) {
             throw new IllegalArgumentException("검색어를 입력하세요");
