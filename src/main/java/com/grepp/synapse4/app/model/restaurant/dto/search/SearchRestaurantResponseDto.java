@@ -31,7 +31,7 @@ public class SearchRestaurantResponseDto {
                 restaurant.getLatitude(),
                 restaurant.getLongitude(),
                 restaurant.getCategory(),
-                restaurant.getRoadAddress(),
+                restaurant.getAddress(),
                 restaurant.getDetail().getRowBusinessTime(),
                 restaurant.getDetail().getDayOff(),
                 restaurant.getDetail().getTel(),

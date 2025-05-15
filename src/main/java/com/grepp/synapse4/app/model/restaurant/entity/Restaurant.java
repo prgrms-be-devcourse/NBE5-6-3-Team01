@@ -28,7 +28,7 @@ public class Restaurant extends BaseEntity {
     private String branch;
 
     @Column(name = "restaurant_road_address")
-    private String roadAddress;
+    private String address;
 
     @Column(name = "restaurant_jibun_address")
     private String jibunAddress;
@@ -65,7 +65,7 @@ public class Restaurant extends BaseEntity {
         this.id = id;
         this.name = name;
         this.branch = branch;
-        this.roadAddress = roadAddress;
+        this.address = roadAddress;
         this.jibunAddress = jibunAddress;
         this.latitude = latitude;
         this.longitude = longitude;
