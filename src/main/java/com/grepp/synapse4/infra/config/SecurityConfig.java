@@ -19,6 +19,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/img/**", "/css/**").permitAll()
                 .requestMatchers("/", "/user/**").permitAll()
+                .requestMatchers("/", "/search/**").permitAll()
+                .requestMatchers("/", "/curation/**").permitAll()
+                .requestMatchers("/", "/restaurant/**").permitAll()
                 .requestMatchers("/mypage/**").authenticated()
                 .anyRequest().authenticated()
             );
