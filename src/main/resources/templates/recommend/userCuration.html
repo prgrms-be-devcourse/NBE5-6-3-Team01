@@ -9,12 +9,13 @@
 <body>
 <main layout:fragment="content">
 
-    <p class="restaurant-title" th:text="${curation.title}">🍽️ 큐레이션 제목</p>
+    <div class="restaurant-container">
+    <p class="restaurant-title" th:text="${curation.title}">큐레이션 제목</p>
 
     <div th:if="${#lists.isEmpty(curation.restaurants)}" class="no-result">
         검색 결과가 없습니다.
     </div>
-    <ul th:if="${not #lists.isEmpty(curation.restaurants)}" class="restaurant-list">
+    <div th:if="${not #lists.isEmpty(curation.restaurants)}" class="restaurant-list">
         <ul class="restaurant-list">
             <li th:each="res : ${curation.restaurants}" class="restaurant-card">
                 <a th:href="@{/restaurant/detail/{id}(id=${res.id})}">
@@ -28,6 +29,7 @@
                 </a>
             </li>
         </ul>
+    </div>
 </main>
 </body>
 </html>

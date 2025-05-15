@@ -1,9 +1,18 @@
+.restaurant-container{
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 16px;
+    text-align: left;
+}
+
 .restaurant-title {
+    text-align: center;
     font-size: 28px;
     font-weight: bold;
     color: #111;
     margin-top: 30px;
     margin-bottom: 24px;
+    margin-right: 100px;
 }
 
 .restaurant-list {
