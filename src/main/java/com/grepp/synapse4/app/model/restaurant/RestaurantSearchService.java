@@ -26,8 +26,4 @@ public class RestaurantSearchService {
                 .map(restaurant -> SearchRestaurantResponseDto.fromEntity(restaurant))
                 .collect(Collectors.toList());
     }
-
-    public Optional<Restaurant> findById(Long id) {
-        return restaurantRepository.findById(id);
-    }
 }
