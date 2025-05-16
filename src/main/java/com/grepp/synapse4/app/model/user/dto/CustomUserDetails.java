@@ -10,9 +10,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class CustomUserDetails implements UserDetails {
 
     private final User user;
+    private final List<GrantedAuthority> authorities;
 
     public CustomUserDetails(User user) {
         this.user = user;
+        String roleName = user.getRole().name();
+
+        this.authorities = List.of(
+                new SimpleGrantedAuthority(roleName)
+        );
     }
 
     public User getUser() {
@@ -21,7 +27,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        return authorities;
     }
 
     @Override

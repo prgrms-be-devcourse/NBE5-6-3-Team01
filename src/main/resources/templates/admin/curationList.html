@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminLayout}">
+<head>
+  <meta charset="UTF-8">
+  <title layout:fragment="title">큐레이션 결과 리스트</title>
+</head>
+
+<section layout:fragment="content" class="p-6 bg-gray-50 flex-1">
+
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-semibold">큐레이션 추천 리스트</h2>
+    <button type="button"
+            th:onclick="|location.href='@{/admin/curation/register}'|"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      새로운 큐레이션 등록
+    </button>
+  </div>
+
+  <div class="grid grid-cols-3 gap-6">
+    <div th:each="result : ${curationResults}"
+         class="border rounded-lg bg-white p-4 shadow-sm hover:shadow-md transition">
+
+      <p class="text-xs text-gray-400 mb-2">
+        주제명: <span th:text="${result.title}">주제명</span>
+      </p>
+
+      <h3 class="font-medium text-lg mb-1"
+          th:text="${result.name}">식당명</h3>
+
+      <p class="text-sm text-gray-600 mb-3"
+         th:text="${result.address}">식당 위치</p>
+
+      <p class="text-sm mb-2"
+         th:text="${result.active} ? '현재: 활성' : '현재: 비활성'">현재 상태</p>
+
+      <form th:action="@{/admin/curation/toggle/{id}(id=${result.id})}"
+            method="post">
+        <button type="submit"
+                class="px-3 py-1 border rounded"
+                th:text="${result.active} ? '비활성화' : '활성화'">
+          토글
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+</section>
+</html>
+
+

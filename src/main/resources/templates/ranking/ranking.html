@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Layout}">
+<head>
+  <meta charset="UTF-8">
+  <title layout:fragment="title">북마크 랭킹 리스트</title>
+</head>
+
+<section layout:fragment="content"
+         class="relative flex-1 bg-gray-50">
+
+<!--  <div class="p-20">-->
+<!--    <img src="/img/ranking.png" alt="랭킹" class="w-19 h-19"/>-->
+<!--    <h2 class="text-2xl font-semibold">북마크 랭킹 리스트</h2>-->
+<!--  </div>-->
+  <div class="p-8 flex items-center space-x-4">
+    <img src="/img/ranking.png" alt="랭킹" class="w-18 h-18" />
+    <h2 class="text-3xl font-semibold">북마크 랭킹 리스트</h2>
+  </div>
+  <div class="absolute overflow-y-auto"
+       style="
+         top: 96px;
+         bottom: 24px;
+         left: 24px;
+         right: 24px;
+       ">
+    <div class="max-w-5xl mx-auto space-y-4">
+
+      <div th:each="r, idx : ${ranking}"
+           class="relative flex items-center bg-white border rounded-lg shadow-sm p-4 hover:shadow-md transition">
+        <!-- 순위 번호 -->
+        <div class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2
+                    w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center
+                    text-sm font-semibold">
+          <span th:text="${idx.count}">1</span>
+        </div>
+
+        <!-- 이미지 자리 -->
+        <div class="w-20 h-20 bg-gray-200 rounded-md flex-shrink-0 mr-4 flex items-center justify-center">
+          <span class="text-gray-400">No Image</span>
+        </div>
+
+        <!-- 정보 -->
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold mb-1" th:text="${r.name}">식당명</h3>
+          <p class="text-sm text-gray-600" th:text="${r.address}">식당 주소</p>
+        </div>
+
+        <!-- 북마크 아이콘 -->
+        <div class="ml-4 flex-shrink-0">
+          <button type="button" class="focus:outline-none">
+            <!-- 예시 북마크 SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 hover:text-gray-600" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 5v14l7-7 7 7V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+</html>

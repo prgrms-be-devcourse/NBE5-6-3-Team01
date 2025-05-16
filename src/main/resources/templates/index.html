@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}">
@@ -29,7 +30,7 @@
 <body>
 <div class="flex justify-end items-center gap-4">
 <main layout:fragment="content">
-  <!-- 로그인한 사용자 정보 확인용 -->
+   로그인한 사용자 정보 확인용
   <div sec:authorize="isAuthenticated()">
     <span class="text-sm font-semibold">
       <span th:text="${#authentication.principal.user.nickname}">닉네임</span> 님 환영합니다!
