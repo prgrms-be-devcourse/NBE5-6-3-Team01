@@ -20,6 +20,7 @@ public class SecurityConfig {
                 .requestMatchers("/img/**", "/css/**").permitAll()
                 .requestMatchers("/", "/user/**").permitAll()
                 .requestMatchers("/mypage/**").authenticated()
+                .requestMatchers("/meetings/**").permitAll()
                 .anyRequest().authenticated()
             );
 

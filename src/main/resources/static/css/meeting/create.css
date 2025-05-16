@@ -1,0 +1,61 @@
+main {
+  padding: 2.5vw 17vw;
+  width: 100%;
+  align-content: center;
+  justify-items: center;
+}
+
+a {
+  color: black;
+}
+
+label {
+  font-weight: bold;
+}
+
+.container {
+  width: 50vw;
+  background-color: white;
+  padding: 50px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-top: 50px;
+}
+
+.meeting-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3vw;
+}
+.complete {
+  width: 20%;
+  padding: 8px 20px;
+  background-color: #e5d4ff;
+  border: 1px solid #333;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.input-group {
+  width: 100%;
+  margin-bottom: 4vh;
+}
+
+.radio-group {
+  display: flex;
+  align-content: center;
+  gap: 2vw;
+  margin-top: 10px;
+}
+
+select {
+  display: block;
+  visibility: visible;
+}
+
+.error{
+  margin-top: 5px;
+  color: orangered;
+}

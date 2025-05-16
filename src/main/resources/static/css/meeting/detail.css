@@ -1,0 +1,77 @@
+main{
+  padding: 2.5vw 15vw;
+  width: 100%;
+  align-content: center;
+}
+h2{
+  font-weight: bold;
+}
+a {
+  color: black;
+}
+
+.div-flex{
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  margin-bottom: 2vh;
+}
+
+.meeting-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e0e0e0;
+  border: 1px solid #333;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.2vw;
+  height: auto;
+  cursor: pointer;
+}
+
+.empty{
+  width: 100%;
+  height: 60vh;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: large;
+  font-weight: bold;
+  text-align: center;
+  align-content: center;
+}
+
+.scroll-container {
+  max-height: 59vh;
+  overflow-y: auto;
+  /*scrollbar-width: none;*/
+}
+.vote{
+  display: flex;
+  justify-content: space-between;
+  padding: 2vw;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 2vh;
+  align-items: center;
+}
+.vote-button{
+  display: inline-block;
+  padding: 7px 12px;
+  background-color: #e0e0e0;
+  border: 1px solid #333;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.1vw;
+}
+
+.vote-detail{
+  font-size: 20px;
+  font-weight: bold;
+}
