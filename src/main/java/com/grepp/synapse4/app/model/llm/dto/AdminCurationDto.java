@@ -8,12 +8,10 @@ import lombok.ToString;
 import java.util.List;
 
 @Getter @Setter @ToString
-@AllArgsConstructor
-public class CurationDto {
+public class AdminCurationDto {
 
     private Long id;
     private String title;
-
     private CompanyLocation companyLocation;
     private Purpose purpose;
     private Companion companion;
@@ -21,9 +19,4 @@ public class CurationDto {
     private PreferredMood preferredMood;
     private Boolean activated;
 
-    List<CurationRestaurantDto> restaurants;
-
-    public CurationDto() {
-
-    }
 }
