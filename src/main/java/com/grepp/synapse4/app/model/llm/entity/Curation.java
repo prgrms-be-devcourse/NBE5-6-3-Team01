@@ -1,6 +1,5 @@
 package com.grepp.synapse4.app.model.llm.entity;
 
-import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import com.grepp.synapse4.infra.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter

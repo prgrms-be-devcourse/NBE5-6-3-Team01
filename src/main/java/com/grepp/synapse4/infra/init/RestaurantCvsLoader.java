@@ -5,7 +5,6 @@ import com.grepp.synapse4.app.model.restaurant.dto.create.CreateRestaurantDto;
 import com.grepp.synapse4.app.model.restaurant.dto.create.CsvBasicInfoDto;
 import com.grepp.synapse4.app.model.restaurant.dto.create.CsvDetailInfoDto;
 import com.grepp.synapse4.app.model.restaurant.dto.create.CsvMenuDto;
-import com.grepp.synapse4.app.model.restaurant.dto.search.SearchRestaurantResponseDto;
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import com.grepp.synapse4.app.model.restaurant.entity.RestaurantMenu;
 import com.grepp.synapse4.app.model.restaurant.repository.KakaoRestaurantVerifierService;

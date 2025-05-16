@@ -1,7 +1,5 @@
 package com.grepp.synapse4.app.model.llm.dto;
 
-import com.grepp.synapse4.app.model.llm.entity.Curation;
-import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

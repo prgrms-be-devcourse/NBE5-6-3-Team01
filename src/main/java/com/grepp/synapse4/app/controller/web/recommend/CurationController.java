@@ -1,7 +1,6 @@
 package com.grepp.synapse4.app.controller.web.recommend;
 
 import com.grepp.synapse4.app.model.llm.CurationService;
-import com.grepp.synapse4.app.model.llm.dto.AdminCurationDto;
 import com.grepp.synapse4.app.model.llm.dto.UserCurationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

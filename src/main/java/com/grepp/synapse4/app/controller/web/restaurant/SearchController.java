@@ -2,14 +2,11 @@ package com.grepp.synapse4.app.controller.web.restaurant;
 
 import com.grepp.synapse4.app.model.restaurant.RestaurantSearchService;
 import com.grepp.synapse4.app.model.restaurant.dto.search.SearchRestaurantResponseDto;
-import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
-import com.grepp.synapse4.app.model.restaurant.entity.RestaurantMenu;
 import com.grepp.synapse4.app.model.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;

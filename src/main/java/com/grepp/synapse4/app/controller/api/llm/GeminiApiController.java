@@ -1,7 +1,6 @@
 package com.grepp.synapse4.app.controller.api.llm;
 
 import com.grepp.synapse4.app.model.llm.GeminiService;
-import com.grepp.synapse4.app.model.llm.dto.GeminiRequestDto;
 import com.grepp.synapse4.app.model.llm.dto.GeminiUserRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,9 @@
 package com.grepp.synapse4.app.model.restaurant.dto.search;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor

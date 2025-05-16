@@ -4,8 +4,6 @@ import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 @AllArgsConstructor
 public class SearchRestaurantResponseDto {

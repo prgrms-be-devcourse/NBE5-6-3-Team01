@@ -1,11 +1,9 @@
 package com.grepp.synapse4.app.model.llm.dto;
 
 import com.grepp.synapse4.app.model.llm.code.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import java.util.List;
 
 @Getter @Setter @ToString
 public class AdminCurationDto {

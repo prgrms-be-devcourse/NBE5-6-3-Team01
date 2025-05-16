@@ -1,6 +1,5 @@
 package com.grepp.synapse4.app.model.llm.dto;
 
-import com.grepp.synapse4.app.model.restaurant.dto.search.SearchRestaurantResponseDto;
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
