@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>모임 상세</title>
+    <link rel="stylesheet" th:href="@{/css/meeting/detail.css}" />
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="header">
+        <div>
+            <div class="div-flex" style="gap: 2vw;">
+                <div th:text="${meeting.title}" style="font-size: 40px; font-weight: bold">모임명</div>
+                <div>멤버 <span th:text="${count}"></span>명</div>
+            </div>
+            <p th:text="${meeting.description}"></p>
+        </div>
+        <div class="div-flex" style="gap: 2vw;">
+            <a class="meeting-button"
+               th:onclick="'openPopup(' + ${meeting.id} + '); return false;'">
+                멤버 보기
+            </a>
+
+            <form th:action="@{/meetings/detail}" onsubmit="return confirmLeave();" method="post">
+                <button type="submit" class="meeting-button">모임 탈퇴</button>
+                <input type="hidden" name="id" th:value="${meeting.id}" />
+            </form>
+        </div>
+    </div>
+
+    <!-- 투표 리스트 -->
+    <div class="header" style="margin-top: 5vh;">
+        <div style="font-size: 2vw; font-weight: bold">투표 리스트</div>
+        <button class="vote-button">투표 만들기</button>
+    </div>
+
+    <div class="empty" th:if="${#lists.isEmpty(voteList)}">
+        현재 진행중인 투표가 없습니다.<br/>
+        투표를 만들어서 멤버들과 투표를 진행해 보세요!
+    </div>
+
+    <div class="scroll-container">
+        <div th:each="vote:${voteList}" class="vote">
+            <div>
+                <p class="vote-detail">5월 둘째주 맛집 탐방</p>
+                <p>둘째주 맛집 탐방 활동을 위한 투표입니다.</p>
+                <p>투표 마감: 5월 12일 6시까지</p>
+            </div>
+            <button class="vote-button">투표하기</button>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+      function openPopup(id) {
+        const popupWidth = 1000;
+        const popupHeight = 700;
+
+        const screenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
+        const screenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
+
+        const screenWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
+        const screenHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+
+        const left = screenLeft + (screenWidth - popupWidth) / 2;
+        const top = screenTop + (screenHeight - popupHeight) / 2;
+
+        window.open(
+            "/meetings/modal/meeting-member-list.html?id=" + id,
+            'popupWindow',
+            `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`
+        );
+      }
+
+      function confirmLeave() {
+          return confirm("정말로 모임을 탈퇴하시겠습니까?");
+      }
+    </script>
+</main>
+
+</body>
+</html>

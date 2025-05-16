@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>모임 멤버</title>
+    <link rel="stylesheet" th:href="@{/css/meeting/modal/modal.css}" />
+</head>
+<body>
+<div>
+  <h1>
+      <span th:text="${meeting.title}"></span>
+      멤버 목록
+  </h1>
+</div>
+<div class="invite-button-wrapper">
+  <a class="invite-button"
+     th:onclick="'openPopup(' + ${meeting.id} + '); return false;'">
+    초대하기
+  </a>
+</div>
+<div class="modal" style="width: 60vw;">
+  <ul class="notification-list">
+    <li th:each="user:${userList}" class="notification-item">
+      <div class="user">
+        <span th:text="${user.nickname}" class="nickname">닉네임</span>
+        <span th:text="${user.userAccount}" class="account">아이디</span>
+      </div>
+      <a href="/" target="_blank" style="display: flex; align-items: center;">
+        <img src="/img/bookmark.png" alt="북마크" class="bookmark"/>
+      </a>
+    </li>
+
+  </ul>
+</div>
+
+<script th:inline="javascript">
+  function openPopup(id) {
+    const popupWidth = 1000;
+    const popupHeight = 700;
+
+    const screenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
+    const screenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
+
+    const screenWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
+    const screenHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+
+    const left = screenLeft + (screenWidth - popupWidth) / 2;
+    const top = screenTop + (screenHeight - popupHeight) / 2;
+
+    window.open(
+        "/meetings/modal/meeting-invite.html?id=" + id,
+        'popupWindow',
+        `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`
+    );
+  }
+</script>
+</body>
+</html>
