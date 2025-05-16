@@ -1,0 +1,85 @@
+/* background map */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: sans-serif;
+    color: #000000;
+    text-align: center;
+}
+
+body {
+    background-image: url('/img/map.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: -1;
+}
+
+.content {
+    position: relative;
+    top: 40%;
+    transform: translateY(-50%);
+}
+
+
+.search-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    padding: 0 20px;
+}
+
+
+/* 제목 */
+.main-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #111;
+    margin-bottom: 24px;
+}
+
+/* 검색 바 */
+.search {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    width: 60%;
+}
+
+.search input[type="text"] {
+    flex: 1;
+    min-width: 400px;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #050505;
+    border-radius: 8px;
+}
+
+.search button {
+    background-color: #7F56D9;
+    color: white;
+    height: 66px;
+    padding: 10px 16px;
+    border: none;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+
+    /* 부드러운 전환 효과 */
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+}
+
+.search button:hover {
+    background-color: #6941C6;           /* 살짝 어두운 파란색 */
+    /*box-shadow: 0 4px 12px rgba(0, 95, 163, 0.3);  !* 약한 그림자 *!*/
+    transform: translateY(-1px);         /* 살짝 위로 뜨는 느낌 */
+}

@@ -6,8 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @ToString
-
-public class CurationDto {
+public class AdminCurationDto {
 
     private Long id;
     private String title;
@@ -19,5 +18,3 @@ public class CurationDto {
     private Boolean activated;
 
 }
-
-

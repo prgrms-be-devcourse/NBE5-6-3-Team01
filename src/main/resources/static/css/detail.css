@@ -1,0 +1,165 @@
+.restaurant-info {
+    margin-right: 30px;
+
+}
+
+.main-main {
+    margin-top: 30px;
+    height: 40px;
+}
+
+.main-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #111;
+    margin-top: 30px;
+    margin-bottom: 24px;
+}
+
+.main-branch {
+    font-size: 18px;
+    font-weight: normal;
+    color: #393737;
+    margin-top: 30px;
+    margin-bottom: 24px;
+}
+
+.category-list {
+    display: inline-block;
+    font-size: 14px;
+    margin-bottom: 24px;
+    background-color: #e0f0ff;
+    color: #0077cc;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.detail-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+}
+
+
+/*.restaurant-category {*/
+/*    float: right;*/
+/*    font-size: 12px;*/
+/*    background-color: #e0f0ff;*/
+/*    color: #0077cc;*/
+/*    padding: 2px 8px;*/
+/*    border-radius: 999px;*/
+/*}*/
+
+
+
+/*.action-buttons {*/
+/*    display: flex;*/
+/*    border-top: 1px solid #eee;*/
+/*    border-bottom: 1px solid #eee;*/
+/*    padding: 16px 0;*/
+/*    margin-bottom: 24px;*/
+/*    justify-content: space-between;*/
+/*}*/
+
+.action-buttons {
+    display: flex;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    justify-content: center;
+    gap: 40px;
+    margin: 20px 0;
+}
+
+.action-item {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+
+.action-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    margin-bottom: 4px;
+}
+
+
+.info-section {
+    margin-bottom: 32px;
+}
+
+.info-section p {
+    margin: 6px 0;
+    font-size: 15px;
+    color: #444;
+}
+
+.info-section a {
+    word-break: break-all;
+}
+
+.info-section i {
+    vertical-align: middle;
+    margin-right: 6px;
+    font-size: 18px;
+}
+
+.menu-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.menu-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.menu-card {
+    width: 130px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+.none-menu-card{
+    width: 450px;
+    height: 93px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-name {
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.menu-price {
+    font-size: 14px;
+    color: #777;
+    margin-top: 2px;
+}
+

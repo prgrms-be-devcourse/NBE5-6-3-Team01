@@ -8,7 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface CurationRepository extends JpaRepository<Curation, Long>{
 
 
-
-
-
+    Curation findTopByOrderByCreatedAtDesc();
 }

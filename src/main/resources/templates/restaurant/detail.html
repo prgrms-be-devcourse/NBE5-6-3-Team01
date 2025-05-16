@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>식당 상세</title>
+    <link rel="stylesheet" href="/css/detail.css">
+
+
+</head>
+<body>
+<main layout:fragment="content">
+    <div style="display: flex;">
+        <div id="dtl" style="width: 35%; height: 100%;">
+        <div class="restaurant-info"> <!-- 왼쪽 상세 정보 -->
+
+            <!-- 식당 이름 -->
+            <div class="main-main">
+            <span class="main-title" th:text="${restaurant.name}">식당명</span>
+            <span class="main-branch" th:text="${restaurant.branch}">지점명</span>
+            <span class="category-list" th:text="${restaurant.category}">카테고리</span>
+
+            </div>
+
+            <!-- 버튼 -->
+            <div class="action-buttons">
+                <div class="action-item">
+                    <img src="/img/location.png" alt="위치 보기" class="action-icon">
+                    <span>위치 보기</span>
+                </div>
+                <div class="action-item">
+                    <img src="/img/bookmark.png" alt="북마크" class="action-icon">
+                    <span>북마크</span>
+                </div>
+                <div class="action-item">
+                    <img src="/img/share.png" alt="공유하기" class="action-icon">
+                    <span>공유하기</span>
+                </div>
+            </div>
+
+            <!-- 정보 섹션 -->
+            <div class="info-section">
+                <p th:if="${!#strings.isEmpty(restaurant.address)}">
+                    <strong>주소</strong> <span th:text="${restaurant.address}">주소</span>
+                </p>
+                <p th:if="${restaurant.detail != null and !#strings.isEmpty(restaurant.detail.tel)}">
+                    <strong>연락처</strong> <span th:text="${restaurant.detail.tel}">연락처</span>
+                </p>
+                <p th:if="${restaurant.detail != null and !#strings.isEmpty(restaurant.detail.homePageURL)}">
+                    <strong>홈페이지</strong>
+                    <a th:href="@{${restaurant.detail.homePageURL}}"
+                       th:text="${restaurant.detail.homePageURL}"
+                       class="homepage-url"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                    </a>
+                </p>
+
+                <p th:if="${restaurant.detail != null and !#strings.isEmpty(restaurant.detail.dayOff)}">
+                    <strong>휴무일</strong> <span th:text="${restaurant.detail.dayOff}">휴무일</span>
+                </p>
+                <p th:if="${restaurant.detail != null and !#strings.isEmpty(restaurant.detail.rowBusinessTime)}">
+                    <strong>영업시간</strong> <span th:text="${restaurant.detail.rowBusinessTime}">영업시간</span>
+                </p>
+            </div>
+
+            <!--     메뉴     -->
+            <div>
+                <h2 class="menu-title">메뉴</h2>
+
+                <div th:if="${topMenus != null and !topMenus.isEmpty()}" class="menu-list">
+                    <div th:each="menu : ${topMenus}" class="menu-card">
+                        <div class="menu-info">
+                            <p class="menu-name" th:text="${menu.name}">메뉴명</p>
+                            <p class="menu-price" th:text="${#numbers.formatInteger(menu.price, 3, 'COMMA') + '원'}">가격</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:unless="${topMenus != null and !topMenus.isEmpty()}" class="none-menu-card">
+                    <div class="menu-info">
+                        <p>등록된 메뉴가 없습니다.</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="facility-section">
+                <h2 class="menu-title">시설 안내</h2>
+                <p>
+                    <strong>배달</strong>
+                    <span th:if="${restaurant.detail.delivery}"> ☺️가능해요</span>
+                    <span th:unless="${restaurant.detail.delivery}"> 😢어려워요</span>
+                </p>
+                <p>
+                    <strong>주차</strong>
+                    <span th:if="${restaurant.detail.parking}"> ☺️가능해요</span>
+                    <span th:unless="${restaurant.detail.parking}"> 😢어려워요</span>
+                </p>
+                <p>
+                    <strong>와이파이</strong>
+                    <span th:if="${restaurant.detail.wifi}"> ☺️제공해요</span>
+                    <span th:unless="${restaurant.detail.wifi}"> 😢제공하지 않아요</span>
+                </p>
+            </div>
+
+        </div>
+
+        </div>
+        <div id="map" style="width: 65%; height: 730px;"></div>
+    </div>
+
+    <script th:src="@{('https://dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${kakaoMapApiKey} + '&libraries=services')}"></script>
+    <script th:inline="javascript">
+        var lat = [[${restaurant.latitude}]];
+        var lng = [[${restaurant.longitude}]];
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
+                level: 1 // 지도의 확대 레벨
+            };
+
+        // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 마커가 표시될 위치입니다
+        var markerPosition  = new kakao.maps.LatLng(lat, lng);
+
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+            position: markerPosition
+        });
+
+        // 마커가 지도 위에 표시되도록 설정합니다
+        marker.setMap(map);
+    </script>
+
+</main>
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -11,6 +11,7 @@
         <!-- 로고 -->
         <div class="mb-12">
             <a href="/" class="flex flex-col text-black items-center justify-center">
+                <span class="text-xl">🍘</span>
                 <span class="text-xl">밥로드</span>
             </a>
         </div>
@@ -27,7 +28,7 @@
             </a>
             <a href="/recommend" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
                 <img src="/img/llm.png" alt="LLM 추천" class="w-6 h-6" />
-                <span class="text-xs">LLM 추천</span>
+                <span class="text-xs">AI 추천</span>
             </a>
             <a href="/meetings" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
                 <img src="/img/meeting.png" alt="모임" class="w-6 h-6" />
@@ -43,15 +44,29 @@
             </a>
         </div>
 
-        <!-- 로그아웃, 마이페이지 -->
-        <div class="flex flex-col items-center space-y-6 mt-auto">
+        <div class="flex flex-col items-center space-y-20 mt-auto">
+        <!-- 로그인 : 마이페이지, 로그아웃 -->
+        <div sec:authorize="isAuthenticated()">
             <a th:href="@{/logout}" class="flex flex-col items-center justify-center space-y-1">
                 <img src="/img/logout.png" alt="로그아웃" class="w-6 h-6" />
             </a>
-            <button class="flex flex-col items-center justify-center space-y-1">
+            <a th:href="@{/mypage}" class="flex flex-col items-center justify-center space-y-1">
                 <img src="/img/mypage.png" alt="마이페이지" class="w-6 h-6"/>
-            </button>
+            </a>
         </div>
+
+        <!-- 미로그인: 로그인, 회원가입 -->
+        <div sec:authorize="isAnonymous()">
+            <a th:href="@{/user/signin}" class="flex flex-col items-center justify-center space-y-1">
+                <img src="/img/login.png" alt="로그인" class="w-6 h-6" />
+            </a>
+            <a th:href="@{/user/signup}" class="flex flex-col items-center justify-center space-y-1">
+                <img src="/img/signup.png" alt="회원가입" class="w-6 h-6"/>
+            </a>
+        </div>
+        </div>
+
+
     </aside>
 </th:block>
 </body>

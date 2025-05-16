@@ -1,6 +1,5 @@
 package com.grepp.synapse4.infra.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -11,7 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -46,7 +44,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/signin","/admin/signup","/img/**", "/css/**").permitAll()
+                        .requestMatchers("/admin/signin", "/admin/signup", "/img/**", "/css/**").permitAll()
                         .requestMatchers("/").permitAll()
                         .anyRequest().hasRole("ADMIN")
                 );
@@ -73,8 +71,8 @@ public class SecurityConfig {
 
         http
                 .exceptionHandling(ex -> ex
-                .authenticationEntryPoint(new org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint("/admin/signin"))
-                                .accessDeniedPage("/")
+                        .authenticationEntryPoint(new org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint("/admin/signin"))
+                        .accessDeniedPage("/")
                 );
 
         return http.build();
@@ -88,33 +86,38 @@ public class SecurityConfig {
         http
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/img/**", "/css/**").permitAll()
-                .requestMatchers("/", "/user/signin","/user/signup", "/user/**").permitAll()
-                .requestMatchers("/mypage","/mypage/**").authenticated()
-                        .requestMatchers("/meetings/**").permitAll() // 미팅추가완료
-                .anyRequest().permitAll()
-            );
-
+                        .requestMatchers("/static/**").permitAll()
+                        .requestMatchers("/", "/user/signin", "/user/signup", "/user/**").permitAll()
+                        .requestMatchers("/search/**").permitAll()
+                        .requestMatchers("/curation/**").permitAll()
+                        .requestMatchers("/restaurant/**").permitAll()
+                        .requestMatchers("/ranking/**").permitAll()
+                        .requestMatchers("/recommend/**").authenticated()      // gemini연결 이슈로 잠깐 켜둠
+                        .requestMatchers("/meetings/**").authenticated()
+                        .requestMatchers("/mypage/**").authenticated()
+                        .requestMatchers("/bookmark/**").authenticated()
+                        .anyRequest().permitAll()
+                );
 
 
         http
-            .formLogin(auth -> auth
-                .loginPage("/user/signin")
-                .loginProcessingUrl("/user/signin")
-                .defaultSuccessUrl("/", true)
-                .failureUrl("/user/signin?error=true")
-                .usernameParameter("userAccount")
-                .passwordParameter("password")
-                .permitAll()
-            );
+                .formLogin(auth -> auth
+                        .loginPage("/user/signin")
+                        .loginProcessingUrl("/user/signin")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/user/signin?error=true")
+                        .usernameParameter("userAccount")
+                        .passwordParameter("password")
+                        .permitAll()
+                );
 
         http
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-            );
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                );
 
         return http.build();
 

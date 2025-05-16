@@ -3,7 +3,7 @@ package com.grepp.synapse4.app.controller.web.admin;
 import com.grepp.synapse4.app.model.llm.CurationResultService;
 import com.grepp.synapse4.app.model.llm.CurationService;
 import com.grepp.synapse4.app.model.llm.code.*;
-import com.grepp.synapse4.app.model.llm.dto.CurationDto;
+import com.grepp.synapse4.app.model.llm.dto.AdminCurationDto;
 import com.grepp.synapse4.app.model.llm.dto.CurationResultDto;
 import com.grepp.synapse4.app.model.meeting.MeetingService;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
@@ -49,7 +49,7 @@ public class AdminController {
     @GetMapping("/curation/register")
     public String curationRegister(Model model) {
 
-        model.addAttribute("form", new CurationDto());
+        model.addAttribute("form", new AdminCurationDto());
         model.addAttribute("companylocation", CompanyLocation.values());
         model.addAttribute("purpose", Purpose.values());
         model.addAttribute("compainons", Companion.values());
@@ -60,8 +60,8 @@ public class AdminController {
     }
 
     @PostMapping("/curation/register")
-    public String curationRegister(@ModelAttribute("form") CurationDto curationDto) {
-        curationService.setCuration(curationDto);
+    public String curationRegister(@ModelAttribute("form") AdminCurationDto adminCurationDto) {
+        curationService.setCuration(adminCurationDto);
         return "redirect:admin/curation/list";
     }
 

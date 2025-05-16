@@ -1,0 +1,118 @@
+.search-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 20vh;
+    width: auto;
+}
+
+/* 검색 바 */
+.search {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.search input[type="text"] {
+    flex: 1;
+    min-width: 400px;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #050505;
+    border-radius: 8px;
+}
+
+.search button {
+    background-color: #7F56D9;
+    color: white;
+    height: 66px;
+    padding: 10px 16px;
+    border: none;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+
+    /* 부드러운 전환 효과 */
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+}
+
+.search button:hover {
+    background-color: #6941C6;           /* 살짝 어두운 파란색 */
+    /*box-shadow: 0 4px 12px rgba(0, 95, 163, 0.3);  !* 약한 그림자 *!*/
+    transform: translateY(-1px);         /* 살짝 위로 뜨는 느낌 */
+}
+
+
+.restaurant-container{
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 16px;
+    text-align: left;
+}
+
+.restaurant-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #111;
+    margin-top: 30px;
+    margin-bottom: 24px;
+    margin-right: 100px;
+}
+
+.restaurant-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px;
+    margin-left: 0px;
+    max-width: 600px;
+}
+
+.restaurant-card {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+}
+
+.restaurant-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.restaurant-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+}
+
+.restaurant-branch {
+    font-size: 14px;
+    color: #555;
+    margin-left: 8px;
+}
+
+.restaurant-category {
+    float: right;
+    font-size: 12px;
+    background-color: #e0f0ff;
+    color: #0077cc;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.restaurant-time {
+    font-size: 13px;
+    color: #888;
+}
+
+.restaurant-address {
+    font-size: 14px;
+    color: #666;
+    margin-top: 4px;
+}
