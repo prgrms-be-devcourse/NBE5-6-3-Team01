@@ -87,14 +87,16 @@ public class SecurityConfig {
         http
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/img/**", "/css/**").permitAll()
+                        .requestMatchers("/static/**").permitAll()
                         .requestMatchers("/", "/user/signin", "/user/signup", "/user/**").permitAll()
                         .requestMatchers("/search/**").permitAll()
                         .requestMatchers("/curation/**").permitAll()
                         .requestMatchers("/restaurant/**").permitAll()
-                        .requestMatchers("/recommend/**").permitAll()      // gemini연결 이슈로 잠깐 켜둠
-                        .requestMatchers("/meetings/**").permitAll()
+                        .requestMatchers("/ranking/**").permitAll()
+                        .requestMatchers("/recommend/**").authenticated()      // gemini연결 이슈로 잠깐 켜둠
+                        .requestMatchers("/meetings/**").authenticated()
                         .requestMatchers("/mypage/**").authenticated()
+                        .requestMatchers("/bookmark/**").authenticated()
                         .anyRequest().permitAll()
                 );
 
