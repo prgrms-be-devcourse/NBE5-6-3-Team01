@@ -11,7 +11,16 @@
 <div class="restaurant-container">
   <p class="restaurant-title">🍽️ 식당 검색 결과</p>
 
-  <div th:if="${#lists.isEmpty(results)}" class="no-result">
+  <form method="get" action="/search/result" class="search" onsubmit="return validateForm()">
+    <input type="text" name="restaurantKeyword" id="restaurantKeyword" placeholder="식당명을 입력하세요">
+    <button type="submit">검색</button>
+  </form>
+
+  <div th:if="${message != null}">
+    <p th:text="${message}" class="text-red-500 font-semibold"></p>
+  </div>
+
+  <div th:if="${#lists.isEmpty(results)} and ${message == null}" class="no-result">
     검색 결과가 없습니다.
   </div>
   <ul th:if="${not #lists.isEmpty(results)}" class="restaurant-list">
