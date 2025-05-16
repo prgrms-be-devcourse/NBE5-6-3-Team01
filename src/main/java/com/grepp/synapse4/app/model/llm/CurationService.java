@@ -17,27 +17,42 @@ public class CurationService {
 
     private final CurationRepository curationRepository;
 
+    @Transactional
+    public void setCuration(CurationDto dto) {
+        Curation curation = new Curation();
+        curation.setTitle(dto.getTitle());
+        curation.setCompanyLocation(String.valueOf(dto.getCompanyLocation()));
+        curation.setCompanion(String.valueOf(dto.getCompanion()));
+        curation.setPurpose(String.valueOf(dto.getPurpose()));
+        curation.setFavoriteCategory(String.valueOf(dto.getFavoriteCategory()));
+        curation.setPreferredMood(String.valueOf(dto.getPreferredMood()));
+        curationRepository.save(curation);
+    }
 
+
+
+    public CurationDto getLatestCurationRestaurants() {
+        return null;
+    }
     // 우선 가장 최신 등록한 큐레이션만 노출하도록 로직 설계
     // 4개 테이블 조인해서 lazy 이슈로 서비스단에서 트랜젝션 리드온니처리
-    @Transactional(readOnly = true)
-    public CurationDto getLatestCurationRestaurants() {
-
-        // 1. 최신 큐레이션 엔티티
-        Curation latest = curationRepository.findTopByOrderByCreatedAtDesc();
-
-        // 2. 최신 큐레이션 엔티티의 결과 리스트 엔티티
-        // 3. 큐레이션 결과의 1개 식당과 매핑
-        //    그렇게 매핑된 식당을 '큐레이션식당 dto'에 담기
-        List<CurationRestaurantDto> dtos = latest.getResults().stream()
-                .map(result -> result.getRestaurant())
-                .map(restaurant -> CurationRestaurantDto.fromEntity(restaurant))
-                .collect(Collectors.toList());
-
-        return new CurationDto(
-                latest.getId(),
-                latest.getTitle(),
-                dtos
-        );
-    }
+//    @Transactional(readOnly = true)
+//    public CurationDto getLatestCurationRestaurants() {
+//
+//        // 1. 최신 큐레이션 엔티티
+//        Curation latest = curationRepository.findTopByOrderByCreatedAtDesc();
+//
+//        // 2. 최신 큐레이션 엔티티의 결과 리스트 엔티티
+//        // 3. 큐레이션 결과의 1개 식당과 매핑
+//        //    그렇게 매핑된 식당을 '큐레이션식당 dto'에 담기
+//        List<CurationRestaurantDto> dtos = latest.getResults().stream()
+//                .map(result -> result.getRestaurant())
+//                .map(restaurant -> CurationRestaurantDto.fromEntity(restaurant))
+//                .collect(Collectors.toList());
+//
+//        return new CurationDto(
+//                latest.getId(),
+//                latest.getTitle(),
+//                dtos );
+//    }
 }

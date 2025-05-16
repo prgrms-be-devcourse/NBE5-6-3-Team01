@@ -26,10 +26,15 @@ import org.springframework.ui.Model;
 @Transactional
 public class MeetingService {
 
-  private final MeetingRepository meetingRepository;
-  private final ModelMapper mapper;
-  private final UserRepository userRepository;
-  private final MeetingMemberRepository meetingMemberRepository;
+    private final MeetingRepository meetingRepository;
+    private final ModelMapper mapper;
+    private final UserRepository userRepository;
+    private final MeetingMemberRepository meetingMemberRepository;
+
+
+    public List<Meeting> findAll() {
+        return meetingRepository.findAll();
+    }
 
   public void registMeeting(MeetingDto dto){
     Meeting meeting = mapper.map(dto, Meeting.class);
