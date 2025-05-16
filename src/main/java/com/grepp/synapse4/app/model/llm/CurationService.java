@@ -3,6 +3,7 @@ package com.grepp.synapse4.app.model.llm;
 import com.grepp.synapse4.app.model.llm.dto.CurationDto;
 import com.grepp.synapse4.app.model.llm.dto.CurationRestaurantDto;
 import com.grepp.synapse4.app.model.llm.entity.Curation;
+import com.grepp.synapse4.app.model.llm.repository.CurationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.grepp.synapse4.app.model.llm;
+package com.grepp.synapse4.app.model.llm.repository;
 
 import com.grepp.synapse4.app.model.llm.entity.Curation;
 import org.springframework.data.jpa.repository.JpaRepository;

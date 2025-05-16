@@ -11,6 +11,7 @@ public class VerifyTestController {
 
     private final KakaoRestaurantVerifierService kakaoRestaurantVerifierService;
 
+    // 경로 앞에 /admin 추가?
     @GetMapping("/verify")
     private String verifyRestaurant() {
         kakaoRestaurantVerifierService.verifyAndActivateRestaurant();

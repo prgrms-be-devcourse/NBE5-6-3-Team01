@@ -29,11 +29,15 @@ public class SearchController {
 
     @GetMapping("/search/result")
     public String searchResult(@RequestParam(required = false) String restaurantKeyword, Model model) {
-        if (restaurantKeyword != null) {
+        if(restaurantKeyword == null || restaurantKeyword.isBlank()) {
+            model.addAttribute("message", "검색어를 입력해 주세요");
+            return "restaurant/searchResult";
+        }
+
             List<SearchRestaurantResponseDto> results = restaurantSearchService.searchByName(restaurantKeyword);
             model.addAttribute("keyword", restaurantKeyword);
             model.addAttribute("results", results);
-        }
+
         return "restaurant/searchResult";
     }
 

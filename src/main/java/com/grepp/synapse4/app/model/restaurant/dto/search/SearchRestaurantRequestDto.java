@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 public class SearchRestaurantRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "입력값은 필수입니다.")
     private String restaurantKeyword;
 }

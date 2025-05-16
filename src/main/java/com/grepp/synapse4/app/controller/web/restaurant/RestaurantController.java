@@ -23,18 +23,22 @@ public class RestaurantController {
 
     @GetMapping("restaurant/detail/{id}")
     public String restaurantDetail(@PathVariable Long id, Model model) {
-        Restaurant restaurant = restaurantRepository.findWithMenusById(id)
-                .orElseThrow(() -> new IllegalArgumentException("식당 없음"));
 
-        // 메뉴 가장 비싼 메뉴 상위 3개만 노출
-        List<RestaurantMenu> topMenus = restaurant.getMenus().stream()
-                .sorted((a, b) -> b.getPrice() - a.getPrice())
-                .limit(3)
-                .toList();
+        // exception 처리(CurationController와 공통 사항 noList)
+        Restaurant restaurant = restaurantRepository.findWithMenusById(id)
+                .orElseThrow(null);
+
+        model.addAttribute("restaurant", restaurant); // null 가능성 있음
+
+        if (restaurant != null && restaurant.getMenus() != null) {
+            List<RestaurantMenu> topMenus = restaurant.getMenus().stream()
+                    .sorted((a, b) -> b.getPrice() - a.getPrice())
+                    .limit(3)
+                    .toList();
+            model.addAttribute("topMenus", topMenus);
+        }
 
         model.addAttribute("kakaoMapApiKey", kakaoMapApiKey);
-        model.addAttribute("restaurant", restaurant);
-        model.addAttribute("topMenus", topMenus);
         return "restaurant/detail";
     }
 }
