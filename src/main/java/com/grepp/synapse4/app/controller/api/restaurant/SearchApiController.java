@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping
-public class MainSearchApiController {
+public class SearchApiController {
 
     private final RestaurantSearchService restaurantSearchService;
 
