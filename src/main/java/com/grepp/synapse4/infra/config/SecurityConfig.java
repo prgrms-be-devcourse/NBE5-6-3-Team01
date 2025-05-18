@@ -1,5 +1,7 @@
 package com.grepp.synapse4.infra.config;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -9,15 +11,19 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
 
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
@@ -37,90 +43,75 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Order(1)
-    public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
-        http
-                .securityMatcher("/admin/**")
-                .csrf(csrf -> csrf.disable())
-                .authenticationProvider(daoAuthenticationProvider())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/signin", "/admin/signup", "/img/**", "/css/**").permitAll()
-                        .requestMatchers("/").permitAll()
-                        .anyRequest().hasRole("ADMIN")
-                );
-
-
-        http
-                .formLogin(auth -> auth
-                        .loginPage("/admin/signin")
-                        .loginProcessingUrl("/admin/signin")
-                        .defaultSuccessUrl("/admin/users", true)
-                        .failureUrl("/admin/signin?error=true")
-                        .usernameParameter("userAccount")
-                        .passwordParameter("password")
-                        .permitAll()
-                );
-
-        http
-                .logout(logout -> logout
-                        .logoutUrl("/admin/logout")
-                        .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                );
-
-        http
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(new org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint("/admin/signin"))
-                        .accessDeniedPage("/")
-                );
-
-        return http.build();
+    public AuthenticationSuccessHandler successHandler() {
+        return (HttpServletRequest request, HttpServletResponse response, Authentication auth) -> {
+            boolean isAdmin = auth.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            if (isAdmin) {
+                response.sendRedirect("/admin/users");
+            } else {
+                response.sendRedirect("/");
+            }
+        };
     }
 
     @Bean
-    @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable());
-
         http
+                .csrf(csrf -> csrf.disable())
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/static/**").permitAll()
-                        .requestMatchers("/", "/user/signin", "/user/signup", "/user/**").permitAll()
-                        .requestMatchers("/search/**").permitAll()
-                        .requestMatchers("/curation/**").permitAll()
-                        .requestMatchers("/restaurant/**").permitAll()
-                        .requestMatchers("/ranking/**").permitAll()
-                        .requestMatchers("/recommend/**").authenticated()      // gemini연결 이슈로 잠깐 켜둠
-                        .requestMatchers("/meetings/**").authenticated()
-                        .requestMatchers("/mypage/**").authenticated()
-                        .requestMatchers("/bookmark/**").authenticated()
+                        // admin
+                        .requestMatchers(
+                                "/admin/signin", "/admin/signup",
+                                "/img/**", "/css/**"
+                        ).permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // user
+                        .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
+                        .requestMatchers(
+                                "/", "/user/signin", "/user/signup",
+                                "/search/**", "/curation/**",
+                                "/restaurant/**", "/ranking/**",
+                                "/recommend/**" // 테스트용 임시 permitAll
+                        ).permitAll()
+                        .requestMatchers(
+                                 "/meetings/**",
+                                "/mypage/**", "/bookmark/**"
+                        ).authenticated()
                         .anyRequest().permitAll()
-                );
-
-
-        http
-                .formLogin(auth -> auth
+                )
+                .formLogin(form -> form
                         .loginPage("/user/signin")
-                        .loginProcessingUrl("/user/signin")
-                        .defaultSuccessUrl("/", true)
-                        .failureUrl("/user/signin?error=true")
+                        .loginProcessingUrl("/signin")
                         .usernameParameter("userAccount")
                         .passwordParameter("password")
+                        .successHandler(successHandler())
+                        .failureUrl("/user/signin?error=true")
                         .permitAll()
-                );
-
-        http
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
+                )
+                .exceptionHandling(ex -> ex
+                        .defaultAuthenticationEntryPointFor(
+                                new LoginUrlAuthenticationEntryPoint("/admin/signin"),
+                                new AntPathRequestMatcher("/admin/**")
+                        )
+                        .defaultAuthenticationEntryPointFor(
+                                new LoginUrlAuthenticationEntryPoint("/user/signin"),
+                                new NegatedRequestMatcher(new AntPathRequestMatcher("/admin/**"))
+                        )
+                        .accessDeniedPage("/")
+
                 );
 
-        return http.build();
 
+        return http.build();
     }
 
     @Bean
@@ -128,5 +119,3 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 }
-
-

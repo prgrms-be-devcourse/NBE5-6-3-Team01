@@ -1,7 +1,8 @@
 package com.grepp.synapse4.app.controller.api.llm;
 
-import com.grepp.synapse4.app.model.llm.GeminiService;
-import com.grepp.synapse4.app.model.llm.dto.GeminiUserRequestDto;
+import com.grepp.synapse4.app.model.llm.GeminiPromptService;
+import com.grepp.synapse4.app.model.llm.dto.GeminiPromptDto;
+import com.grepp.synapse4.app.model.llm.dto.GeminiResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,20 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("recommend")
 public class GeminiApiController {
 
-    private final GeminiService geminiService;
+    private final GeminiPromptService geminiPromptService;
 
     @PostMapping
-    public ResponseEntity<String> getRecommend(@Valid @RequestBody GeminiUserRequestDto request,
+    public ResponseEntity<?> getRecommend(@Valid @RequestBody GeminiPromptDto request,
                                                BindingResult bindingResult){
-        String userText = request.getUserText();
 
         if(bindingResult.hasErrors()){
-            return ResponseEntity.badRequest().body(bindingResult.getFieldError().getDefaultMessage());
+            return ResponseEntity.badRequest()
+                    .body(bindingResult.getFieldError().getDefaultMessage());
         }
 
-        String geminiResponse = geminiService.getGeminiResponse(userText);
-        log.info("응답: {}", geminiResponse);
-
-        return ResponseEntity.ok(geminiResponse);
+        GeminiResponseDto result = geminiPromptService.generateRecommendations(request);
+        return ResponseEntity.ok(result);
     }
 }
