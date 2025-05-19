@@ -33,11 +33,36 @@
         </a>
       </div>
 
+      <input type="hidden" id="userId" th:value="${user.id}" />
       <div class="mt-6 text-center">
-        <form th:action="@{/mypage/delete}" method="post">
-          <button type="submit" class="text-red-600 text-sm hover:underline">회원탈퇴</button>
-        </form>
+        <button type="button" onclick="deleteUser()" class="text-red-600 text-sm hover:underline">
+          회원탈퇴
+        </button>
       </div>
+
+      <script>
+        function deleteUser() {
+          const userId = document.getElementById("userId").value;
+
+          if (confirm("정말 탈퇴하시겠습니까?")) {
+            fetch(`/api/users/${userId}`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
+            .then(res => {
+              if (res.ok) {
+                alert("탈퇴가 완료되었습니다.");
+                window.location.href = "/user/signin?message=deleted";
+              } else {
+                alert("탈퇴에 실패했습니다.");
+              }
+            });
+          }
+        }
+      </script>
+
     </div>
   </div>
 </main>

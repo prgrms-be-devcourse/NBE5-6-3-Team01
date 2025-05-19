@@ -1,21 +1,19 @@
 package com.grepp.synapse4.app.model.user;
 
+import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_ADMIN;
+import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_USER;
+
 import com.grepp.synapse4.app.model.user.dto.request.EditInfoRequest;
 import com.grepp.synapse4.app.model.user.dto.request.UserSignUpRequest;
 import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.app.model.user.repository.UserRepository;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-
-import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_ADMIN;
-import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_USER;
 
 @Service
 @Transactional
@@ -24,11 +22,11 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserValidator userValidator;
 
     public List<User> findAll() {
         return userRepository.findAll();
     }
-
 
     public void signup(UserSignUpRequest request){
         String encodedPassword = passwordEncoder.encode(request.getPassword());
@@ -37,17 +35,13 @@ public class UserService {
     }
 
     public void validateDuplicateUser(UserSignUpRequest request, BindingResult bindingResult) {
-        if (userRepository.existsByUserAccount(request.getUserAccount())) {
-            bindingResult.rejectValue("userAccount", "duplicate", "이미 등록된 아이디입니다.");
-        }
-
-        if (userRepository.existsByNickname(request.getNickname())) {
-            bindingResult.rejectValue("nickname", "duplicate", "이미 등록된 닉네임입니다.");
-        }
-
-        if (userRepository.existsByEmail(request.getEmail())) {
-            bindingResult.rejectValue("email", "duplicate", "이미 등록된 이메일입니다.");
-        }
+        userValidator.validateIdentifiers(
+            request.getUserAccount(),
+            request.getEmail(),
+            request.getNickname(),
+            null,
+            bindingResult
+        );
     }
 
     public void validateEditUser(EditInfoRequest request, User user, BindingResult bindingResult) {
@@ -55,20 +49,28 @@ public class UserService {
             bindingResult.rejectValue("currentPassword", "invalid", "기존 비밀번호가 일치하지 않습니다.");
         }
 
+        userValidator.validateIdentifiers(
+            null,
+            request.getEmail(),
+            request.getNickname(),
+            user.getId(),
+            bindingResult
+        );
+
         if (request.getNewPassword() != null && !request.getNewPassword().isBlank()) {
-            if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            String pw = request.getNewPassword();
+
+            if (!pw.matches("^(?=.*[A-Za-z])(?=.*\\d)[^\\s]{4,16}$")) {
+                bindingResult.rejectValue("newPassword", "pattern", "비밀번호는 공백 없이 영문자와 숫자를 포함한 4~16자여야 합니다.");
+            }
+
+            if (passwordEncoder.matches(pw, user.getPassword())) {
                 bindingResult.rejectValue("newPassword", "sameAsOld", "기존 비밀번호와 동일합니다.");
             }
-        }
 
-        Optional<User> userByNickname = userRepository.findByNickname(request.getNickname());
-        if (userByNickname.isPresent() && !userByNickname.get().getId().equals(user.getId())) {
-            bindingResult.rejectValue("nickname", "duplicate", "이미 사용 중인 닉네임입니다.");
-        }
-
-        Optional<User> userByEmail = userRepository.findByEmail(request.getEmail());
-        if (userByEmail.isPresent() && !userByEmail.get().getId().equals(user.getId())) {
-            bindingResult.rejectValue("email", "duplicate", "이미 등록된 이메일입니다.");
+            if (!pw.equals(request.getConfirmNewPassword())) {
+                bindingResult.rejectValue("confirmNewPassword", "mismatch", "새 비밀번호가 일치하지 않습니다.");
+            }
         }
     }
 
@@ -79,6 +81,8 @@ public class UserService {
         if (request.getNewPassword() != null && !request.getNewPassword().isBlank()) {
             user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         }
+
+        userRepository.save(user);
     }
 
     public void signupAdmin(UserSignUpRequest request) {
@@ -103,5 +107,12 @@ public class UserService {
                 .email(req.getEmail())
                 .nickname(req.getNickname())
                 .build();
+    }
+
+    @Transactional
+    public void softDelete(User user) {
+        user.setActivated(false);
+        user.setDeletedAt(LocalDateTime.now());
+        userRepository.save(user);
     }
 }

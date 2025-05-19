@@ -23,7 +23,7 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
 
     public SecurityConfig(UserDetailsService userDetailsService,
-                          PasswordEncoder passwordEncoder) {
+                            PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -39,6 +39,7 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .securityMatcher("/admin/**")
                 .csrf(csrf -> csrf.disable())
@@ -51,29 +52,29 @@ public class SecurityConfig {
 
 
         http
-                .formLogin(auth -> auth
-                        .loginPage("/admin/signin")
-                        .loginProcessingUrl("/admin/signin")
-                        .defaultSuccessUrl("/admin/users", true)
-                        .failureUrl("/admin/signin?error=true")
-                        .usernameParameter("userAccount")
-                        .passwordParameter("password")
-                        .permitAll()
-                );
+            .formLogin(auth -> auth
+                .loginPage("/admin/signin")
+                .loginProcessingUrl("/admin/signin")
+                .defaultSuccessUrl("/admin/users", true)
+                .failureUrl("/admin/signin?error=true")
+                .usernameParameter("userAccount")
+                .passwordParameter("password")
+                .permitAll()
+            );
 
         http
-                .logout(logout -> logout
-                        .logoutUrl("/admin/logout")
-                        .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                );
+            .logout(logout -> logout
+                .logoutUrl("/admin/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+            );
 
         http
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(new org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint("/admin/signin"))
-                        .accessDeniedPage("/")
-                );
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(new org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint("/admin/signin"))
+                .accessDeniedPage("/")
+            );
 
         return http.build();
     }
@@ -81,6 +82,7 @@ public class SecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http.csrf(csrf -> csrf.disable());
 
         http
@@ -95,21 +97,21 @@ public class SecurityConfig {
                         .requestMatchers("/recommend/**").authenticated()      // gemini연결 이슈로 잠깐 켜둠
                         .requestMatchers("/meetings/**").authenticated()
                         .requestMatchers("/mypage/**").authenticated()
+                        .requestMatchers("/surveys/**").authenticated()
                         .requestMatchers("/bookmark/**").authenticated()
                         .anyRequest().permitAll()
                 );
 
-
         http
-                .formLogin(auth -> auth
-                        .loginPage("/user/signin")
-                        .loginProcessingUrl("/user/signin")
-                        .defaultSuccessUrl("/", true)
-                        .failureUrl("/user/signin?error=true")
-                        .usernameParameter("userAccount")
-                        .passwordParameter("password")
-                        .permitAll()
-                );
+            .formLogin(auth -> auth
+                .loginPage("/user/signin")
+                .loginProcessingUrl("/user/signin")
+                .defaultSuccessUrl("/login-redirect", true)
+                .failureUrl("/user/signin?error=true")
+                .usernameParameter("userAccount")
+                .passwordParameter("password")
+                .permitAll()
+            );
 
         http
                 .logout(logout -> logout

@@ -5,7 +5,6 @@ import com.grepp.synapse4.app.model.user.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,12 +18,11 @@ public class UserSignUpRequest {
     private String userAccount;
 
     @NotBlank(message = "비밀번호는 필수 입력값입니다.")
-    @Pattern(regexp = "^[^\\s]+$", message = "비밀번호는 공백을 포함할 수 없습니다.")
-    @Size(min = 4, max = 12, message = "비밀번호는 4자 이상 12자 이하로 입력해주세요.")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[^\\s]{4,16}$", message = "비밀번호는 공백 없이 영문자와 숫자를 포함한 4~16자여야 합니다.")
     private String password;
 
     @NotBlank(message = "닉네임은 필수 입력값입니다.")
-    @Pattern(regexp = "^[a-zA-Z0-9가-힣]{2,20}$", message = "닉네임은 특수문자를 제외한 2~10자여야 합니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣]{2,10}$", message = "닉네임은 특수문자를 제외한 2~10자여야 합니다.")
     private String nickname;
 
     @NotBlank(message = "이메일은 필수 입력값입니다.")

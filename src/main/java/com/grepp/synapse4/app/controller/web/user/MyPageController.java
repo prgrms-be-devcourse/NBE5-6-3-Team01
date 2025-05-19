@@ -1,9 +1,16 @@
 package com.grepp.synapse4.app.controller.web.user;
 
+import com.grepp.synapse4.app.model.user.SurveyService;
+import com.grepp.synapse4.app.model.user.UserService;
+import com.grepp.synapse4.app.model.user.code.Companion;
+import com.grepp.synapse4.app.model.user.code.CompanyLocation;
+import com.grepp.synapse4.app.model.user.code.FavoriteCategory;
+import com.grepp.synapse4.app.model.user.code.PreferredMood;
+import com.grepp.synapse4.app.model.user.code.Purpose;
 import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
 import com.grepp.synapse4.app.model.user.dto.request.EditInfoRequest;
+import com.grepp.synapse4.app.model.user.dto.request.SurveyRequest;
 import com.grepp.synapse4.app.model.user.entity.User;
-import com.grepp.synapse4.app.model.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -21,10 +29,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MyPageController {
 
     private final UserService userService;
+    private final SurveyService surveyService;
 
     @GetMapping
     public String myPage(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
-
         User user = userDetails.getUser();
         model.addAttribute("user", user);
         return "user/mypage";
@@ -47,7 +55,6 @@ public class MyPageController {
         BindingResult bindingResult) {
 
         User user = userDetails.getUser();
-
         userService.validateEditUser(request, user, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -58,5 +65,36 @@ public class MyPageController {
         return "redirect:/mypage";
     }
 
+    @GetMapping("/edit-prefer")
+    public String showEditForm(@AuthenticationPrincipal CustomUserDetails userDetails,
+        Model model) {
 
+        User user = userDetails.getUser();
+
+        SurveyRequest request = surveyService.getSurveyRequest(user);
+        Long id = surveyService.getSurveyId(userDetails.getUser());
+
+        model.addAttribute("surveyRequest", request);
+        model.addAttribute("surveyId", id);
+
+        addEnumsAttributes(model);
+
+        return "user/edit-survey";
+    }
+
+    @PostMapping("/edit-prefer/{id}")
+    public String updateSurvey(@PathVariable Long id,
+                                @ModelAttribute SurveyRequest request,
+                                @AuthenticationPrincipal CustomUserDetails userDetails) {
+        surveyService.updateSurvey(id, request, userDetails.getUser());
+        return "redirect:/mypage";
+    }
+
+    private void addEnumsAttributes(Model model) {
+        model.addAttribute("companylocation", CompanyLocation.values());
+        model.addAttribute("purpose", Purpose.values());
+        model.addAttribute("companion", Companion.values());
+        model.addAttribute("favoritecategory", FavoriteCategory.values());
+        model.addAttribute("preferredmood", PreferredMood.values());
+    }
 }

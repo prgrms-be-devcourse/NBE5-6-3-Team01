@@ -2,19 +2,21 @@ package com.grepp.synapse4.app.model.user.entity;
 
 import com.grepp.synapse4.app.model.auth.code.Role;
 import com.grepp.synapse4.infra.entity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import java.time.LocalDateTime;
 
-//@ToString
-//@DynamicInsert      //del이 null일 때 insert되지 않도록
 @Entity
 @Getter
 @Setter
