@@ -2,42 +2,46 @@
 <html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-  <meta charset="UTF-8">
-  <title>식당 리스트</title>
-  <link rel="stylesheet" href="/css/restaurantList.css">
+    <meta charset="UTF-8">
+    <title>식당 리스트</title>
+    <link rel="stylesheet" href="/css/restaurantList.css">
 </head>
 <body>
 <main layout:fragment="content">
-<div class="restaurant-container">
-  <p class="restaurant-title">🍽️ 식당 검색 결과</p>
+    <div class="absolute overflow-y-auto"
+         style="max-height: 100%; width: 90%; overflow-y: auto;">
+        <div class="restaurant-container">
+            <p class="restaurant-title">🍽️ 식당 검색 결과</p>
 
-  <form method="get" action="/search/result" class="search" onsubmit="return validateForm()">
-    <input type="text" name="restaurantKeyword" id="restaurantKeyword" placeholder="식당명을 입력하세요">
-    <button type="submit">검색</button>
-  </form>
+            <form method="get" action="/search/result" class="search" onsubmit="return validateForm()">
+                <input type="text" name="restaurantKeyword" id="restaurantKeyword" placeholder="식당명을 입력하세요">
+                <button type="submit">검색</button>
+            </form>
 
-  <div th:if="${message != null}">
-    <p th:text="${message}" class="text-red-500 font-semibold"></p>
-  </div>
+            <div th:if="${message != null}">
+                <p th:text="${message}" class="text-red-500 font-semibold"></p>
+            </div>
 
-  <div th:if="${#lists.isEmpty(results)} and ${message == null}" class="no-result">
-    검색 결과가 없습니다.
-  </div>
-  <ul th:if="${not #lists.isEmpty(results)}" class="restaurant-list">
-  <ul class="restaurant-list">
-    <li th:each="res : ${results}" class="restaurant-card">
-      <a th:href="@{/restaurant/detail/{id}(id=${res.id})}">
-        <div>
-          <span class="restaurant-name" th:text="${res.name}">식당명</span>
-          <span class="restaurant-branch" th:text="${res.branch}">지점명</span>
-          <span class="restaurant-category" th:text="${res.category}">한식</span>
+            <div th:if="${#lists.isEmpty(results)} and ${message == null}" class="no-result">
+                검색 결과가 없습니다.
+            </div>
+
+            <ul th:if="${not #lists.isEmpty(results)}" class="restaurant-list">
+<!--                <ul class="restaurant-list">-->
+                    <li th:each="res : ${results}" class="restaurant-card">
+                        <a th:href="@{/restaurant/detail/{id}(id=${res.id})}">
+                            <div>
+                                <span class="restaurant-name" th:text="${res.name}">식당명</span>
+                                <span class="restaurant-branch" th:text="${res.branch}">지점명</span>
+                                <span class="restaurant-category" th:text="${res.category}">한식</span>
+                            </div>
+                            <p class="restaurant-time" th:text="${res.businessTime}">영업시간</p>
+                            <p class="restaurant-address" th:text="${res.roadAddress}">주소</p>
+                        </a>
+                    </li>
+                </ul>
         </div>
-        <p class="restaurant-time" th:text="${res.businessTime}">영업시간</p>
-        <p class="restaurant-address" th:text="${res.roadAddress}">주소</p>
-      </a>
-    </li>
-  </ul>
-</div>
+    </div>
 </main>
 </body>
 </html>

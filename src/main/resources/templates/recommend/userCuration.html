@@ -12,8 +12,8 @@
     <div class="restaurant-container">
     <p class="restaurant-title" th:text="${curation.title}">큐레이션 제목</p>
 
-    <div th:if="${#lists.isEmpty(curation.restaurants)}" class="no-result">
-        검색 결과가 없습니다.
+    <div th:if="${curation == null or #lists.isEmpty(curation.restaurants)}" class="no-result">
+        큐레이션이 없습니다.
     </div>
     <div th:if="${not #lists.isEmpty(curation.restaurants)}" class="restaurant-list">
         <ul class="restaurant-list">

@@ -1,6 +1,6 @@
 package com.grepp.synapse4.app.model.llm;
 
-import com.grepp.synapse4.app.model.llm.dto.GeminiRequestDto;
+import com.grepp.synapse4.app.model.llm.dto.userrecommenddto.GeminiRequestDto;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;

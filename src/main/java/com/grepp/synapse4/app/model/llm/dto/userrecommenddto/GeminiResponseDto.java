@@ -1,4 +1,4 @@
-package com.grepp.synapse4.app.model.llm.dto;
+package com.grepp.synapse4.app.model.llm.dto.userrecommenddto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
