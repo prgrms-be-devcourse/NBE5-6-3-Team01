@@ -49,7 +49,7 @@ public class SecurityConfig {
             if (isAdmin) {
                 response.sendRedirect("/admin/users");
             } else {
-                response.sendRedirect("/");
+                response.sendRedirect("/login-redirect");
             }
         };
     }
@@ -86,7 +86,6 @@ public class SecurityConfig {
                         .loginProcessingUrl("/signin")
                         .usernameParameter("userAccount")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/login-redirect", true)
                         .successHandler(successHandler())
                         .failureUrl("/user/signin?error=true")
                         .permitAll()

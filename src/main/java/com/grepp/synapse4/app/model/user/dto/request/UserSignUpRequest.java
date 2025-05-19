@@ -5,7 +5,6 @@ import com.grepp.synapse4.app.model.user.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,14 +30,6 @@ public class UserSignUpRequest {
 
     public UserSignUpRequest() {
 
-    }
-
-    @Builder
-    public UserSignUpRequest(String userAccount, String password, String nickname, String email) {
-        this.userAccount = userAccount;
-        this.password = password;
-        this.nickname = nickname;
-        this.email = email;
     }
 
     public User toEntity(String encodedPassword, Role role) {
