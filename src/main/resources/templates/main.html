@@ -49,7 +49,7 @@
   } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
 
     var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
-            message = '환영합니다!'
+            message = '환영합니다! 현재 위치와 가까운 강남구의 맛집을 확인해 보세요!'
 
     displayMarker(locPosition, message);
   }
@@ -94,8 +94,31 @@
     });
 
 // 커스텀 오버레이를 지도에 표시합니다
-    customOverlay.setMap(map);
+//     customOverlay.setMap(map);
   }
 </script>
+
+    <script th:inline="javascript">
+        const restaurants = /*[[${restaurants}]]*/ [];
+
+        restaurants.forEach(r => {
+            const markerPosition = new kakao.maps.LatLng(r.latitude, r.longitude);
+
+            const marker = new kakao.maps.Marker({
+                position: markerPosition,
+                map: map
+            });
+
+            const infowindow = new kakao.maps.InfoWindow({
+                content: `<div style="padding:5px;">${r.name}</div>`
+            });
+
+            kakao.maps.event.addListener(marker, 'mouseover', () => infowindow.open(map, marker));
+            kakao.maps.event.addListener(marker, 'mouseout', () => infowindow.close());
+
+            console.log('[전체 식당]', restaurants);
+        });
+    </script>
+
 </body>
 </html>
