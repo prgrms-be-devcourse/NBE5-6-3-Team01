@@ -12,6 +12,7 @@ import com.grepp.synapse4.app.model.llm.repository.RestaurantTagsDocumentReposit
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import com.grepp.synapse4.app.model.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GeminiUserRecommendPromptService {
 
     // 제미나이에게 보낼 프롬프트 제작 담당 서비스
@@ -31,12 +33,14 @@ public class GeminiUserRecommendPromptService {
     private final RestaurantRepository restaurantRepository;
     private final LlmResultRepository llmResultRepository;
 
+    @Transactional
     public GeminiResponseDto generateRecommendations(Long llmQuestionId) {
         //0. 입력받은 id 값으로 사용자 입력 텍스트 찾기
         // todo 추후 Questionservice로 감싸서 전달하기.
         String userText = llmQuestionRepository.findById(llmQuestionId)
                 .orElseThrow(() -> new RuntimeException("저장된 질문이 없습니다"))
                 .getText();
+        System.out.println(" id 찾음");
 
         // 1. text로 문자열 prompt 생성
         String prompt = buildUserRecommendPrompt(userText);
