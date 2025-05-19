@@ -22,6 +22,4 @@ public class AdminCurationResultDto {
         this.active = active;
     }
 
-
-
 }

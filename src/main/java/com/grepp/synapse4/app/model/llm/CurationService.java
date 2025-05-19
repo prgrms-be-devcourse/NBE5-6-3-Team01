@@ -17,9 +17,12 @@ import java.util.stream.Collectors;
 public class CurationService {
 
     private final CurationRepository curationRepository;
+    private final GeminiAdminCurationPromptService geminiAdminCurationPromptService;
 
     @Transactional
     public void setCuration(AdminCurationDto dto) {
+
+        // 1. 큐레이션 엔티티 저장
         Curation curation = new Curation();
         curation.setTitle(dto.getTitle());
         curation.setCompanyLocation(String.valueOf(dto.getCompanyLocation()));
@@ -27,7 +30,14 @@ public class CurationService {
         curation.setPurpose(String.valueOf(dto.getPurpose()));
         curation.setFavoriteCategory(String.valueOf(dto.getFavoriteCategory()));
         curation.setPreferredMood(String.valueOf(dto.getPreferredMood()));
-        curationRepository.save(curation);
+
+        Curation savedCuration = curationRepository.save(curation);
+        Long id = savedCuration.getId();
+        String curationTitle = savedCuration.getTitle();
+
+        // 2. Gemini 호출
+        geminiAdminCurationPromptService.generateRecommendations(id, curationTitle);
+
     }
 
 
