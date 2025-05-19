@@ -1,6 +1,7 @@
 package com.grepp.synapse4.app.controller.api;
 
 import com.grepp.synapse4.app.model.user.BookmarkService;
+import com.grepp.synapse4.app.model.user.PreferService;
 import com.grepp.synapse4.app.model.user.SurveyService;
 import com.grepp.synapse4.app.model.user.dto.BookMarkDto;
 import com.grepp.synapse4.app.model.user.dto.SurveyDto;
@@ -27,15 +28,13 @@ public class AdminApiController {
 
     private final SurveyService surveyService;
     private final BookmarkService bookmarkService;
+    private final PreferService preferService;
 
-    // TODO : survey 엔티티변경(이넘값)으로인해 변경해야함
     @GetMapping("/users/prefer/{userId}")
     public ResponseEntity<ApiResponse<List<SurveyDto>>> getUserPrefer(
-            @PathVariable("userId") Long userId) {
+            @PathVariable Long userId) {
         List<Survey> surveys = surveyService.findByUserId(userId);
-        List<SurveyDto> dtoList = surveys.stream()
-                .map(SurveyDto::fromEntity)
-                .toList();
+        List<SurveyDto> dtoList = preferService.getUserPreferences(userId);
         return ResponseEntity.ok(ApiResponse.success(dtoList));
     }
 
@@ -43,9 +42,7 @@ public class AdminApiController {
     public ResponseEntity<ApiResponse<List<BookMarkDto>>> getUserBookmark(
             @PathVariable("userId") Long userId) {
         List<Bookmark> entities = bookmarkService.findByUserId(userId);
-        List<BookMarkDto> dtoList = entities.stream()
-                .map(BookMarkDto::fromEntity)
-                .toList();
+        List<BookMarkDto> dtoList = bookmarkService.getUserBookmarks(userId);
         return ResponseEntity.ok(ApiResponse.success(dtoList));
     }
 

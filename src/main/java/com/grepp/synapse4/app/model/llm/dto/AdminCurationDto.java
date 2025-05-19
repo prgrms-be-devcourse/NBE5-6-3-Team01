@@ -18,3 +18,5 @@ public class AdminCurationDto {
     private Boolean activated;
 
 }
+
+
