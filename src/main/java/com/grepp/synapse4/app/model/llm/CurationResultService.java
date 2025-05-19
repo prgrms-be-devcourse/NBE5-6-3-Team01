@@ -1,9 +1,7 @@
 package com.grepp.synapse4.app.model.llm;
 
-import com.grepp.synapse4.app.model.llm.dto.CurationResultDto;
-import com.grepp.synapse4.app.model.llm.entity.CurationResult;
+import com.grepp.synapse4.app.model.llm.dto.AdminCurationResultDto;
 import com.grepp.synapse4.app.model.llm.repository.CurationResultRepository;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,7 @@ public class CurationResultService {
     private final CurationResultRepository repository;
 //    private EntityManager entityManager;
 
-    public List<CurationResultDto> getResultsByCurationId() {
+    public List<AdminCurationResultDto> getResultsByCurationId() {
         return repository.findResultsByCurationId();
     }
 

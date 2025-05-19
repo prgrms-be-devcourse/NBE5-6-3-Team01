@@ -4,8 +4,9 @@ import com.grepp.synapse4.app.model.llm.CurationResultService;
 import com.grepp.synapse4.app.model.llm.CurationService;
 import com.grepp.synapse4.app.model.llm.code.*;
 import com.grepp.synapse4.app.model.llm.dto.AdminCurationDto;
-import com.grepp.synapse4.app.model.llm.dto.CurationResultDto;
+import com.grepp.synapse4.app.model.llm.dto.AdminCurationResultDto;
 import com.grepp.synapse4.app.model.meeting.MeetingService;
+import com.grepp.synapse4.app.model.meeting.dto.AdminMeetingDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.user.UserService;
 import com.grepp.synapse4.app.model.user.dto.request.UserSignUpRequest;
@@ -41,7 +42,7 @@ public class AdminController {
 
     @GetMapping("/meetings")
     public String meetings(Model model) {
-        List<Meeting> meetings = meetingService.findAll();
+        List<AdminMeetingDto> meetings = meetingService.findAllForAdmin();
         model.addAttribute("meetings", meetings);
         return "admin/meetings";
     }
@@ -67,7 +68,7 @@ public class AdminController {
 
     @GetMapping("/curation/list")
     public String curationList(Model model) {
-        List<CurationResultDto> curationResults = curationResultService.getResultsByCurationId();
+        List<AdminCurationResultDto> curationResults = curationResultService.getResultsByCurationId();
         model.addAttribute("curationResults", curationResults);
         return "admin/curationList";
     }

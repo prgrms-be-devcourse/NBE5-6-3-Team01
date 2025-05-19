@@ -1,6 +1,6 @@
 package com.grepp.synapse4.app.model.llm.repository;
 
-import com.grepp.synapse4.app.model.llm.dto.CurationResultDto;
+import com.grepp.synapse4.app.model.llm.dto.AdminCurationResultDto;
 import com.grepp.synapse4.app.model.llm.entity.CurationResult;
 import feign.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +12,7 @@ import java.util.List;
 public interface CurationResultRepository extends JpaRepository<CurationResult, Long> {
 
     @Query("""
-      SELECT new com.grepp.synapse4.app.model.llm.dto.CurationResultDto(
+      SELECT new com.grepp.synapse4.app.model.llm.dto.AdminCurationResultDto(
         cr.id,
         c.title,
         r.name,
@@ -23,7 +23,7 @@ public interface CurationResultRepository extends JpaRepository<CurationResult, 
       JOIN cr.curation c
       JOIN cr.restaurant r
       """)
-    List<CurationResultDto> findResultsByCurationId();
+    List<AdminCurationResultDto> findResultsByCurationId();
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""

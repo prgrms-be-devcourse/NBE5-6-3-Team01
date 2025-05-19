@@ -15,6 +15,7 @@ import org.hibernate.annotations.DynamicInsert;
 @DynamicInsert
 @Getter @Setter
 public class MeetingMember extends BaseEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "member_id")
