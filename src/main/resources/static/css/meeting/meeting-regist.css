@@ -23,19 +23,7 @@ label {
 }
 
 .meeting-name {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 3vw;
-}
-.complete {
-  width: 20%;
-  padding: 8px 20px;
-  background-color: #e5d4ff;
-  border: 1px solid #333;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 16px;
 }
 
 .input-group {
@@ -58,4 +46,21 @@ select {
 .error{
   margin-top: 5px;
   color: orangered;
+}
+
+.button-wrapper{
+  width: 100%;
+  margin-top: 4vh;
+  display: flex;
+  justify-content: center;
+}
+
+.complete {
+  width: 20vw;
+  padding: 15px 20px;
+  background-color: #27a69a;
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
 }

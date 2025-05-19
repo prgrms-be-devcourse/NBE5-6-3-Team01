@@ -3,80 +3,112 @@
       layout:decorate="~{layout}"
 >
 <head>
-    <meta charset="UTF-8">
-    <title>모임 상세</title>
-    <link rel="stylesheet" th:href="@{/css/meeting/detail.css}" />
+  <meta charset="UTF-8">
+  <title>모임 상세</title>
+  <link rel="stylesheet" th:href="@{/css/meeting/meeting-detail.css}"/>
 </head>
 <body>
 <main layout:fragment="content">
-    <div class="header">
-        <div>
-            <div class="div-flex" style="gap: 2vw;">
-                <div th:text="${meeting.title}" style="font-size: 40px; font-weight: bold">모임명</div>
-                <div>멤버 <span th:text="${count}"></span>명</div>
-            </div>
-            <p th:text="${meeting.description}"></p>
-        </div>
-        <div class="div-flex" style="gap: 2vw;">
-            <a class="meeting-button"
-               th:onclick="'openPopup(' + ${meeting.id} + '); return false;'">
-                멤버 보기
-            </a>
-
-            <form th:action="@{/meetings/detail}" onsubmit="return confirmLeave();" method="post">
-                <button type="submit" class="meeting-button">모임 탈퇴</button>
-                <input type="hidden" name="id" th:value="${meeting.id}" />
-            </form>
-        </div>
+  <div class="header">
+    <div>
+      <div class="div-flex" style="gap: 2vw; margin-bottom: 10px; align-items: center">
+        <div th:text="${meeting.title}" style="font-size: 40px; font-weight: bold">모임명</div>
+        <div style="font-weight: bold;">멤버 <span th:text="${count}"></span>명</div>
+      </div>
+      <p th:text="${meeting.description}"></p>
     </div>
+    <div class="div-flex" style="gap: 2vw;">
+      <a class="meeting-button"
+         th:onclick="'openPopup(' + ${meeting.id} + '); return false;'">
+        멤버 보기
+      </a>
+      <form th:action="@{/meetings/detail}" onsubmit="return confirmLeave();" method="post">
+        <button type="submit" class="meeting-button" style="height: 100%;">모임 탈퇴</button>
+        <input type="hidden" name="id" th:value="${meeting.id}"/>
+      </form>
+    </div>
+  </div>
 
-    <!-- 투표 리스트 -->
+  <!-- 투표 리스트 -->
+  <div>
     <div class="header" style="margin-top: 5vh;">
-        <div style="font-size: 2vw; font-weight: bold">투표 리스트</div>
-        <button class="vote-button">투표 만들기</button>
+      <div style="font-size: 30px; font-weight: bold">투표 리스트</div>
+      <a th:href="@{'/meetings/vote-regist'(id=${meeting.id})}" class="vote-button">투표 만들기</a>
     </div>
 
     <div class="empty" th:if="${#lists.isEmpty(voteList)}">
-        현재 진행중인 투표가 없습니다.<br/>
-        투표를 만들어서 멤버들과 투표를 진행해 보세요!
+      현재 진행중인 투표가 없습니다.<br/>
+      투표를 만들어서 멤버들과 투표를 진행해 보세요!
     </div>
 
     <div class="scroll-container">
-        <div th:each="vote:${voteList}" class="vote">
-            <div>
-                <p class="vote-detail">5월 둘째주 맛집 탐방</p>
-                <p>둘째주 맛집 탐방 활동을 위한 투표입니다.</p>
-                <p>투표 마감: 5월 12일 6시까지</p>
+      <div th:each="vote:${voteList}" class="vote">
+        <div>
+          <div th:text="${vote.title}" style="font-size: 25px; font-weight: bold;">투표명</div>
+          <div th:text="${vote.description}" style="margin-bottom: 5px;">투표 설명</div>
+          <th:block th:if="${meeting.isDutch}">
+            <div>더치페이 여부:
+              <span th:if="${vote.isDutch}" th:text="Y">터치페이 여부</span>
+              <span th:unless="${vote.isDutch}" th:text="N">터치페이 여부</span>
             </div>
-            <button class="vote-button">투표하기</button>
+          </th:block>
+          <div style="margin-bottom: 2vh;">마감 일자: <span th:text="${#temporals.format(vote.endedAt, 'yyyy년 MM월 dd일 HH시 mm분')}">투표 마감일자</span></div>
+          <div style="font-weight: bold;">모임 일자: <span th:text="${#temporals.format(vote.meetingDate, 'yyyy년 MM월 dd일 HH시 mm분')}">모임 일자</span></div>
         </div>
+
+        <div class="button-wrapper">
+          <th:block th:if="${vote.endedAt.isAfter(T(java.time.LocalDateTime).now())}">
+            <a th:if="${isVotedMap[vote.id] == false}"
+               th:href="@{'/meetings/vote'(id=${vote.id})}"
+               class="vote-move">
+              투표하기
+            </a>
+            <button th:if="${isVotedMap[vote.id] == true}"
+               class="vote-move disabled">
+              이미 투표함
+            </button>
+            <button th:if="${isVotedMap[vote.id] == null}"
+               class="vote-move disabled">
+              투표 불가능
+            </button>
+          </th:block>
+          <th:block th:if="${vote.endedAt.isBefore(T(java.time.LocalDateTime).now())}">
+            <button class="vote-move ended">투표 마감</button>
+          </th:block>
+
+          <a th:href="@{'/meetings/vote-result'(id=${vote.id})}" class="vote-move">투표 결과보기</a>
+        </div>
+
+      </div>
     </div>
+  </div>
 
-    <script th:inline="javascript">
-      function openPopup(id) {
-        const popupWidth = 1000;
-        const popupHeight = 700;
+  <script th:inline="javascript">
+    function openPopup(id) {
+      const popupWidth = 1000;
+      const popupHeight = 700;
 
-        const screenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
-        const screenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
+      const screenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
+      const screenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
 
-        const screenWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
-        const screenHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+      const screenWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
+      const screenHeight = window.innerHeight || document.documentElement.clientHeight
+          || screen.height;
 
-        const left = screenLeft + (screenWidth - popupWidth) / 2;
-        const top = screenTop + (screenHeight - popupHeight) / 2;
+      const left = screenLeft + (screenWidth - popupWidth) / 2;
+      const top = screenTop + (screenHeight - popupHeight) / 2;
 
-        window.open(
-            "/meetings/modal/meeting-member-list.html?id=" + id,
-            'popupWindow',
-            `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`
-        );
-      }
+      window.open(
+          "/meetings/modal/meeting-member-list.html?id=" + id,
+          'popupWindow',
+          `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`
+      );
+    }
 
-      function confirmLeave() {
-          return confirm("정말로 모임을 탈퇴하시겠습니까?");
-      }
-    </script>
+    function confirmLeave() {
+      return confirm("정말로 모임을 탈퇴하시겠습니까?");
+    }
+  </script>
 </main>
 
 </body>

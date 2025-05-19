@@ -7,6 +7,7 @@ import com.grepp.synapse4.app.model.user.dto.BookMarkRegistDto;
 import com.grepp.synapse4.app.model.user.dto.MyBookMarkDto;
 import com.grepp.synapse4.app.model.user.dto.RankingDto;
 import com.grepp.synapse4.app.model.user.entity.Bookmark;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Repository
 public interface BookMarkRepository extends JpaRepository<Bookmark, Long> {
+  List<Bookmark> findAllByUserId(Long userId);
 
 
     @Query("""

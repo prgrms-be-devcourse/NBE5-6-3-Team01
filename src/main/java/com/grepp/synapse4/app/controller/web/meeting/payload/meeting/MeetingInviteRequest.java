@@ -1,8 +1,7 @@
-package com.grepp.synapse4.app.controller.web.meeting.payload;
+package com.grepp.synapse4.app.controller.web.meeting.payload.meeting;
 
 import com.grepp.synapse4.app.model.meeting.code.State;
 import com.grepp.synapse4.app.model.meeting.dto.MeetingMemberDto;
-import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import lombok.Data;
 

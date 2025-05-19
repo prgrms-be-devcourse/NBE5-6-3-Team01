@@ -1,18 +1,21 @@
 package com.grepp.synapse4.app.controller.web.meeting;
 
-import com.grepp.synapse4.app.controller.web.meeting.payload.MeetingInviteRequest;
-import com.grepp.synapse4.app.controller.web.meeting.payload.MeetingRegistRequest;
+import com.grepp.synapse4.app.controller.web.meeting.payload.meeting.MeetingInviteRequest;
+import com.grepp.synapse4.app.controller.web.meeting.payload.meeting.MeetingRegistRequest;
 import com.grepp.synapse4.app.model.meeting.MeetingService;
+import com.grepp.synapse4.app.model.meeting.VoteService;
 import com.grepp.synapse4.app.model.meeting.code.Purpose;
 import com.grepp.synapse4.app.model.meeting.code.State;
 import com.grepp.synapse4.app.model.meeting.dto.MeetingDto;
 import com.grepp.synapse4.app.model.meeting.dto.MeetingMemberDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.meeting.entity.MeetingMember;
+import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
 import com.grepp.synapse4.app.model.user.entity.User;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,11 +37,11 @@ public class MeetingController {
 
   private final MeetingService meetingService;
   private final CustomUserDetailsService customUserDetailsService;
+  private final VoteService voteService;
 
   @GetMapping
   public String meeting(Model model){
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    Long userId = customUserDetailsService.loadUserIdByAccount(authentication.getName());
+    Long userId = customUserDetailsService.loadUserIdByAccount();
 
     List<Meeting> meetingList = meetingService.findMeetingsByUserId(userId);
     model.addAttribute("meetingList", meetingList);
@@ -64,8 +67,7 @@ public class MeetingController {
       return "meetings/meeting-regist";
     }
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    Long userId = customUserDetailsService.loadUserIdByAccount(authentication.getName());
+    Long userId = customUserDetailsService.loadUserIdByAccount();
 
     MeetingDto dto = form.toDto(userId);
     meetingService.registMeeting(dto);
@@ -78,10 +80,19 @@ public class MeetingController {
       @RequestParam Long id,
       Model model
   ){
+    Long userId = customUserDetailsService.loadUserIdByAccount();
+
     Meeting meeting = meetingService.findMeetingsById(id);
     model.addAttribute("meeting", meeting);
     Integer count = meetingService.countMemberByMeeting(id);
     model.addAttribute("count", count);
+    List<Vote> voteList = voteService.findVoteListByMeetingId(id);
+    model.addAttribute("voteList", voteList);
+
+    if(!voteList.isEmpty()){
+      Map<Long, Boolean> isVotedMap = voteService.isVotedByUser(voteList, userId);
+      model.addAttribute("isVotedMap", isVotedMap);
+    }
 
     return "meetings/meeting-detail";
   }
@@ -90,8 +101,7 @@ public class MeetingController {
   public String detail(
       @RequestParam Long id
   ){
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    Long userId = customUserDetailsService.loadUserIdByAccount(authentication.getName());
+    Long userId = customUserDetailsService.loadUserIdByAccount();
 
     meetingService.leaveMeeting(id, userId);
 
@@ -101,12 +111,10 @@ public class MeetingController {
   @GetMapping("/modal/alarm-invite.html")
   @PreAuthorize("isAuthenticated()")
   public String invitePopup(Model model) {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    Long userId = customUserDetailsService.loadUserIdByAccount(authentication.getName());
+    Long userId = customUserDetailsService.loadUserIdByAccount();
 
     List<MeetingMember> invitedList = meetingService.findInviteByUserId(userId);
     model.addAttribute("invitedList", invitedList);
-    log.info("invitedList: {}", invitedList);
 
     return "meetings/modal/alarm-invite";
   }
@@ -117,24 +125,14 @@ public class MeetingController {
       @RequestParam Long id,
       @RequestParam String state
   ){
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    Long userId = customUserDetailsService.loadUserIdByAccount(authentication.getName());
+    Long userId = customUserDetailsService.loadUserIdByAccount();
 
     Boolean result = meetingService.updateInvitedState(id, userId, state);
+//    if(result){
+//      return "redirect:/meetings";
+//    }
 
     return "redirect:/meetings/modal/alarm-invite.html";
-  }
-
-  @GetMapping("/modal/alarm-vote.html")
-  @PreAuthorize("isAuthenticated()")
-  public String votePopup(Model model) {
-    return "meetings/modal/alarm-vote";
-  }
-
-  @PostMapping("/modal/alarm-vote.html")
-  @PreAuthorize("isAuthenticated()")
-  public String votePopup() {
-    return "redirect:/meetings/modal/alarm-vote";
   }
 
   @GetMapping("/modal/meeting-member-list.html")

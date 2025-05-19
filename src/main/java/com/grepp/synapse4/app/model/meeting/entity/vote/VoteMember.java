@@ -5,27 +5,30 @@ import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.infra.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @ToString
-public class VoteMember extends BaseEntity {
+@Getter @Setter @ToString
+public class VoteMember {
 
     @Id
     @GeneratedValue
     @Column(name = "vote_member_id")
     private Long id;
-    private Boolean isVoted;
+    private Boolean isVoted = false;
+    private Boolean isJoined;
 
     @ManyToOne
     @JoinColumn(name = "vote_id")
-    private Vote meetingVote;
+    private Vote vote;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
+    // TODO: 투표에 여러 식당 등록 시 필요
+//    @ManyToOne
+//    @JoinColumn(name = "restaurant_id")
+//    private Restaurant restaurant;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -26,14 +26,11 @@
 
             <div th:each="m : ${meetings}"
                  class="flex items-center bg-white border rounded-lg shadow-sm p-4 hover:shadow-md transition">
-                <div class="w-20 h-20 bg-gray-200 rounded-md flex-shrink-0 mr-4 flex items-center justify-center">
-                    <span class="text-gray-400">No Image</span>
-                </div>
                 <div>
                     <h3 class="text-lg font-semibold mb-1" th:text="${m.title}">모임 제목</h3>
                     <p class="text-sm text-gray-600 mb-1">
                         <span class="font-medium">생성자:</span>
-                        <span th:text="${m.userAccount}"></span>
+                        <span th:text="${m.user.nickname}"></span>
                     </p>
                     <p class="text-sm text-gray-600 mb-1">
                         <span class="font-medium">설명:</span>

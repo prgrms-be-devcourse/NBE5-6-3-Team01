@@ -15,12 +15,10 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
       select new com.grepp.synapse4.app.model.meeting.dto.AdminMeetingDto(
         m.id,
         m.title,
-        u.userAccount,
-            m.description
+        m.user,
+        m.description
       )
       from Meeting m
-      join com.grepp.synapse4.app.model.user.entity.User u
-        on m.creatorId = u.id
       order by m.id
     """)
     List<AdminMeetingDto> findAllWithCreatorAccount();

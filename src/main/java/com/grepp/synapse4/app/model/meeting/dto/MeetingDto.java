@@ -13,19 +13,12 @@ import lombok.ToString;
 @Getter @Setter @ToString
 public class MeetingDto {
 
-
     private Long id;
-//    private Long meetingId;
     private String title;
     private String description;
     private Purpose purpose;
     private Boolean isDutch;
     private Long creatorId;
     private LocalDateTime createdAt = LocalDateTime.now();
-
-
-
-
-
 
 }

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>투표 생성</title>
+  <link rel="stylesheet" th:href="@{/css/meeting/vote-regist.css}" />
+</head>
+<body>
+<main layout:fragment="content">
+  <form th:action="@{/meetings/vote-regist}" th:object="${voteRegistRequest}" onsubmit="return confirmRegist();" method="post">
+    <input type="hidden" th:field="*{meetingId}" />
+    <div class="input-wrapper">
+      <div style="width: 32vw;">
+        <div class="title-wrapper">
+          <input type="text" th:field="*{title}" placeholder="투표 제목을 입력해주세요." class="invite-input"/>
+          <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+                class="error" style="margin-left: 5px;"></span>
+        </div>
+        <div class="detail-wrapper">
+          <div class="input-group">
+            <label th:field="*{description}">투표 설명</label>
+            <input type="text" th:field="*{description}" placeholder="투표 설명을 입력하세요.">
+          </div>
+
+          <div class="input-group">
+            <label th:field="*{meetingDate}">모임 일시</label>
+            <input type="datetime-local" th:field="*{meetingDate}">
+            <span th:if="${#fields.hasErrors('meetingDate')}" th:errors="*{meetingDate}" class="error"></span>
+          </div>
+
+          <div class="input-group">
+            <label th:field="*{endedAt}">투표 마감</label>
+            <input type="datetime-local" th:field="*{endedAt}">
+            <span th:if="${#fields.hasErrors('endedAt')}" th:errors="*{endedAt}" class="error"></span>
+          </div>
+
+          <div>
+            <th:block th:if="${isDutch}">
+              <label>더치페이 여부</label>
+              <div class="radio-group">
+                <label>
+                  <input type="radio" th:field="*{isDutch}" th:value="true"/>
+                  <span>네, 더치페이 예정이에요!</span>
+                </label>
+                <label>
+                  <input type="radio" th:field="*{isDutch}" th:value="false" checked />
+                  <span>아니요, 더치페이가 없어요!</span>
+                </label>
+              </div>
+            </th:block>
+          </div>
+        </div>
+      </div>
+
+      <div class="bookmark">
+        <div class="bookmark-header">
+          <div style="font-size: 40px; font-weight: bold;">북마크 리스트</div>
+          <div>나의 북마크에서 투표에 부칠 식당을 선택해주세요.</div>
+        </div>
+        <div class="empty" th:if="${#lists.isEmpty(bookmarkList)}">
+          저장한 북마크가 없습니다.<br/>
+          북마크를 저장하시고 투표를 생성해보세요!
+        </div>
+        <div class="scroll-container">
+          <div th:each="bookmark:${bookmarkList}" class="bookmark-card">
+            <div style="justify-items: start;">
+              <div th:text="${bookmark.restaurant.getName()}" style="font-size: 20px; font-weight: bold;">식당명</div>
+              <div th:text="${bookmark.restaurant.getAddress()}">주소</div>
+            </div>
+            <label style="width: 2vh; height: 2vh;">
+              <input type="radio" th:field="*{restaurantId}" th:value="${bookmark.restaurant.id}">
+              <span></span>
+            </label>
+          </div>
+        </div>
+        <span th:if="${#fields.hasErrors('restaurantId')}" th:errors="*{restaurantId}"
+              class="error" style="margin-left: 5px;"></span>
+      </div>
+    </div>
+
+    <div class="button-wrapper">
+      <button type="submit" class="complete">투표 생성하기</button>
+    </div>
+  </form>
+  <script>
+    function confirmRegist() {
+      return confirm("투표를 생성하겠습니까?");
+    }
+  </script>
+</main>
+
+</body>
+</html>
