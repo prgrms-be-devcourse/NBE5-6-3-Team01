@@ -1,14 +1,20 @@
 package com.grepp.synapse4.app.model.user.entity;
 
-
-import com.grepp.synapse4.app.model.user.code.Category;
 import com.grepp.synapse4.infra.entity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.Setter;
 
 @Entity
-@Getter @ToString
+@Getter
+@Setter
 public class Survey extends BaseEntity {
 
     @Id
@@ -18,9 +24,7 @@ public class Survey extends BaseEntity {
     private String companyLocation;
     private String purpose;
     private String companion;
-
-    @Enumerated(EnumType.STRING)
-    private Category favoriteCategory;
+    private String favoriteCategory;
     private String preferredMood;
 
     @OneToOne(fetch = FetchType.LAZY)

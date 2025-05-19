@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>설문조사 수정</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="flex justify-center items-center min-h-screen bg-white-100">
+    <div class="bg-gray-100 p-8 rounded-lg shadow-md w-full max-w-3xl">
+      <h1 class="text-2xl font-bold text-center mb-6">선호 목록 수정</h1>
+      <form th:action="@{/mypage/edit-prefer/{id}(id=${surveyId})}" method="post"
+            th:object="${surveyRequest}" class="space-y-4">
+
+        <div>
+          <label for="companyLocation" class="block font-semibold mb-1">회사 위치</label>
+          <select th:field="*{companyLocation}" id="companyLocation"
+                  class="no-style w-full border border-gray-300 px-3 py-2 rounded bg-blue appearance-auto">
+            <option th:each="item : ${companylocation}"
+                    th:value="${item.name()}"
+                    th:text="${item.label}">
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="purpose" class="block font-semibold mb-1">식사 목적</label>
+          <select th:field="*{purpose}" id="purpose"
+                  class="no-style w-full border border-gray-300 px-3 py-2 rounded bg-white appearance-auto">
+            <option th:each="item : ${purpose}"
+                    th:value="${item.name()}"
+                    th:text="${item.label}">
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="companion" class="block font-semibold mb-1">주로 함께 식사하는 사람</label>
+          <select th:field="*{companion}" id="companion"
+                  class="no-style w-full border border-gray-300 px-3 py-2 rounded bg-white appearance-auto">
+            <option th:each="item : ${companion}"
+                    th:value="${item.name()}"
+                    th:text="${item.label}">
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="favoriteCategory" class="block font-semibold mb-1">좋아하는 음식 종류</label>
+          <select th:field="*{favoriteCategory}" id="favoriteCategory"
+                  class="no-style w-full border border-gray-300 px-3 py-2 rounded bg-white appearance-auto">
+            <option th:each="item : ${favoritecategory}"
+                    th:value="${item.name()}"
+                    th:text="${item.label}">
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="preferredMood" class="block font-semibold mb-1">선호 분위기</label>
+          <select th:field="*{preferredMood}" id="preferredMood"
+                  class="no-style w-full border border-gray-300 px-3 py-2 rounded bg-white appearance-auto">
+            <option th:each="item : ${preferredmood}"
+                    th:value="${item.name()}"
+                    th:text="${item.label}">
+            </option>
+          </select>
+        </div>
+
+        <div class="text-center pt-4">
+          <button type="submit"
+                  class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">
+            수정하기
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+</body>
+</html>

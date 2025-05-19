@@ -73,11 +73,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/", "/user/signin", "/user/signup",
                                 "/search/**", "/curation/**",
-                                "/restaurant/**", "/ranking/**",
-                                "/recommend/**" // 테스트용 임시 permitAll
+                                "/restaurant/**", "/ranking/**"
                         ).permitAll()
                         .requestMatchers(
-                                 "/meetings/**",
+                                "/recommend/**", "/meetings/**",
                                 "/mypage/**", "/bookmark/**"
                         ).authenticated()
                         .anyRequest().permitAll()
@@ -109,6 +108,7 @@ public class SecurityConfig {
                         .accessDeniedPage("/")
 
                 );
+
 
 
         return http.build();
