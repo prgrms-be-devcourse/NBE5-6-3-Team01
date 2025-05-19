@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>투표 상세</title>
+  <link rel="stylesheet" th:href="@{/css/meeting/vote-detail.css}"/>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="container">
+    <div>
+      <span th:text="${vote.title}" style="font-size: 40px; font-weight: bold; margin-left: 10px;"></span>
+      <div class="detail-wrapper">
+        <div style="font-weight: bold;">모임 일시: <span th:text="${#temporals.format(vote.meetingDate, 'yyyy년 MM월 dd일 EEE HH시 mm분')}">모임 일시</span></div>
+        <div>투표 설명: <span th:text="${vote.description}">투표 설명</span></div>
+        <div>마감 기한: <span th:text="${#temporals.format(vote.endedAt, 'MM월 dd일 HH시 mm분')}">투표 설명</span>까지</div>
+      </div>
+    </div>
+
+    <div class="restaurant-card">
+      <div style="justify-items: start;">
+        <div th:text="${vote.restaurant.getName()}" style="font-size: 20px; font-weight: bold;">식당명</div>
+        <div th:text="${vote.restaurant.getAddress()}">주소</div>
+      </div>
+      <a th:href="@{'/restaurant/detail/'+ ${vote.restaurant.getId()}}" class="restaurant-move">식당 보기</a>
+    </div>
+    <form th:action="@{/meetings/vote}" onsubmit="return confirmVote();"  method="post">
+      <input type="hidden" name="id" th:value="${vote.id}" />
+      <div class="radio-group">
+        <label class="radio-label">
+          <input type="radio" name="isJoined" value="true" checked/>
+          <span>참석 O</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="isJoined" value="false"/>
+          <span>참석 X</span>
+        </label>
+      </div>
+
+      <div class="button-wrapper">
+        <button type="submit" class="complete">
+          투표하기
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <script th:inline="javascript">
+    function confirmVote() {
+      return confirm("투표하시겠습니까?");
+    }
+  </script>
+</main>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.grepp.synapse4.app.controller.web.meeting.payload;
+package com.grepp.synapse4.app.controller.web.meeting.payload.meeting;
 
 import com.grepp.synapse4.app.model.meeting.code.Purpose;
 import com.grepp.synapse4.app.model.meeting.dto.MeetingDto;

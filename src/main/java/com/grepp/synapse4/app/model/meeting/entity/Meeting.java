@@ -28,12 +28,15 @@ public class Meeting extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Purpose purpose;
     private Boolean isDutch;
-    private Long creatorId;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User user;
 
     @OneToMany(mappedBy = "meeting")
     private List<MeetingMember> meetingMembers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "meeting")
+    @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
     private List<Vote> votes = new ArrayList<>();
 
     @Override
@@ -44,7 +47,7 @@ public class Meeting extends BaseEntity {
             ", description='" + description + '\'' +
             ", purpose=" + purpose +
             ", isDutch=" + isDutch +
-            ", creatorId=" + creatorId +
+            ", user=" + user +
             ", createdAt=" + createdAt +
             '}';
     }

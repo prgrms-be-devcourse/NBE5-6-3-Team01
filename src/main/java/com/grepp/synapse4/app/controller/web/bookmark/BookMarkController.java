@@ -5,6 +5,8 @@ import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
 import com.grepp.synapse4.app.model.user.dto.MyBookMarkDto;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@Slf4j
 @RequestMapping("bookmarks")
 @RequiredArgsConstructor
 public class BookMarkController {
@@ -31,6 +35,16 @@ public class BookMarkController {
         return "bookmarks/bookmarks";
     }
 
+    @GetMapping("/modal/member-bookmarks.html")
+    @PreAuthorize("isAuthenticated()")
+    public String memberBookmarks(
+        @RequestParam Long id,
+        Model model
+    ) throws NotFoundException {
+        List<MyBookMarkDto> bookmarks = bookmarkService.findByBookmarkId(id);
+        model.addAttribute("bookmarks", bookmarks);
 
+        return "bookmarks/modal/member-bookmarks";
+    }
 
 }

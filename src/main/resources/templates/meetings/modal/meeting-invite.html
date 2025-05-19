@@ -16,7 +16,7 @@
       <div class="invite-wrapper">
         <input type="text" name="account" placeholder="초대할 ID를 입력해주세요." class="invite-input"/>
         <input type="hidden" name="id" th:value="${meetingId}" />
-        <button type="submit" class="invite-button">초대하기</button>
+        <button type="submit" class="invite-button" style="border: transparent;">초대하기</button>
       </div>
       <div class="error" th:if="${error}" th:text="${error}" style="color: red; margin-top: 10px;"></div>
     </form>
@@ -24,17 +24,19 @@
 
   <div style="margin-top: 8vh;">
     <span class="invite-header">초대된 멤버</span>
-    <div th:if="${#lists.isEmpty(invitedList)}" class="empty">
+    <div th:if="${#lists.isEmpty(invitedList)}" class="invite-list-wrapper empty">
       초대된 유저가 없습니다.
     </div>
-    <ul class="notification-list">
-      <li th:each="user:${invitedList}" class="notification-item">
-        <div class="user">
-          <span th:text="${user.nickname}" class="nickname">닉네임</span>
-          <span th:text="${user.userAccount}" class="account">아이디</span>
-        </div>
-      </li>
-    </ul>
+    <th:block th:if="${!#lists.isEmpty(invitedList)}">
+      <ul class="invite-list-wrapper">
+        <li th:each="user:${invitedList}" class="notification-item invite">
+          <div class="user">
+            <span th:text="${user.nickname}" class="nickname">닉네임</span>
+            <span th:text="${user.userAccount}" class="account">아이디</span>
+          </div>
+        </li>
+      </ul>
+    </th:block>
   </div>
 
 </div>

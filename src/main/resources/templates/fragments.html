@@ -1,73 +1,79 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 <th:block th:fragment="frg_sidenav">
-    <aside class="p-2 w-24 bg-gray-200 min-h-screen flex flex-col items-center py-10">
-        <!-- 로고 -->
-        <div class="mb-12">
-            <a href="/" class="flex flex-col text-black items-center justify-center">
-                <span class="text-xl">🍘</span>
-                <span class="text-xl">밥로드</span>
-            </a>
-        </div>
+  <aside class="p-2 w-24 bg-gray-200 min-h-screen flex flex-col items-center py-10">
+    <!-- 로고 -->
+    <div class="mb-12">
+      <a href="/" class="flex flex-col text-black items-center justify-center">
+        <span class="text-xl">🍘</span>
+        <span class="text-xl">밥로드</span>
+      </a>
+    </div>
 
-        <!-- 메뉴 아이콘들 -->
-        <div class="flex flex-col items-center space-y-3 flex-grow w-full">
-            <a href="/search" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-                <img src="/img/search.png" alt="검색" class="w-5 h-5" />
-                <span class="text-xs">검색</span>
-            </a>
-            <a href="/curation" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-                <img src="/img/curation.png" alt="큐레이팅" class="w-6 h-6" />
-                <span class="text-xs">큐레이팅</span>
-            </a>
-            <a href="/recommend" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-                <img src="/img/llm.png" alt="LLM 추천" class="w-6 h-6" />
-                <span class="text-xs">AI 추천</span>
-            </a>
-            <a href="/meetings" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-                <img src="/img/meeting.png" alt="모임" class="w-6 h-6" />
-                <span class="text-xs">모임</span>
-            </a>
-            <a href="/bookmarks" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-                <img src="/img/bookmark.png" alt="북마크" class="w-6 h-6" />
-                <span class="text-xs">북마크</span>
-            </a>
-            <a href="/ranking" class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
-                <img src="/img/ranking.png" alt="랭킹" class="w-6 h-6" />
-                <span class="text-xs">랭킹</span>
-            </a>
-        </div>
+    <!-- 메뉴 아이콘들 -->
+    <div class="flex flex-col items-center space-y-3 flex-grow w-full">
+      <a href="/search"
+         class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+        <img src="/img/search.png" alt="검색" class="w-5 h-5"/>
+        <span class="text-xs">검색</span>
+      </a>
+      <a href="/curation"
+         class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+        <img src="/img/curation.png" alt="큐레이팅" class="w-6 h-6"/>
+        <span class="text-xs">큐레이팅</span>
+      </a>
+      <a href="/recommend"
+         class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+        <img src="/img/llm.png" alt="LLM 추천" class="w-6 h-6"/>
+        <span class="text-xs">AI 추천</span>
+      </a>
+      <a href="/meetings"
+         class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+        <img src="/img/meeting.png" alt="모임" class="w-6 h-6"/>
+        <span class="text-xs">모임</span>
+      </a>
+      <a href="/bookmarks"
+         class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+        <img src="/img/bookmark.png" alt="북마크" class="w-6 h-6"/>
+        <span class="text-xs">북마크</span>
+      </a>
+      <a href="/ranking"
+         class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
+        <img src="/img/ranking.png" alt="랭킹" class="w-6 h-6"/>
+        <span class="text-xs">랭킹</span>
+      </a>
+    </div>
 
-        <div class="flex flex-col items-center space-y-20 mt-auto">
-        <!-- 로그인 : 마이페이지, 로그아웃 -->
-        <div sec:authorize="isAuthenticated()">
-            <a th:href="@{/logout}" class="flex flex-col items-center justify-center space-y-1">
-                <img src="/img/logout.png" alt="로그아웃" class="w-6 h-6" />
-            </a>
-            <a th:href="@{/mypage}" class="flex flex-col items-center justify-center space-y-1">
-                <img src="/img/mypage.png" alt="마이페이지" class="w-6 h-6"/>
-            </a>
-        </div>
+    <div class="flex flex-col items-center mt-auto">
+      <!-- 로그인 : 마이페이지, 로그아웃 -->
+      <div sec:authorize="isAuthenticated()" class="flex flex-col items-center space-y-6 mt-auto">
+        <a th:href="@{/logout}" class="flex flex-col items-center justify-center space-y-1">
+          <img src="/img/logout.png" alt="로그아웃" class="w-6 h-6"/>
+        </a>
+        <a th:href="@{/mypage}" class="flex flex-col items-center justify-center space-y-1">
+          <img src="/img/mypage.png" alt="마이페이지" class="w-6 h-6"/>
+        </a>
+      </div>
 
-        <!-- 미로그인: 로그인, 회원가입 -->
-        <div sec:authorize="isAnonymous()">
-            <a th:href="@{/user/signin}" class="flex flex-col items-center justify-center space-y-1">
-                <img src="/img/login.png" alt="로그인" class="w-6 h-6" />
-            </a>
-            <a th:href="@{/user/signup}" class="flex flex-col items-center justify-center space-y-1">
-                <img src="/img/signup.png" alt="회원가입" class="w-6 h-6"/>
-            </a>
-        </div>
-        </div>
+      <!-- 미로그인: 로그인, 회원가입 -->
+      <div sec:authorize="isAnonymous()" class="flex flex-col items-center space-y-6 mt-auto">
+        <a th:href="@{/user/signin}" class="flex flex-col items-center justify-center space-y-1">
+          <img src="/img/login.png" alt="로그인" class="w-6 h-6"/>
+        </a>
+        <a th:href="@{/user/signup}" class="flex flex-col items-center justify-center space-y-1">
+          <img src="/img/signup.png" alt="회원가입" class="w-6 h-6"/>
+        </a>
+      </div>
+    </div>
 
 
-    </aside>
+  </aside>
 </th:block>
 </body>
 </html>
