@@ -15,7 +15,7 @@ public class LlmQuestionService {
     private final LlmQuestionRepository llmQuestionRepository;
     private final UserRepository userRepository;
 
-    public Long saveQuestion(RecommendRequestDto dto) {
+    public String saveQuestion(RecommendRequestDto dto) {
 
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("유효한 유저가 없음"));
@@ -26,6 +26,6 @@ public class LlmQuestionService {
                 .build();
         LLMQuestion saved = llmQuestionRepository.save(question);
 
-        return saved.getId();
+        return saved.getText();
     }
 }

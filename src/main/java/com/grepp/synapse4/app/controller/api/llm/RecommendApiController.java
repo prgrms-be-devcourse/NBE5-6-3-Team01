@@ -22,7 +22,7 @@ public class RecommendApiController {
     @PostMapping()
     public ResponseEntity<GeminiResponseDto> recommendForUserQuestion(@RequestBody RecommendRequestDto dto){
         // 1. 사용자 입력 저장
-        Long llmQuestionId = llmQuestionService.saveQuestion(dto);
+        String llmQuestionId = llmQuestionService.saveQuestion(dto);
 
         // 2. gemini 호출
         GeminiResponseDto response = geminiUserRecommendPromptService.generateRecommendations(llmQuestionId);

@@ -34,16 +34,16 @@ public class GeminiUserRecommendPromptService {
     private final LlmResultRepository llmResultRepository;
 
     @Transactional
-    public GeminiResponseDto generateRecommendations(Long llmQuestionId) {
-        //0. 입력받은 id 값으로 사용자 입력 텍스트 찾기
-        // todo 추후 Questionservice로 감싸서 전달하기.
-        String userText = llmQuestionRepository.findById(llmQuestionId)
-                .orElseThrow(() -> new RuntimeException("저장된 질문이 없습니다"))
-                .getText();
-        System.out.println(" id 찾음");
+    public GeminiResponseDto generateRecommendations(String llmQuestionText) {
+//        //0. 입력받은 id 값으로 사용자 입력 텍스트 찾기
+//        // todo 추후 Questionservice로 감싸서 전달하기.
+//        String userText = llmQuestionRepository.findById(llmQuestionText)
+//                .orElseThrow(() -> new RuntimeException("저장된 질문이 없습니다"))
+//                .getText();
+//        System.out.println(" id 찾음");
 
         // 1. text로 문자열 prompt 생성
-        String prompt = buildUserRecommendPrompt(userText);
+        String prompt = buildUserRecommendPrompt(llmQuestionText);
 
         // 2. 완성된 requestDto를 GeminiService로 호출하여 String 형태로 받음
         String geminiResponse = geminiService.getGeminiResponse(prompt);
@@ -52,8 +52,8 @@ public class GeminiUserRecommendPromptService {
         // 3. 응답 파싱
         GeminiResponseDto responseDto = parseGeminiResponse(geminiResponse);
 
-        // 4. 응답 저장!
-        saveResults(llmQuestionId, responseDto);
+        // 4. 응답 저장! 구조 다시 짜야함..
+//        saveResults(llmQuestionText, responseDto);
 
         return responseDto;
     }
