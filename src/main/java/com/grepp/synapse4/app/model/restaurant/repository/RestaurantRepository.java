@@ -21,4 +21,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     @Query("select r from Restaurant r left join fetch r.menus where r.id = :id")
     Optional<Restaurant> findWithMenusById(@Param("id")Long id);
+
+
+    List<Restaurant> findTop10ByActivatedIsTrueOrderByIdDesc();
 }

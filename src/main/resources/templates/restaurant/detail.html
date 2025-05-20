@@ -25,15 +25,23 @@
 
             <!-- 버튼 -->
             <div class="action-buttons">
-                <div class="action-item">
+                <div class="action-item recenter-btn" style="cursor: pointer;">
                     <img src="/img/location.png" alt="위치 보기" class="action-icon">
                     <span>위치 보기</span>
                 </div>
                 <div class="action-item">
-                    <img src="/img/bookmark.png" alt="북마크" class="action-icon">
+                    <button type="button"
+                            class="bookmark-btn focus:outline-none"
+                            th:attr="data-id=${restaurant.id}">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="h-6 w-6 text-gray-400 hover:text-gray-600 fill-current"
+                             viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M5 3a2 2 0 00-2 2v14l7-5 7 5V5a2 2 0 00-2-2H5z"/>
+                        </svg>
+                    </button>
                     <span>북마크</span>
                 </div>
-                <div class="action-item">
+                <div class="action-item share-btn" style="cursor: pointer;">
                     <img src="/img/share.png" alt="공유하기" class="action-icon">
                     <span>공유하기</span>
                 </div>
@@ -136,6 +144,63 @@
 
         // 마커가 지도 위에 표시되도록 설정합니다
         marker.setMap(map);
+    </script>
+
+    <script th:inline="javascript">
+            document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const id = btn.getAttribute('data-id');
+                    fetch(`/api/bookmarks/toggle/${id}`, { method: 'POST' })
+                        .then(res => {
+                            if (!res.ok) throw new Error('Status ' + res.status);
+                            return res.json();
+                        })
+                        .then(data => {
+                            const svg = btn.querySelector('svg');
+                            if (data.added) {
+                                svg.classList.replace('text-gray-400', 'text-green-400');
+                                svg.classList.replace('hover:text-gray-600', 'hover:text-green-600');
+                                alert('북마크가 추가되었습니다.');
+                            } else {
+                                svg.classList.replace('text-green-400', 'text-gray-400');
+                                svg.classList.replace('hover:text-green-600', 'hover:text-gray-600');
+                                alert('북마크가 해제되었습니다.');
+                            }
+                        })
+                        .catch(err => {
+                            console.error('[Ranking] 북마크 오류:', err);
+                            alert('로그인이 필요한 서비스입니다.');
+                            window.location.href = 'http://localhost:8080/user/signin';
+                        });
+                });
+            });
+    </script>
+
+    <script>
+        document.querySelector('.share-btn')?.addEventListener('click', () => {
+            const url = window.location.href;
+
+            navigator.clipboard.writeText(url)
+                .then(() => {
+                    alert('현재 페이지 주소가 복사되었습니다!');
+                })
+                .catch(err => {
+                    console.error('URL 복사 실패:', err);
+                    alert('URL 복사 중 문제가 발생했습니다 😢');
+                });
+        });
+
+    </script>
+
+    <script th:inline="javascript">
+        document.querySelector('.recenter-btn')?.addEventListener('click', () => {
+            const centerPosition = new kakao.maps.LatLng([[${restaurant.latitude}]], [[${restaurant.longitude}]]);
+            map.setCenter(centerPosition);
+            map.setLevel(1);
+        });
     </script>
 
 </main>

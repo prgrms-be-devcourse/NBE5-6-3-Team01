@@ -24,4 +24,10 @@ public class LLMResult extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
+
+    public LLMResult(String reason, LLMQuestion question, Restaurant restaurant) {
+        this.reason = reason;
+        this.lLMQuestion = question;
+        this.restaurant = restaurant;
+    }
 }

@@ -63,7 +63,7 @@ public class AdminController {
     @PostMapping("/curation/register")
     public String curationRegister(@ModelAttribute("form") AdminCurationDto adminCurationDto) {
         curationService.setCuration(adminCurationDto);
-        return "redirect:admin/curation/list";
+        return "redirect:/admin/curation/list";
     }
 
     @GetMapping("/curation/list")

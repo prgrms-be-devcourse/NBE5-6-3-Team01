@@ -11,12 +11,7 @@
     <div class="absolute overflow-y-auto"
          style="max-height: 100%; width: 90%; overflow-y: auto;">
         <div class="restaurant-container">
-            <p class="restaurant-title">🍽️ 식당 검색 결과</p>
-
-            <form method="get" action="/search/result" class="search" onsubmit="return validateForm()">
-                <input type="text" name="restaurantKeyword" id="restaurantKeyword" placeholder="식당명을 입력하세요">
-                <button type="submit">검색</button>
-            </form>
+            <p class="restaurant-title">🍽️ 추천 결과</p>
 
             <div th:if="${message != null}">
                 <p th:text="${message}" class="text-red-500 font-semibold"></p>
@@ -29,14 +24,15 @@
             <ul th:if="${not #lists.isEmpty(results)}" class="restaurant-list">
 <!--                <ul class="restaurant-list">-->
                     <li th:each="res : ${results}" class="restaurant-card">
-                        <a th:href="@{/restaurant/detail/{id}(id=${res.id})}">
+                        <a th:href="@{/restaurant/detail/{id}(id=${res.restaurant.id})}">
                             <div>
-                                <span class="restaurant-name" th:text="${res.name}">식당명</span>
-                                <span class="restaurant-branch" th:text="${res.branch}">지점명</span>
-                                <span class="restaurant-category" th:text="${res.category}">한식</span>
+                                <span class="restaurant-name" th:text="${res.restaurant.name}">식당명</span>
+                                <span class="restaurant-branch" th:text="${res.restaurant.branch}">지점명</span>
+                                <span class="restaurant-category" th:text="${res.restaurant.category}">한식</span>
                             </div>
-                            <p class="restaurant-time" th:text="${res.businessTime}">영업시간</p>
-                            <p class="restaurant-address" th:text="${res.roadAddress}">주소</p>
+<!--                            <p class="restaurant-time" th:text="${res.businessTime}">영업시간</p>-->
+                            <p class="restaurant-address" th:text="${res.restaurant.address}">주소</p>
+                            <p class="restaurant-address" th:text="${res.reason}">주소</p>
                         </a>
                     </li>
                 </ul>
