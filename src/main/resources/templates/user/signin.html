@@ -9,8 +9,8 @@
 <body>
 <main layout:fragment="content">
   <div class="flex justify-center items-center min-h-screen bg-white">
-    <div class="signin-container bg-gray-100 p-8 rounded-lg shadow-md w-full max-w-3xl">
-      <h1 class="text-2xl font-bold text-center mb-6">로그인</h1>
+    <div class="signin-container bg-gray-100 p-12 rounded-lg shadow-md w-full max-w-3xl">
+      <div class="text-2xl font-bold text-center mb-8">로그인</div>
       <form th:action="@{/signin}" method="post" class="space-y-4">
         <div th:if="${param.error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center">
           아이디 또는 비밀번호가 일치하지 않습니다.
@@ -28,12 +28,14 @@
                  class="w-full border border-gray-300 rounded px-3 py-2" />
         </div>
 
-        <button type="submit" class="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-700">
-          로그인
-        </button>
+        <div class="flex justify-center" style="margin-top: 35px;">
+          <button type="submit" class="w-1/2 text-white py-3 rounded" style="background-color: #27a69a;">
+            로그인
+          </button>
+        </div>
 
         <div class="text-center mt-4">
-          <a th:href="@{/user/signup}" class="text-sm text-black underline hover:text-gray-800">회원가입</a>
+          <a th:href="@{/user/signup}" class="text-sm text-black underline hover:text-gray-800" style="text-decoration: none;">회원가입</a>
         </div>
       </form>
     </div>

@@ -4,25 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <title>식당 검색</title>
-  <link rel="stylesheet" href="/css/search.css">
+  <link rel="stylesheet" href="/css/restaurant/search.css">
 </head>
 <body>
 <main layout:fragment="content">
 
-  <!-- 로그인한 사용자 정보 확인용 -->
-  <div sec:authorize="isAuthenticated()">
-    <span class="text-sm font-semibold">
-      <span th:text="${#authentication.principal.user.nickname}">닉네임</span> 님 환영합니다!
-    </span>
-  </div>
 
   <div class="search-box">
-  <p class="main-title">🍽️ 찾으시는 식당이 있으신가요?</p>
+    <p class="main-title">🍽️ 찾으시는 식당이 있으신가요?</p>
 
-  <form method="get" action="/search/result" class="search" onsubmit="return validateForm()">
-    <input type="text" name="restaurantKeyword" id="restaurantKeyword" placeholder="식당명을 입력하세요">
-    <button type="submit">검색</button>
-  </form>
+    <form method="get" action="/search/result" class="search" onsubmit="return validateForm()">
+      <input type="text" name="restaurantKeyword" id="restaurantKeyword" placeholder="식당명을 입력하세요">
+      <button type="submit">검색</button>
+    </form>
   </div>
 
 

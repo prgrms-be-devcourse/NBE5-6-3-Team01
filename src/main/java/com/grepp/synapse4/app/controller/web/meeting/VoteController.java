@@ -15,15 +15,13 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Slf4j
@@ -36,11 +34,12 @@ public class VoteController {
   private final VoteService voteService;
   private final MeetingService meetingService;
 
-  @GetMapping("vote-regist")
+  // 투표 등록 화면
+  @GetMapping("vote-regist/{id}")
   @PreAuthorize("isAuthenticated()")
   public String voteRegist(
-      Model model,
-      @RequestParam Long id
+      @PathVariable Long id,
+      Model model
   ){
     Long userId = customUserDetailsService.loadUserIdByAccount();
 
@@ -50,17 +49,20 @@ public class VoteController {
     VoteRegistRequest request = new VoteRegistRequest();
     request.setMeetingId(id);
     model.addAttribute("voteRegistRequest", request);
+
+    // 유저의 북마크 리스트
     List<Bookmark> bookmarkList = bookmarkService.findByUserId(userId);
     model.addAttribute("bookmarkList", bookmarkList);
 
     return "meetings/vote/vote-regist";
   }
 
-  @PostMapping("vote-regist")
+  // 투표 등록하기
+  @PostMapping("vote-regist/{id}")
   @PreAuthorize("isAuthenticated()")
   public String voteRegist(
+      @PathVariable Long id,
       @Valid VoteRegistRequest form,
-//      @RequestParam List<Long> selectedList,
       BindingResult bindingResult,
       Model model
   ){
@@ -77,39 +79,39 @@ public class VoteController {
 
     voteService.registVoteMember(vote, dto.getMeetingId());
 
-    return "redirect:/meetings/detail?id="+dto.getMeetingId();
+    return "redirect:/meetings/detail/"+dto.getMeetingId();
   }
 
-  @GetMapping("vote")
+  @GetMapping("vote/{id}")
   @PreAuthorize("isAuthenticated()")
   public String voteDetail(
-      @RequestParam Long id,
+      @PathVariable Long id,
       Model model
   ){
     Vote vote = voteService.findVoteByVoteId(id);
     model.addAttribute("vote", vote);
 
-    return "meetings/vote/vote-detail";
+    return "meetings/vote/vote";
   }
 
-  @PostMapping("vote")
+  @PostMapping("vote/{id}")
   @PreAuthorize("isAuthenticated()")
   public String voteDetail(
       @Valid Boolean isJoined,
-      @RequestParam Long id
+      @PathVariable Long id
   ){
     Long userId = customUserDetailsService.loadUserIdByAccount();
     voteService.vote(id, userId, isJoined);
 
     Vote vote = voteService.findVoteByVoteId(id);
 
-    return "redirect:/meetings/detail?id="+vote.getMeeting().getId();
+    return "redirect:/meetings/detail/"+vote.getMeeting().getId();
   }
 
-  @GetMapping("vote-result")
+  @GetMapping("vote-result/{id}")
   @PreAuthorize("isAuthenticated()")
   public String voteResult(
-      @RequestParam Long id,
+      @PathVariable Long id,
       Model model
   ){
     Vote vote = voteService.findVoteByVoteId(id);

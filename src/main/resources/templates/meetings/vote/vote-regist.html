@@ -9,7 +9,7 @@
 </head>
 <body>
 <main layout:fragment="content">
-  <form th:action="@{/meetings/vote-regist}" th:object="${voteRegistRequest}" onsubmit="return confirmRegist();" method="post">
+  <form th:action="@{'/meetings/vote-regist/'+${voteRegistRequest.getMeetingId()}}" th:object="${voteRegistRequest}" onsubmit="return confirmRegist();" method="post">
     <input type="hidden" th:field="*{meetingId}" />
     <div class="input-wrapper">
       <div style="width: 32vw;">

@@ -7,7 +7,7 @@
 </head>
 <body>
 <th:block th:fragment="frg_sidenav">
-  <aside class="p-2 w-24 bg-gray-200 min-h-screen flex flex-col items-center py-10">
+  <aside class="p-2 w-24 bg-gray-200 min-h-screen flex flex-col items-center py-10" style="flex: 1; height: 100vh;">
     <!-- 로고 -->
     <div class="mb-12">
       <a href="/" class="flex flex-col text-black items-center justify-center">
@@ -67,7 +67,7 @@
           <img src="/img/login.png" alt="로그인" class="w-6 h-6"/>
         </a>
         <a th:href="@{/user/signup}" class="flex flex-col items-center justify-center space-y-1">
-          <img src="/img/signup.png" alt="회원가입" class="w-6 h-6"/>
+          <img src="/img/signup.png" alt="회원가입" class="w-6 h-5.8"/>
         </a>
       </div>
     </div>
