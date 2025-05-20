@@ -49,6 +49,15 @@ public class CurationService {
         // 1. 최신 큐레이션 엔티티
         Curation latest = curationRepository.findTopByOrderByCreatedAtDesc();
 
+        if(latest == null){
+            return null;
+        }
+
+        if (latest.getResults() == null || latest.getResults().isEmpty()) {
+            return null;
+        }
+
+
         // 2. 최신 큐레이션 엔티티의 결과 리스트 엔티티
         // 3. 큐레이션 결과의 1개 식당과 매핑
         //    그렇게 매핑된 식당을 '큐레이션식당 dto'에 담기
