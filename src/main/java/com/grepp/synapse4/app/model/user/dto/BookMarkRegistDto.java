@@ -13,12 +13,12 @@ import java.time.LocalDateTime;
 
 public class BookMarkRegistDto {
 
-    private final Long restaurantId;
-    private final String name;
-    private final String address;
-    private final String branch;
-    private final String category;
-    private final LocalDateTime createdAt;
+    private Long restaurantId;
+    private String name;
+    private String address;
+    private String branch;
+    private String category;
+    private LocalDateTime createdAt;
 
     public BookMarkRegistDto(Long restaurantId, String name, String address, String branch, String category, LocalDateTime createdAt) {
         this.restaurantId = restaurantId;
