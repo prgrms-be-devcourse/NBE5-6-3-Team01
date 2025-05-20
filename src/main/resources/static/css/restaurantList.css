@@ -7,6 +7,18 @@
     width: auto;
 }
 
+/* 대문명 : 강남구 맛집 큐레이팅*/
+.content-name{
+    margin-top: 30px;
+    font-stretch: condensed;
+}
+
+/* 큐레이션 값 없을 시 */
+.no-result {
+    text-align: center;
+    font-stretch: extra-expanded;
+}
+
 /* 검색 바 */
 .search {
     display: flex;
