@@ -9,8 +9,8 @@
 <body>
 <main layout:fragment="content">
   <div class="flex justify-center items-center min-h-screen bg-white">
-    <div class="signup-container bg-gray-100 p-8 rounded-lg shadow-md w-full max-w-3xl">
-      <h1 class="text-2xl font-bold text-center mb-6">회원정보 수정</h1>
+    <div class="signup-container bg-gray-100 p-12 rounded-lg shadow-md w-full max-w-3xl">
+      <div class="text-2xl font-bold text-center mb-16">회원정보 수정</div>
 
       <form th:action="@{/mypage/edit-info}" th:object="${editRequest}" method="post" class="space-y-4">
 
@@ -65,9 +65,11 @@
                th:errors="*{email}"></div>
         </div>
 
-        <button type="submit" class="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-700">
-          수정하기
-        </button>
+        <div class="flex justify-center" style="margin-top: 35px;">
+          <button type="submit" class="w-1/2 text-white py-3 rounded" style="background-color: #27a69a;">
+            수정하기
+          </button>
+        </div>
       </form>
     </div>
   </div>

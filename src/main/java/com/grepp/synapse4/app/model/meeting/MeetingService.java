@@ -27,10 +27,10 @@ import org.springframework.ui.Model;
 @Transactional
 public class MeetingService {
 
-    private final MeetingRepository meetingRepository;
-    private final ModelMapper mapper;
-    private final UserRepository userRepository;
-    private final MeetingMemberRepository meetingMemberRepository;
+  private final MeetingRepository meetingRepository;
+  private final ModelMapper mapper;
+  private final UserRepository userRepository;
+  private final MeetingMemberRepository meetingMemberRepository;
 
 
   public List<AdminMeetingDto> findAllForAdmin() {
@@ -40,7 +40,7 @@ public class MeetingService {
   public void registMeeting(MeetingDto dto){
     Meeting meeting = mapper.map(dto, Meeting.class);
     User user = userRepository.findById(dto.getCreatorId())
-                      .orElseThrow(() -> new RuntimeException("유저를 찾지 못했습니다."));
+        .orElseThrow(() -> new RuntimeException("유저를 찾지 못했습니다."));
     meeting.setUser(user);
     meetingRepository.save(meeting);
 
@@ -63,7 +63,7 @@ public class MeetingService {
 
   public Meeting findMeetingsById(Long id) {
     return meetingRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("모임을 찾지 못했습니다."));
+        .orElseThrow(() -> new RuntimeException("모임을 찾지 못했습니다."));
   }
 
   public Integer countMemberByMeeting(Long id) {
@@ -76,6 +76,7 @@ public class MeetingService {
 
     meetingMemberRepository.delete(member);
 
+    // 멤버가 없을 시 모임 제거
     int memberCount = meetingMemberRepository.countByMeetingId(id);
     if(memberCount == 0){
       Meeting meeting = meetingRepository.findById(id)
@@ -123,19 +124,15 @@ public class MeetingService {
     meetingMemberRepository.save(member);
   }
 
-  public boolean updateInvitedState(Long meetingId, Long userId, String state) {
+  public void updateInvitedState(Long meetingId, Long userId, State state) {
     MeetingMember member = meetingMemberRepository.findByMeetingIdAndUserId(meetingId, userId)
         .orElseThrow(() -> new EntityNotFoundException("데이터를 찾지 못했습니다"));
 
-    if (state.equals("REJECT")) {
+    if (state.equals(State.REJECT)) {
       meetingMemberRepository.delete(member);
-      return false;
-    } else if (state.equals("ACCEPT")) {
+    } else if (state.equals(State.ACCEPT)) {
       member.setState(State.ACCEPT);
       meetingMemberRepository.save(member);
-      return true;
     }
-
-    return false;
   }
 }

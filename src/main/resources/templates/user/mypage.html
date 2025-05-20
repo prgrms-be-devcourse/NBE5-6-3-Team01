@@ -9,35 +9,46 @@
 <body>
 <main layout:fragment="content">
   <div class="flex justify-center items-center min-h-screen bg-white">
-    <div class="mypage-container bg-gray-100 p-8 rounded-lg shadow-md w-full max-w-3xl">
-      <h1 class="text-2xl font-bold text-center mb-6">마이페이지</h1>
+    <div class="mypage-container bg-gray-100 p-12 rounded-lg shadow-md w-full max-w-3xl">
+      <div class="text-2xl font-bold text-center mb-16">마이페이지</div>
 
-      <div class="flex flex-col items-center space-y-2 mb-6">
-        <div class="text-5xl">👤</div>
-        <h2 class="text-xl font-semibold" th:text="${user.nickname}">닉네임</h2>
-        <p class="text-sm text-gray-600" th:text="${user.email}">test@test.com</p>
-      </div>
+      <div>
+        <div class="flex justify-between items-center mb-12">
+          <div class="flex gap-5">
+            <div class="text-5xl">👤</div>
+            <div>
+              <p class="text-xl font-semibold" th:text="${user.nickname}">닉네임</p>
+              <p class="text-sm text-gray-600" th:text="${user.email}">test@test.com</p>
+            </div>
+          </div>
 
-      <div class="mb-6 text-right">
-        <a th:href="@{/logout}" class="text-sm border border-gray-400 px-3 py-1 rounded hover:bg-gray-200">
-          로그아웃
-        </a>
-      </div>
+          <a th:href="@{/logout}" class="text-sm border border-gray-400 px-6 py-2 rounded hover:bg-gray-200 text-black">
+            로그아웃
+          </a>
+        </div>
 
-      <div class="space-y-3">
-        <a th:href="@{/mypage/edit-info}" class="w-full block bg-gray-100 py-3 px-4 rounded-lg text-left hover:bg-gray-200">
-          회원정보 수정 <span class="float-right">➔</span>
-        </a>
-        <a th:href="@{/mypage/edit-prefer}" class="w-full block bg-gray-100 py-3 px-4 rounded-lg text-left hover:bg-gray-200">
-          선호 목록 수정 <span class="float-right">➔</span>
-        </a>
-      </div>
+        <div class="space-y-3">
+          <div class="border border-gray-300 rounded-lg">
+            <a th:href="@{/mypage/edit-info}"
+               class="w-full block bg-gray-100 py-3 px-4 rounded-lg text-left hover:bg-gray-200 text-black">
+              회원정보 수정 <span class="float-right" style="color: #27a69a;">➔</span>
+            </a>
+          </div>
 
-      <input type="hidden" id="userId" th:value="${user.id}" />
-      <div class="mt-6 text-center">
-        <button type="button" onclick="deleteUser()" class="text-red-600 text-sm hover:underline">
-          회원탈퇴
-        </button>
+          <div class="border border-gray-300 rounded-lg">
+            <a th:href="@{/mypage/edit-prefer}"
+               class="w-full block bg-gray-100 py-3 px-4 rounded-lg text-left hover:bg-gray-200 text-black">
+              선호 목록 수정 <span class="float-right" style="color: #27a69a;">➔</span>
+            </a>
+          </div>
+        </div>
+
+        <input type="hidden" id="userId" th:value="${user.id}" />
+        <div class="mt-6 text-center">
+          <button type="button" onclick="deleteUser()" class="text-red-600 text-sm hover:underline">
+            회원탈퇴
+          </button>
+        </div>
       </div>
 
       <script>

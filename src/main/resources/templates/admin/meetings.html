@@ -4,45 +4,38 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{adminLayout}">
 <head>
-    <meta charset="UTF-8">
-    <title layout:fragment="title">모든 모임 목록</title>
+  <meta charset="UTF-8">
+  <title layout:fragment="title">모든 모임 목록</title>
 </head>
 
-<section layout:fragment="content"
-         class="relative flex-1 bg-gray-50">
+<main layout:fragment="content" class="bg-gray-50"
+      style="padding-left: 20vw; padding-right: 20vw; padding-top: 5vw; width: 100%;">
 
-    <div class="p-6">
-        <h2 class="text-2xl font-semibold">모든 모임 목록</h2>
-    </div>
+  <div class="mb-5">
+    <h1 class="font-semibold">모든 모임 목록</h1>
+  </div>
 
-    <div class="absolute overflow-y-auto"
-         style="
-         top: 96px;
-         bottom: 24px;
-         left: 24px;
-         right: 24px;
-       ">
-        <div class="max-w-5xl mx-auto space-y-4">
-
-            <div th:each="m : ${meetings}"
-                 class="flex items-center bg-white border rounded-lg shadow-sm p-4 hover:shadow-md transition">
-                <div>
-                    <h3 class="text-lg font-semibold mb-1" th:text="${m.title}">모임 제목</h3>
-                    <p class="text-sm text-gray-600 mb-1">
-                        <span class="font-medium">생성자:</span>
-                        <span th:text="${m.user.nickname}"></span>
-                    </p>
-                    <p class="text-sm text-gray-600 mb-1">
-                        <span class="font-medium">설명:</span>
-                        <span th:text="${m.description}">간단한 설명</span>
-                    </p>
-                </div>
-            </div>
-
+  <div style="max-height: 80vh; overflow-y: auto;">
+    <div class="max-w-5xl mx-auto space-y-4">
+      <div th:each="m : ${meetings}"
+           class="flex items-center bg-white border rounded-lg shadow-sm p-4 hover:shadow-md transition">
+        <div>
+          <h3 class="text-lg font-semibold mb-1" th:text="${m.title}">모임 제목</h3>
+          <p class="text-sm text-gray-600 mb-1">
+            <span class="font-medium">생성자:</span>
+            <span th:text="${m.user.nickname}"></span>
+          </p>
+          <p class="text-sm text-gray-600 mb-1">
+            <span class="font-medium">설명:</span>
+            <span th:text="${m.description}">간단한 설명</span>
+          </p>
         </div>
-    </div>
+      </div>
 
-</section>
+    </div>
+  </div>
+
+</main>
 </html>
 
 

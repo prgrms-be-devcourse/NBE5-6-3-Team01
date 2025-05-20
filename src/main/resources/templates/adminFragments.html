@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -9,32 +9,36 @@
 <th:block th:fragment="frg_sidenav">
   <div class="flex">
     <!-- 사이드바 -->
-    <aside class="w-20 bg-gray-200 min-h-screen flex flex-col items-center py-4">
+    <aside class="pt-8 pb-8 pl-2 pr-2 w-26 bg-gray-200 min-h-screen flex flex-col items-center py-10" style="flex: 1;">
 
       <!-- 상단: 로고 -->
-      <div class="mb-6">
-        <button class="w-[62px] h-[52px] p-[10px] flex flex-col items-center justify-center space-y-1 hover:bg-gray-300 rounded">
+      <div class="mb-12">
+        <a href="/" class="flex flex-col text-black items-center justify-center">
+          <span class="text-xl">🍘</span>
           <span class="text-xl">밥로드</span>
-        </button>
+        </a>
       </div>
 
       <!-- 가운데: 메뉴 아이콘들 -->
-      <div class="flex flex-col items-center space-y-4 flex-grow">
-        <a href="/admin/curation/list" class="w-[62px] h-[52px]">
+      <div class="flex flex-col items-center space-y-3 flex-grow w-full">
+        <a href="/admin/curation/list"
+           class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
           <button
                   class="w-full h-full p-[10px] flex flex-col items-center justify-center space-y-2 hover:bg-gray-300 rounded">
             <img src="/img/curation.png" alt="큐레이팅" class="w-6 h-6" />
             <span class="text-xs">큐레이팅 관리</span>
           </button>
         </a>
-        <a href="/admin/meetings" class="w-[62px] h-[52px]">
+        <a href="/admin/meetings"
+           class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
           <button
                   class="w-full h-full p-[10px] flex flex-col items-center justify-center space-y-2 hover:bg-gray-300 rounded">
             <img src="/img/meeting.png" alt="모임" class="w-6 h-6" />
             <span class="text-xs">모임 현황</span>
           </button>
         </a>
-        <a href="/admin/users" class="w-[62px] h-[52px]">
+        <a href="/admin/users"
+           class="w-full p-2 flex flex-col text-black items-center justify-center space-y-2 hover:bg-gray-300 rounded">
           <button
                   class="w-full h-full p-[10px] flex flex-col items-center justify-center space-y-2 hover:bg-gray-300 rounded">
             <img src="/img/ranking.png" alt="랭킹" class="w-6 h-6" />
@@ -43,7 +47,24 @@
         </a>
       </div>
 
+      <div class="flex flex-col items-center mt-auto">
+        <!-- 로그인 : 마이페이지, 로그아웃 -->
+        <div sec:authorize="isAuthenticated()" class="flex flex-col items-center space-y-6 mt-auto">
+          <a th:href="@{/logout}" class="flex flex-col items-center justify-center space-y-1">
+            <img src="/img/logout.png" alt="로그아웃" class="w-6 h-6"/>
+          </a>
+        </div>
 
+        <!-- 미로그인: 로그인, 회원가입 -->
+        <div sec:authorize="isAnonymous()" class="flex flex-col items-center space-y-6 mt-auto">
+          <a th:href="@{/admin/signin}" class="flex flex-col items-center justify-center space-y-1">
+            <img src="/img/login.png" alt="로그인" class="w-6 h-6"/>
+          </a>
+          <a th:href="@{/admin/signup}" class="flex flex-col items-center justify-center space-y-1">
+            <img src="/img/signup.png" alt="회원가입" class="w-6 h-5.8"/>
+          </a>
+        </div>
+      </div>
 
     </aside>
   </div>

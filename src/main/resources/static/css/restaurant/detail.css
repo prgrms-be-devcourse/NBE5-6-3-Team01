@@ -1,11 +1,11 @@
-.restaurant-info {
-    margin-right: 30px;
-
+.restaurant-wrapper{
+    display: flex;
+    height: 100%;
+    border-right: 1px solid #ccc;
 }
 
-.main-main {
-    margin-top: 30px;
-    height: 40px;
+.restaurant-info {
+    padding: 40px 30px;
 }
 
 .main-title {
@@ -34,43 +34,19 @@
     border-radius: 999px;
 }
 
-.detail-container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 32px;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+.detail-wrapper {
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+    margin-bottom: 30px;
 }
-
-
-/*.restaurant-category {*/
-/*    float: right;*/
-/*    font-size: 12px;*/
-/*    background-color: #e0f0ff;*/
-/*    color: #0077cc;*/
-/*    padding: 2px 8px;*/
-/*    border-radius: 999px;*/
-/*}*/
-
-
-
-/*.action-buttons {*/
-/*    display: flex;*/
-/*    border-top: 1px solid #eee;*/
-/*    border-bottom: 1px solid #eee;*/
-/*    padding: 16px 0;*/
-/*    margin-bottom: 24px;*/
-/*    justify-content: space-between;*/
-/*}*/
 
 .action-buttons {
     display: flex;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
-    justify-content: center;
-    gap: 40px;
-    margin: 20px 0;
+    margin-bottom: 30px;
+    padding: 0;
+    gap: 0;
 }
 
 .action-item {
@@ -81,15 +57,10 @@
     cursor: pointer;
     margin-top: 20px;
     margin-bottom: 20px;
-}
-
-.action-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    cursor: pointer;
 }
-
 
 .action-icon {
     width: 20px;

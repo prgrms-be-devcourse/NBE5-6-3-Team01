@@ -1,3 +1,8 @@
+main{
+    width: 100%;
+    padding: 5vw 20vw;
+}
+
 .search-box {
     display: flex;
     flex-direction: column;
@@ -13,74 +18,65 @@
     font-stretch: condensed;
 }
 
-/* 큐레이션 값 없을 시 */
-.no-result {
-    text-align: center;
-    font-stretch: extra-expanded;
-}
-
-/* 검색 바 */
 .search {
     display: flex;
-    gap: 8px;
-    margin-bottom: 32px;
-    max-width: 600px;
-    width: 100%;
+    gap: 16px;
 }
 
 .search input[type="text"] {
-    flex: 1;
-    min-width: 400px;
+    min-width: 40vw;
     font-size: 16px;
-    padding: 10px;
-    border: 1px solid #050505;
+    padding: 7px 15px;
+    border: 1px solid #27a69a;
     border-radius: 8px;
+    background-color: white;
+    margin-bottom: 0px;
 }
 
 .search button {
-    background-color: #7F56D9;
+    background-color: #27a69a;
+    width: 100px;
+    padding: 15px 15px;
     color: white;
-    height: 66px;
-    padding: 10px 16px;
     border: none;
     font-weight: bold;
+    font-size: 18px;
     border-radius: 8px;
     cursor: pointer;
-
-    /* 부드러운 전환 효과 */
-    transition: background-color 0.3s ease, box-shadow 0.2s ease;
 }
 
-.search button:hover {
-    background-color: #6941C6;           /* 살짝 어두운 파란색 */
-    /*box-shadow: 0 4px 12px rgba(0, 95, 163, 0.3);  !* 약한 그림자 *!*/
-    transform: translateY(-1px);         /* 살짝 위로 뜨는 느낌 */
+.empty{
+    width: 100%;
+    height: 60vh;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    align-content: center;
+    margin-top: 40px;
 }
 
+.scroll-container {
+    width: 100%;
+    height: 60vh;
+    overflow-y: auto;
+    margin-top: 40px;
+    justify-items: center;
+}
 
-.restaurant-container{
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 0 16px;
-    text-align: left;
+.restaurant-list {
+    width: 70%;
+    list-style: none;
 }
 
 .restaurant-title {
     text-align: center;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: bold;
     color: #111;
-    margin-top: 30px;
-    margin-bottom: 24px;
-    margin-right: 100px;
-}
-
-.restaurant-list {
-    list-style: none;
-    padding: 0;
-    margin: 15px;
-    margin-left: 0px;
-    max-width: 600px;
+    margin-bottom: 30px;
 }
 
 .restaurant-card {
@@ -127,4 +123,14 @@
     font-size: 14px;
     color: #666;
     margin-top: 4px;
+}
+
+.curation-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
 }

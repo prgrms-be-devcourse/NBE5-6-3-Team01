@@ -13,7 +13,6 @@
   <div class="empty-alarm" th:if="${#lists.isEmpty(votedList)}">
     현재 투표중인 것이 없습니다.
   </div>
-  <th:block
   <ul class="notification-list">
     <li th:each="vote:${votedList}" class="notification-item">
       <div class="message">
@@ -30,16 +29,16 @@
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", () => {
     const voteButtons = document.querySelectorAll(".button.vote");
     voteButtons.forEach((button) => {
-      button.addEventListener("click", function () {
+      button.addEventListener("click", () => {
         const confirmed = confirm("투표 페이지로 이동하시겠습니까?");
 
         const voteId = button.getAttribute("voteId");
         if (confirmed) {
           if (window.opener && !window.opener.closed) {
-            window.opener.location.href = `/meetings/vote?id=${voteId}`;
+            window.opener.location.href = `/meetings/vote/${voteId}`;
           }
           window.close();
         }
