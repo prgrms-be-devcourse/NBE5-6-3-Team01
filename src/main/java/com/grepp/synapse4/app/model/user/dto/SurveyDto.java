@@ -1,5 +1,6 @@
 package com.grepp.synapse4.app.model.user.dto;
 
+import com.grepp.synapse4.app.model.user.code.*;
 import com.grepp.synapse4.app.model.user.entity.Survey;
 import lombok.*;
 
@@ -18,11 +19,13 @@ public class SurveyDto {
     public static SurveyDto fromEntity(Survey s) {
         SurveyDto dto = new SurveyDto();
         dto.setSurveyId(s.getId());
-        dto.setCompanyLocation(s.getCompanyLocation());
-        dto.setPurpose(s.getPurpose());
-        dto.setCompanion(s.getCompanion());
-        dto.setFavoriteCategory(String.valueOf(s.getFavoriteCategory()));
-        dto.setPreferMood(s.getPreferredMood());
+
+        dto.setCompanyLocation(CompanyLocation.valueOf(s.getCompanyLocation()).getLabel());
+        dto.setPurpose(Purpose.valueOf(s.getPurpose()).getLabel());
+        dto.setCompanion(Companion.valueOf(s.getCompanion()).getLabel());
+        dto.setFavoriteCategory(FavoriteCategory.valueOf(s.getFavoriteCategory()).getLabel());
+        dto.setPreferMood(PreferredMood.valueOf(s.getPreferredMood()).getLabel());
+
         dto.setUserId(s.getUser().getId());
         return dto;
     }
