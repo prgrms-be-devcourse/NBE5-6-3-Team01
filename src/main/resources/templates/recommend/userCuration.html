@@ -9,27 +9,36 @@
 <body>
 <main layout:fragment="content">
 
-    <div class="restaurant-container">
-    <p class="restaurant-title" th:text="${curation.title}">큐레이션 제목</p>
+<!--  메뉴의 제목란입니다. 왼쪽에 찰삭 붙어있습니다.  -->
+    <div class="content-name">강남구 맛집 큐레이팅</div>
 
-    <div th:if="${curation == null or #lists.isEmpty(curation.restaurants)}" class="no-result">
-        큐레이션이 없습니다.
-    </div>
-    <div th:if="${not #lists.isEmpty(curation.restaurants)}" class="restaurant-list">
-        <ul class="restaurant-list">
-            <li th:each="res : ${curation.restaurants}" class="restaurant-card">
-                <a th:href="@{/restaurant/detail/{id}(id=${res.id})}">
-                    <div>
-                        <span class="restaurant-name" th:text="${res.name}">식당명</span>
-                        <span class="restaurant-branch" th:text="${res.branch}">지점명</span>
-                        <span class="restaurant-category" th:text="${res.category}">한식</span>
-                    </div>
-                    <p class="restaurant-time" th:text="${res.businessTime}">영업시간</p>
-                    <p class="restaurant-address" th:text="${res.roadAddress}">주소</p>
-                </a>
-            </li>
-        </ul>
-    </div>
+    <div class="restaurant-container">
+<!--     큐레이션이 없는 경우입니다 -->
+        <div th:if="${curation == null or #lists.isEmpty(curation.restaurants)}" class="no-result">
+            큐레이션이 없습니다.
+        </div>
+
+<!--    큐레이션 주제명입니다. 가운데 정렬되어 있습니다.    -->
+        <div th:if="${curation != null and not #lists.isEmpty(curation.restaurants)}">
+            <p class="restaurant-title" th:text="${curation.title}">큐레이션 제목</p>
+            <div class="restaurant-list">
+                <ul class="restaurant-list">
+                    <li th:each="res : ${curation.restaurants}" class="restaurant-card">
+                        <a th:href="@{/restaurant/detail/{id}(id=${res.id})}">
+                            <div>
+                                <span class="restaurant-name" th:text="${res.name}">식당명</span>
+                                <span class="restaurant-branch" th:text="${res.branch}">지점명</span>
+                                <span class="restaurant-category" th:text="${res.category}">한식</span>
+                            </div>
+                            <p class="restaurant-time" th:text="${res.businessTime}">영업시간</p>
+                            <p class="restaurant-address" th:text="${res.roadAddress}">주소</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
 </main>
 </body>
 </html>
