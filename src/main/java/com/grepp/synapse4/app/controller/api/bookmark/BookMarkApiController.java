@@ -38,4 +38,11 @@ public class BookMarkApiController {
         List<BookMarkDto> dtoList = bookmarkService.getUserBookmarks(userId);
         return ResponseEntity.ok(ApiResponse.success(dtoList));
     }
+
+    @GetMapping("/member/{userId}/ids")
+    public ResponseEntity<ApiResponse<List<Long>>> getUserBookmarks(
+            @PathVariable Long userId){
+        List<Long> ids = bookmarkService.getUserBookmarksIds(userId);
+    return ResponseEntity.ok(ApiResponse.success(ids));
+    }
 }

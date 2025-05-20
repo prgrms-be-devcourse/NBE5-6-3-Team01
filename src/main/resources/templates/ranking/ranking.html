@@ -60,13 +60,43 @@
       </div>
     </div>
   </div>
+
   <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', () => {
-      // 1) 카드 클릭 → 상세페이지 이동
+      const userId = /*[[${userId}]]*/ 0;
+
+      function setGreen(btn) {
+        const svg = btn.querySelector('svg');
+        svg.classList.replace('text-gray-400','text-green-400');
+        svg.classList.replace('hover:text-gray-600','hover:text-green-600');
+      }
+      function setGray(btn) {
+        const svg = btn.querySelector('svg');
+        svg.classList.replace('text-green-400','text-gray-400');
+        svg.classList.replace('hover:text-green-600','hover:text-gray-600');
+      }
+
+      if (userId > 0) {
+        fetch(`/api/bookmarks/member/${userId}`)
+                .then(res => {
+                  if (!res.ok) throw new Error(res.status);
+                  return res.json();
+                })
+                .then(json => {
+                  // DTO 배열에서 restaurantId만 추출
+                  const list = Array.isArray(json.data) ? json.data : [];
+                  const set = new Set(list.map(d => d.restaurantId));
+                  document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                    const rid = Number(btn.dataset.id);
+                    if (set.has(rid)) setGreen(btn);
+                  });
+                })
+                .catch(err => console.error('초기 북마크 오류:', err));
+      }
+
       document.querySelectorAll('.ranking-card').forEach(card => {
         card.addEventListener('click', () => {
-          const link = card.getAttribute('data-link');
-          window.location.href = link;
+          window.location.href = card.dataset.link;
         });
       });
 
@@ -75,32 +105,35 @@
           e.preventDefault();
           e.stopPropagation();
 
-          const id = btn.getAttribute('data-id');
-          fetch(`/api/bookmarks/toggle/${id}`, { method: 'POST' })
+          if (userId <= 0) {
+            alert('로그인이 필요한 서비스입니다.');
+            return window.location.href = '/user/signin';
+          }
+
+          const rid = btn.dataset.id;
+          fetch(`/api/bookmarks/toggle/${rid}`, { method: 'POST' })
                   .then(res => {
-                    if (!res.ok) throw new Error('Status ' + res.status);
+                    if (!res.ok) throw new Error(res.status);
                     return res.json();
                   })
                   .then(data => {
-                    const svg = btn.querySelector('svg');
                     if (data.added) {
-                      svg.classList.replace('text-gray-400', 'text-green-400');
-                      svg.classList.replace('hover:text-gray-600', 'hover:text-green-600');
+                      setGreen(btn);
                       alert('북마크가 추가되었습니다.');
                     } else {
-                      svg.classList.replace('text-green-400', 'text-gray-400');
-                      svg.classList.replace('hover:text-green-600', 'hover:text-gray-600');
+                      setGray(btn);
                       alert('북마크가 해제되었습니다.');
                     }
                   })
-                  .catch(err => {
-                    console.error('[Ranking] 북마크 오류:', err);
-                    alert('북마크 처리 중 오류가 발생했습니다.');
-                  });
+                  .catch(err => console.error('토글 오류:', err));
         });
       });
     });
   </script>
+
+
+
+
 </section>
 </body>
 </html>
