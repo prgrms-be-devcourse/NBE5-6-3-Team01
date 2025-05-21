@@ -12,7 +12,7 @@
 
   <div class="restaurant-container" style="margin-top: 10vh;">
     <th:block th:if="${curation == null or #lists.isEmpty(curation.restaurants)}">
-      <div class="no-result">
+      <div class="empty">
         큐레이션이 없습니다.
       </div>
     </th:block>
