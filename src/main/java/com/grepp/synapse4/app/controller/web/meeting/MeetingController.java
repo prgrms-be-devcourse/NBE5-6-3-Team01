@@ -67,7 +67,6 @@ public class MeetingController {
       model.addAttribute("purpose", Purpose.values());
       return "meetings/meeting-regist";
     }
-
     Long userId = customUserDetailsService.loadUserIdByAccount();
 
     MeetingDto dto = form.toDto(userId);
@@ -125,7 +124,6 @@ public class MeetingController {
       @RequestParam Long id,
       @RequestParam State state
   ){
-    log.info("id, state: {} {}", id, state);
     Long userId = customUserDetailsService.loadUserIdByAccount();
     meetingService.updateInvitedState(id, userId, state);
 
