@@ -97,7 +97,7 @@ public class GeminiUserRecommendPromptService {
             String cleanedJson = rawJson.replaceAll("```json", "")
                     .replaceAll("```", "").trim();
 
-            System.out.println("🤖 백틱 제거 결과: " + cleanedJson);
+            System.out.println("🤖 백틱 제거 결과: " + cleanedJson);   //log.debug     log.info
 
             // 꺼내온 값 response dto 형태로 파싱
             GeminiResponseDto responseDto = mapper.readValue(cleanedJson, GeminiResponseDto.class);

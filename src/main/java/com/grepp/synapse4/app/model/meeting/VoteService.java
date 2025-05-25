@@ -79,7 +79,7 @@ public class VoteService {
           boolean isBeforeNow = endedAt.isAfter(LocalDateTime.now());
           return isBeforeNow;
         })
-        .collect(Collectors.toList());
+        .toList();
 
     return filteredList;
   }

@@ -35,6 +35,7 @@ public class BookmarkService {
     }
 
     public List<MyBookMarkDto> findByBookmarkId(Long userId) throws NotFoundException {
+        // mybookMarkDtos no usages
         List<MyBookMarkDto> mybookMarkDtos = bookMarkRepository.findmybookmark(userId);
         return bookMarkRepository.findmybookmark(userId);
     }

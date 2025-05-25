@@ -33,6 +33,11 @@ public class CurationResultService {
     // 쿼리 modify 방식
     @Transactional
     public void toggleActive(Long id) {
+
+        // select 를 해서 update 가능한지
+        // 가능 -> update 수행
+        // transaction 비용 이슈
+
         int updated = repository.toggleActiveById(id);
         if (updated == 0) {
             throw new EntityNotFoundException("큐레이션 결과가 없습니다.");
