@@ -1,5 +1,8 @@
 package com.grepp.synapse4.app.controller.api;
 
+import com.grepp.synapse4.app.model.meeting.MeetingService;
+import com.grepp.synapse4.app.model.meeting.dto.AdminMeetingMemberDto;
+import com.grepp.synapse4.app.model.meeting.dto.MeetingMemberDto;
 import com.grepp.synapse4.app.model.user.BookmarkService;
 import com.grepp.synapse4.app.model.user.PreferService;
 import com.grepp.synapse4.app.model.user.SurveyService;
@@ -26,14 +29,13 @@ import java.util.List;
 //@PreAuthorize("hasRole('ADMIN')")
 public class AdminApiController {
 
-    private final SurveyService surveyService;
     private final BookmarkService bookmarkService;
     private final PreferService preferService;
+    private final MeetingService meetingService;
 
     @GetMapping("/users/prefer/{userId}")
     public ResponseEntity<ApiResponse<List<SurveyDto>>> getUserPrefer(
             @PathVariable Long userId) {
-        List<Survey> surveys = surveyService.findByUserId(userId);
         List<SurveyDto> dtoList = preferService.getUserPreferences(userId);
         return ResponseEntity.ok(ApiResponse.success(dtoList));
     }
@@ -41,9 +43,15 @@ public class AdminApiController {
     @GetMapping("/users/bookmark/{userId}")
     public ResponseEntity<ApiResponse<List<BookMarkDto>>> getUserBookmark(
             @PathVariable("userId") Long userId) {
-        List<Bookmark> entities = bookmarkService.findByUserId(userId);
         List<BookMarkDto> dtoList = bookmarkService.getUserBookmarks(userId);
         return ResponseEntity.ok(ApiResponse.success(dtoList));
+    }
+
+    @GetMapping("meetingmember/{meetingId}")
+    public ResponseEntity<ApiResponse<List<AdminMeetingMemberDto>>> getMeetingMember(
+            @PathVariable Long meetingId){
+        List<AdminMeetingMemberDto> dtos = meetingService.findAdminMeetingByUserNickname(meetingId);
+        return ResponseEntity.ok(ApiResponse.success(dtos));
     }
 
 }

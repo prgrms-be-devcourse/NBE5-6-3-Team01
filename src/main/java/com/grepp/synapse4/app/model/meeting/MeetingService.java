@@ -2,6 +2,7 @@ package com.grepp.synapse4.app.model.meeting;
 
 import com.grepp.synapse4.app.model.meeting.code.State;
 import com.grepp.synapse4.app.model.meeting.dto.AdminMeetingDto;
+import com.grepp.synapse4.app.model.meeting.dto.AdminMeetingMemberDto;
 import com.grepp.synapse4.app.model.meeting.dto.MeetingDto;
 import com.grepp.synapse4.app.model.meeting.dto.MeetingMemberDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
@@ -134,5 +135,10 @@ public class MeetingService {
       member.setState(State.ACCEPT);
       meetingMemberRepository.save(member);
     }
+  }
+
+  // 관리자페이지 모임멤버보기
+  public List<AdminMeetingMemberDto> findAdminMeetingByUserNickname(Long meetingId) {
+    return meetingMemberRepository.findUserNicknamesByMeetingId(meetingId);
   }
 }
