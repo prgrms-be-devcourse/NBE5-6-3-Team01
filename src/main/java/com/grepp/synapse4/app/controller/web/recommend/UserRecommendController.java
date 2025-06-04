@@ -23,7 +23,7 @@ public class UserRecommendController {
 
     @GetMapping("/recommend")
     public String recommendStarter() {
-        return "/recommend/recommendLlm";
+        return "recommend/recommend-llm";
     }
 
 
@@ -44,6 +44,6 @@ public class UserRecommendController {
         model.addAttribute("results", results);
         model.addAttribute("questionText", questionText);
 
-        return "recommend/recommendResult";
+        return "recommend/recommend-result";
     }
 }

@@ -9,9 +9,8 @@
 <body>
 <main layout:fragment="content">
   <div class="flex justify-center items-center min-h-screen bg-white-100">
-    <div class="bg-gray-100 p-8 rounded-lg shadow-md w-full max-w-2xl">
-
-      <h1 class="text-2xl font-bold text-center mb-8">더 정교한 추천을 위해 아래 내용에 응답해 주세요.</h1>
+    <div class="bg-gray-100 p-12 rounded-lg shadow-md w-full max-w-2xl">
+      <div class="text-2xl font-bold text-center mb-8">더 정교한 추천을 위해 아래 내용에 응답해 주세요.</div>
 
       <form th:action="@{/surveys}" th:object="${surveyRequest}" method="post" class="space-y-6">
 
@@ -75,10 +74,10 @@
           </select>
         </div>
 
+
         <!-- 제출 버튼 -->
-        <div class="text-center pt-4">
-          <button type="submit"
-                  class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">
+        <div class="flex justify-center pt-6">
+          <button type="submit" class="w-1/2 text-white py-3 rounded" style="background-color: #27a69a;">
             제출하기
           </button>
         </div>

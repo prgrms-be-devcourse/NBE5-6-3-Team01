@@ -64,7 +64,7 @@
         }).then(response => {
           if (response.ok) {
             if (window.opener && !window.opener.closed) {
-              window.opener.location.href = `/meetings/detail?id=${meetingId}`;
+              window.opener.location.href = `/meetings/detail/${meetingId}`;
             }
             window.close();
           } else {

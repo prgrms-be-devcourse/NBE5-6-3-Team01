@@ -19,12 +19,11 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,6 +48,7 @@ public class MeetingController {
     return "meetings/meetings";
   }
 
+  // 모임 생성 화면
   @GetMapping("regist")
   public String regist(Model model) {
     model.addAttribute("meetingRegistRequest", new MeetingRegistRequest());
@@ -56,6 +56,7 @@ public class MeetingController {
     return "meetings/meeting-regist";
   }
 
+  // 모임 생성하기
   @PostMapping("regist")
   public String regist(
       @Valid MeetingRegistRequest form,
@@ -66,7 +67,6 @@ public class MeetingController {
       model.addAttribute("purpose", Purpose.values());
       return "meetings/meeting-regist";
     }
-
     Long userId = customUserDetailsService.loadUserIdByAccount();
 
     MeetingDto dto = form.toDto(userId);
@@ -75,9 +75,10 @@ public class MeetingController {
     return "redirect:/meetings";
   }
 
-  @GetMapping("detail")
+  // 모임 상세정보 (멤버, 투표)
+  @GetMapping("/detail/{id}")
   public String detail(
-      @RequestParam Long id,
+      @PathVariable Long id,
       Model model
   ){
     Long userId = customUserDetailsService.loadUserIdByAccount();
@@ -89,7 +90,7 @@ public class MeetingController {
     List<Vote> voteList = voteService.findVoteListByMeetingId(id);
     model.addAttribute("voteList", voteList);
 
-    if(!voteList.isEmpty()){
+    if(!voteList.isEmpty()){ // 모임의 투표에 대한 정보
       Map<Long, Boolean> isVotedMap = voteService.isVotedByUser(voteList, userId);
       model.addAttribute("isVotedMap", isVotedMap);
     }
@@ -97,12 +98,10 @@ public class MeetingController {
     return "meetings/meeting-detail";
   }
 
-  @PostMapping("detail")
-  public String detail(
-      @RequestParam Long id
-  ){
+  // 모임 탈퇴하기
+  @PostMapping("/detail/{id}")
+  public String detail(@PathVariable Long id){
     Long userId = customUserDetailsService.loadUserIdByAccount();
-
     meetingService.leaveMeeting(id, userId);
 
     return "redirect:/meetings";
@@ -123,22 +122,18 @@ public class MeetingController {
   @PreAuthorize("isAuthenticated()")
   public String invitePopup(
       @RequestParam Long id,
-      @RequestParam String state
+      @RequestParam State state
   ){
     Long userId = customUserDetailsService.loadUserIdByAccount();
-
-    Boolean result = meetingService.updateInvitedState(id, userId, state);
-//    if(result){
-//      return "redirect:/meetings";
-//    }
+    meetingService.updateInvitedState(id, userId, state);
 
     return "redirect:/meetings/modal/alarm-invite.html";
   }
 
-  @GetMapping("/modal/meeting-member-list.html")
+  @GetMapping("/modal/meeting-members/{id}.html")
   @PreAuthorize("isAuthenticated()")
   public String meetingMemberListPopup(
-      @RequestParam Long id,
+      @PathVariable Long id,
       Model model
   ) {
     Meeting meeting = meetingService.findMeetingsById(id);
@@ -147,32 +142,30 @@ public class MeetingController {
     List<User> userList = meetingService.findMemberListByMeetingId(id, State.ACCEPT);
     model.addAttribute("userList", userList);
 
-    return "meetings/modal/meeting-member-list";
+    return "meetings/modal/meeting-members";
   }
 
-  @GetMapping("/modal/meeting-invite.html")
+  @GetMapping("/modal/meeting-invite/{id}.html")
   @PreAuthorize("isAuthenticated()")
   public String meetingInvite(
-      @RequestParam Long id,
+      @PathVariable Long id,
       Model model
   ){
     meetingService.setInviteModel(model, id, null);
 
     return "meetings/modal/meeting-invite";
   }
-
-  @PostMapping("/modal/meeting-invite.html")
+  @PostMapping("/modal/meeting-invite/{id}.html")
   @PreAuthorize("isAuthenticated()")
   public String meetingInvite(
       @Valid MeetingInviteRequest invite,
-      @RequestParam Long id,
+      @PathVariable Long id,
       @RequestParam String account,
       Model model
   ){
     Boolean existByUser = customUserDetailsService.findUserByAccount(account);
     if(!existByUser){
       meetingService.setInviteModel(model, id, "존재하지 않는 유저입니다.");
-
       return "meetings/modal/meeting-invite";
     }
 
@@ -186,6 +179,7 @@ public class MeetingController {
     MeetingMemberDto dto = invite.toDto(id, userId);
     meetingService.inviteUser(dto);
 
-    return "redirect:/meetings/modal/meeting-invite.html?id="+id;
+    return "redirect:/meetings/modal/meeting-invite/"+id+".html";
   }
+
 }

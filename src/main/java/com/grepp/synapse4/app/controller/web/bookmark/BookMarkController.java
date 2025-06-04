@@ -11,10 +11,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Slf4j
@@ -26,8 +26,8 @@ public class BookMarkController {
 
     @GetMapping(value = "")
     public String bookmarks(
-            Model model,
-            @AuthenticationPrincipal CustomUserDetails userDetails
+        Model model,
+        @AuthenticationPrincipal CustomUserDetails userDetails
     ) throws NotFoundException {
         Long userId = userDetails.getUser().getId();
         List<MyBookMarkDto> bookmarks = bookmarkService.findByBookmarkId(userId);
@@ -35,10 +35,10 @@ public class BookMarkController {
         return "bookmarks/bookmarks";
     }
 
-    @GetMapping("/modal/member-bookmarks.html")
+    @GetMapping("/modal/member-bookmarks/{id}.html")
     @PreAuthorize("isAuthenticated()")
     public String memberBookmarks(
-        @RequestParam Long id,
+        @PathVariable Long id,
         Model model
     ) throws NotFoundException {
         List<MyBookMarkDto> bookmarks = bookmarkService.findByBookmarkId(id);

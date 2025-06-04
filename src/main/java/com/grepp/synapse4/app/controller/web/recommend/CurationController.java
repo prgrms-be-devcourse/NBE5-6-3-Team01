@@ -28,6 +28,6 @@ public class CurationController {
 
         model.addAttribute("curation", curation);
 
-        return "recommend/userCuration";
+        return "recommend/user-curation";
     }
 }

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}"
@@ -22,9 +23,8 @@
          th:onclick="'openPopup(' + ${meeting.id} + '); return false;'">
         멤버 보기
       </a>
-      <form th:action="@{/meetings/detail}" onsubmit="return confirmLeave();" method="post">
-        <button type="submit" class="meeting-button" style="height: 100%;">모임 탈퇴</button>
-        <input type="hidden" name="id" th:value="${meeting.id}"/>
+      <form th:action="@{'/meetings/detail/'+${meeting.id}}" method="post" onsubmit="return confirmLeave();" >
+        <button type="submit" class="meeting-button" style="height: 100%;">탈퇴하기</button>
       </form>
     </div>
   </div>
@@ -33,7 +33,7 @@
   <div>
     <div class="header" style="margin-top: 5vh;">
       <div style="font-size: 30px; font-weight: bold">투표 리스트</div>
-      <a th:href="@{'/meetings/vote-regist'(id=${meeting.id})}" class="vote-button">투표 만들기</a>
+      <a th:href="@{'/meetings/vote-regist/'+${meeting.id}}" class="vote-button">투표 만들기</a>
     </div>
 
     <div class="empty" th:if="${#lists.isEmpty(voteList)}">
@@ -59,16 +59,16 @@
         <div class="button-wrapper">
           <th:block th:if="${vote.endedAt.isAfter(T(java.time.LocalDateTime).now())}">
             <a th:if="${isVotedMap[vote.id] == false}"
-               th:href="@{'/meetings/vote'(id=${vote.id})}"
+               th:href="@{'/meetings/vote/'+${vote.id}}"
                class="vote-move">
               투표하기
             </a>
             <button th:if="${isVotedMap[vote.id] == true}"
-               class="vote-move disabled">
+                    class="vote-move disabled">
               이미 투표함
             </button>
             <button th:if="${isVotedMap[vote.id] == null}"
-               class="vote-move disabled">
+                    class="vote-move disabled">
               투표 불가능
             </button>
           </th:block>
@@ -76,7 +76,7 @@
             <button class="vote-move ended">투표 마감</button>
           </th:block>
 
-          <a th:href="@{'/meetings/vote-result'(id=${vote.id})}" class="vote-move">투표 결과보기</a>
+          <a th:href="@{'/meetings/vote-result/'+${vote.id}}" class="vote-move">투표 결과보기</a>
         </div>
 
       </div>
@@ -92,18 +92,17 @@
       const screenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
 
       const screenWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
-      const screenHeight = window.innerHeight || document.documentElement.clientHeight
-          || screen.height;
+      const screenHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
 
       const left = screenLeft + (screenWidth - popupWidth) / 2;
       const top = screenTop + (screenHeight - popupHeight) / 2;
 
       window.open(
-          "/meetings/modal/meeting-member-list.html?id=" + id,
+          "/meetings/modal/meeting-members/" + id + ".html",
           'popupWindow',
           `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`
       );
-    }
+    };
 
     function confirmLeave() {
       return confirm("정말로 모임을 탈퇴하시겠습니까?");
