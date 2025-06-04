@@ -1,10 +1,7 @@
 package com.grepp.synapse4.app.model.llm;
 
-import com.grepp.synapse4.app.model.llm.dto.userrecommenddto.RecommendRequestDto;
 import com.grepp.synapse4.app.model.llm.entity.LLMQuestion;
 import com.grepp.synapse4.app.model.llm.repository.LlmQuestionRepository;
-import com.grepp.synapse4.app.model.user.entity.User;
-import com.grepp.synapse4.app.model.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,19 +10,27 @@ import org.springframework.stereotype.Service;
 public class LlmQuestionService {
 
     private final LlmQuestionRepository llmQuestionRepository;
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
 
-    public String saveQuestion(RecommendRequestDto dto) {
+//    public String saveQuestion(RecommendRequestDto dto) {
+//
+//        User user = userRepository.findById(dto.getUserId())
+//                .orElseThrow(() -> new IllegalArgumentException("유효한 유저가 없음"));
+//
+//        LLMQuestion question = LLMQuestion.builder()
+//                .user(user)
+//                .text(dto.getQuestionText())
+//                .build();
+//        LLMQuestion saved = llmQuestionRepository.save(question);
+//
+//        return saved.getText();
+//    }
 
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("유효한 유저가 없음"));
-
+    public LLMQuestion saveQuestionText(Long userId, String questionText) {
         LLMQuestion question = LLMQuestion.builder()
-                .user(user)
-                .text(dto.getQuestionText())
+                .userId(userId)
+                .text(questionText)
                 .build();
-        LLMQuestion saved = llmQuestionRepository.save(question);
-
-        return saved.getText();
+        return llmQuestionRepository.save(question);
     }
 }

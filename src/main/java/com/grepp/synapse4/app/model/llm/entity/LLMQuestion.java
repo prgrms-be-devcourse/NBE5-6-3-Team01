@@ -1,15 +1,20 @@
 package com.grepp.synapse4.app.model.llm.entity;
 
-import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.infra.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Getter
-@ToString
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class LLMQuestion extends BaseEntity {
 
@@ -18,11 +23,13 @@ public class LLMQuestion extends BaseEntity {
     @Column(name = "question_id")
     private Long id;
 
-    @Setter
     @Column
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column
+    private Long userId;
+
+    // question에 대한 여러 result의 list를 조회해줘야 하므로 양방향 매핑
+    @OneToMany(mappedBy = "llmQuestion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LLMResult> results = new ArrayList<>();
 }
