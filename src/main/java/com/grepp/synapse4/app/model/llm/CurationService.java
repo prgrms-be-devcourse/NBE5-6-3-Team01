@@ -63,8 +63,7 @@ public class CurationService {
         // 3. 큐레이션 결과의 1개 식당과 매핑
         //    그렇게 매핑된 식당을 '큐레이션식당 dto'에 담기
         List<CurationRestaurantDto> dtos = latest.getResults().stream()
-                .map(CurationResult::getRestaurant)
-                .map(CurationRestaurantDto::fromEntity)
+                .map(result -> CurationRestaurantDto.fromEntity(result.getRestaurant(), result))
                 .toList();
 
         return new UserCurationDto(
