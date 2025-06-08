@@ -9,69 +9,51 @@ import com.grepp.synapse4.app.model.llm.mongo.RestaurantTagsDocument;
 import com.grepp.synapse4.app.model.llm.repository.LlmQuestionRepository;
 import com.grepp.synapse4.app.model.llm.repository.LlmResultRepository;
 import com.grepp.synapse4.app.model.llm.repository.RestaurantTagsDocumentRepository;
-import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
-import com.grepp.synapse4.app.model.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class GeminiUserRecommendPromptService {
-
     // 제미나이에게 보낼 프롬프트 제작 담당 서비스
 
     private final GeminiService geminiService;
     private final RestaurantTagsDocumentRepository restaurantTagsDocumentRepository;
 
     private final LlmQuestionRepository llmQuestionRepository;
-    private final RestaurantRepository restaurantRepository;
     private final LlmResultRepository llmResultRepository;
 
-    @Transactional
-    public GeminiResponseDto generateRecommendations(String llmQuestionText) {
-//        //0. 입력받은 id 값으로 사용자 입력 텍스트 찾기
-//        // todo 추후 Questionservice로 감싸서 전달하기.
-//        String userText = llmQuestionRepository.findById(llmQuestionText)
-//                .orElseThrow(() -> new RuntimeException("저장된 질문이 없습니다"))
-//                .getText();
-//        System.out.println(" id 찾음");
-
+    public void getRecommendations(Long questionId, String text) {
         // 1. text로 문자열 prompt 생성
-        String prompt = buildUserRecommendPrompt(llmQuestionText);
+        String prompt = buildUserRecommendPrompt(text);
 
         // 2. 완성된 requestDto를 GeminiService로 호출하여 String 형태로 받음
         String geminiResponse = geminiService.getGeminiResponse(prompt);
-        System.out.println("🤖 gemini response: " + geminiResponse);
 
         // 3. 응답 파싱
         GeminiResponseDto responseDto = parseGeminiResponse(geminiResponse);
 
         // 4. 응답 저장! 구조 다시 짜야함..
-//        saveResults(llmQuestionText, responseDto);
+        saveResults(questionId, responseDto.getRecommendations());
 
-        return responseDto;
     }
 
     // 4. 도착한 응답 result DB 에 저장
-    @Transactional
-    public void saveResults(Long llmQuestionId, GeminiResponseDto responseDto) {
-        LLMQuestion question = llmQuestionRepository.findById(llmQuestionId)
-                .orElseThrow(() -> new RuntimeException("질문 없음"));
+    public void saveResults(Long questionId, List<GeminiResponseDto.Recommendation> recommendations) {
+        LLMQuestion question = llmQuestionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("질문이 존재하지 않습니다"));
 
-        List<LLMResult> results = new ArrayList<>();
-
-        for (GeminiResponseDto.Recommendation rec : responseDto.getRecommendations()) {
-            Restaurant restaurant = restaurantRepository.findById(rec.getRestaurantId())
-                    .orElseThrow(() -> new RuntimeException("식당 없음"));
-
-            results.add(new LLMResult(rec.getReason(), question, restaurant));
-        }
+        List<LLMResult> results = recommendations.stream()
+                .map(rec -> LLMResult.builder()
+                        .reason(rec.getReason())
+                        .restaurantId(rec.getRestaurantId())
+                        .llmQuestion(question)
+                        .build())
+                .toList();
 
         llmResultRepository.saveAll(results);
     }
@@ -87,22 +69,18 @@ public class GeminiUserRecommendPromptService {
 
             // String json get
             String rawJson = fullDto.getCandidates()
-                    .get(0)
+                    .getFirst()
                     .getContent()
                     .getParts()
-                    .get(0)
+                    .getFirst()
                     .getText();
 
             // 영원히 돌아오는 백틱 제거
             String cleanedJson = rawJson.replaceAll("```json", "")
                     .replaceAll("```", "").trim();
 
-            System.out.println("🤖 백틱 제거 결과: " + cleanedJson);
-
             // 꺼내온 값 response dto 형태로 파싱
-            GeminiResponseDto responseDto = mapper.readValue(cleanedJson, GeminiResponseDto.class);
-
-            return responseDto;
+            return mapper.readValue(cleanedJson, GeminiResponseDto.class);
         } catch (Exception e) {
             throw new RuntimeException("❗ Gemini 응답 파싱 실패: " + e.getMessage(), e);
         }

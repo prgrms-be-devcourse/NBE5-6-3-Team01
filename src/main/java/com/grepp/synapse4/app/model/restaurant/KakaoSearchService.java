@@ -4,6 +4,7 @@ import com.grepp.synapse4.app.model.restaurant.dto.KakaoSearchRequestDto;
 import com.grepp.synapse4.app.model.restaurant.dto.KakaoSearchResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class KakaoSearchService {
                 .bodyToMono(KakaoSearchResponseDto.class)
                 .block();
 
-        if (response == null || response.getDocuments() == null || response.getDocuments().isEmpty()) {
+        if (ObjectUtils.isEmpty(response) || response.getDocuments() == null || response.getDocuments().isEmpty()) {
             return Optional.empty();
         }
 

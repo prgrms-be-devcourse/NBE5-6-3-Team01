@@ -1,19 +1,20 @@
 package com.grepp.synapse4.app.model.user;
 
-import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_ADMIN;
-import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_USER;
-
 import com.grepp.synapse4.app.model.user.dto.request.EditInfoRequest;
 import com.grepp.synapse4.app.model.user.dto.request.UserSignUpRequest;
 import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.app.model.user.repository.UserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_ADMIN;
+import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_USER;
 
 @Service
 @Transactional
@@ -28,7 +29,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void signup(UserSignUpRequest request){
+    public void signup(UserSignUpRequest request) {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         User user = request.toEntity(encodedPassword, ROLE_USER);
         userRepository.save(user);
@@ -36,11 +37,11 @@ public class UserService {
 
     public void validateDuplicateUser(UserSignUpRequest request, BindingResult bindingResult) {
         userValidator.validateIdentifiers(
-            request.getUserAccount(),
-            request.getEmail(),
-            request.getNickname(),
-            null,
-            bindingResult
+                request.getUserAccount(),
+                request.getEmail(),
+                request.getNickname(),
+                null,
+                bindingResult
         );
     }
 
@@ -50,17 +51,18 @@ public class UserService {
         }
 
         userValidator.validateIdentifiers(
-            null,
-            request.getEmail(),
-            request.getNickname(),
-            user.getId(),
-            bindingResult
+                null,
+                request.getEmail(),
+                request.getNickname(),
+                user.getId(),
+                bindingResult
         );
 
         if (request.getNewPassword() != null && !request.getNewPassword().isBlank()) {
             String pw = request.getNewPassword();
 
-            if (!pw.matches("^(?=.*[A-Za-z])(?=.*\\d)[^\\s]{4,16}$")) {
+            // ash : 정규표현식(\\S warning 처리)
+            if (!pw.matches("^(?=.*[A-Za-z])(?=.*\\d)\\S{4,16}$")) {
                 bindingResult.rejectValue("newPassword", "pattern", "비밀번호는 공백 없이 영문자와 숫자를 포함한 4~16자여야 합니다.");
             }
 
@@ -91,12 +93,6 @@ public class UserService {
         user.setIsSurvey(false);
         user.setActivated(true);
         user.setDeletedAt(null);
-        userRepository.save(user);
-    }
-
-    public void signupUser(UserSignUpRequest request) {
-        User user = buildUser(request);
-        user.setRole(ROLE_USER);
         userRepository.save(user);
     }
 

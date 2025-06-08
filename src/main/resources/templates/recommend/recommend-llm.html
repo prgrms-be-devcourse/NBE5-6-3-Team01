@@ -19,7 +19,8 @@
     <div class="search-box">
         <p class="main-title">🍽️ 구체적인 상황을 입력하고, AI 추천을 받아보세요!</p>
 
-        <form method="get" action="/recommend/result" class="search" onsubmit="return validateForm()">
+        <!--    post mapping : 입력한 questionText 를 Post 매핑하도록 수정    -->
+        <form method="post" action="/recommend/init" class="search" onsubmit="return validateForm()">
             <input type="text" name="questionText" id="questionText" placeholder="구체적 상황을 입력하세요">
             <button type="submit">추천 받기</button>
         </form>
@@ -27,7 +28,7 @@
 
     <script>
         function validateForm(){
-            const keyword = document.getElementById('restaurantKeyword').value.trim();
+            const keyword = document.getElementById('questionText').value.trim();
             if(!keyword){
                 alert("상황을 입력해 주세요.");
                 return false;

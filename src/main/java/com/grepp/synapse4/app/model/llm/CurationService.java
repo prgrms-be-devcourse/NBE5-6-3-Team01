@@ -4,13 +4,14 @@ import com.grepp.synapse4.app.model.llm.dto.AdminCurationDto;
 import com.grepp.synapse4.app.model.llm.dto.CurationRestaurantDto;
 import com.grepp.synapse4.app.model.llm.dto.UserCurationDto;
 import com.grepp.synapse4.app.model.llm.entity.Curation;
+import com.grepp.synapse4.app.model.llm.entity.CurationResult;
 import com.grepp.synapse4.app.model.llm.repository.CurationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +50,7 @@ public class CurationService {
         // 1. 최신 큐레이션 엔티티
         Curation latest = curationRepository.findTopByOrderByCreatedAtDesc();
 
-        if(latest == null){
+        if(ObjectUtils.isEmpty(latest)){
             return null;
         }
 
@@ -62,9 +63,9 @@ public class CurationService {
         // 3. 큐레이션 결과의 1개 식당과 매핑
         //    그렇게 매핑된 식당을 '큐레이션식당 dto'에 담기
         List<CurationRestaurantDto> dtos = latest.getResults().stream()
-                .map(result -> result.getRestaurant())
-                .map(restaurant -> CurationRestaurantDto.fromEntity(restaurant))
-                .collect(Collectors.toList());
+                .map(CurationResult::getRestaurant)
+                .map(CurationRestaurantDto::fromEntity)
+                .toList();
 
         return new UserCurationDto(
                 latest.getId(),

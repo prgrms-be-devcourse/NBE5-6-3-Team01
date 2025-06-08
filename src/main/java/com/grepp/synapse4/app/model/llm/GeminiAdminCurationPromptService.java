@@ -5,8 +5,6 @@ import com.grepp.synapse4.app.model.llm.dto.userrecommenddto.GeminiFullResponseD
 import com.grepp.synapse4.app.model.llm.dto.userrecommenddto.GeminiResponseDto;
 import com.grepp.synapse4.app.model.llm.entity.Curation;
 import com.grepp.synapse4.app.model.llm.entity.CurationResult;
-import com.grepp.synapse4.app.model.llm.entity.LLMQuestion;
-import com.grepp.synapse4.app.model.llm.entity.LLMResult;
 import com.grepp.synapse4.app.model.llm.mongo.RestaurantTagsDocument;
 import com.grepp.synapse4.app.model.llm.repository.CurationRepository;
 import com.grepp.synapse4.app.model.llm.repository.CurationResultRepository;
@@ -42,7 +40,6 @@ public class GeminiAdminCurationPromptService {
 
         // 2. 완성된 requestDto를 GeminiService로 호출하여 String 형태로 받음
         String geminiResponse = geminiService.getGeminiResponse(prompt);
-        System.out.println("🤖 gemini response: " + geminiResponse);
 
         // 3. 응답 파싱
         GeminiResponseDto responseDto = parseGeminiResponse(geminiResponse);
@@ -82,22 +79,18 @@ public class GeminiAdminCurationPromptService {
 
             // String json get
             String rawJson = fullDto.getCandidates()
-                    .get(0)
+                    .getFirst()
                     .getContent()
                     .getParts()
-                    .get(0)
+                    .getFirst()
                     .getText();
 
             // 영원히 돌아오는 백틱 제거
             String cleanedJson = rawJson.replaceAll("```json", "")
                     .replaceAll("```", "").trim();
 
-            System.out.println("🤖 백틱 제거 결과: " + cleanedJson);
-
             // 꺼내온 값 response dto 형태로 파싱
-            GeminiResponseDto responseDto = mapper.readValue(cleanedJson, GeminiResponseDto.class);
-
-            return responseDto;
+            return mapper.readValue(cleanedJson, GeminiResponseDto.class);
         } catch (Exception e) {
             throw new RuntimeException("❗ Gemini 응답 파싱 실패: " + e.getMessage(), e);
         }
