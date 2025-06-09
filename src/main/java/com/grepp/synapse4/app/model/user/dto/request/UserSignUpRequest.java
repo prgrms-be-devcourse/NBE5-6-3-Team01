@@ -13,12 +13,15 @@ import lombok.Setter;
 public class UserSignUpRequest {
 
     @NotBlank(message = "아이디는 필수 입력값입니다.")
-    @Pattern(regexp = "^[^\\s]+$", message = "아이디는 공백을 포함할 수 없습니다.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)[a-z0-9]{6,16}$", message = "아이디는 공백 없이 영어 소문자와 숫자를 모두 포함한 6~16자여야 합니다.")
     private String userAccount;
 
     @NotBlank(message = "비밀번호는 필수 입력값입니다.")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[^\\s]{4,16}$", message = "비밀번호는 공백 없이 영문자와 숫자를 포함한 4~16자여야 합니다.")
     private String password;
+
+    @NotBlank(message = "이름은 필수 입력값입니다.")
+    private String name;
 
     @NotBlank(message = "닉네임은 필수 입력값입니다.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]{2,10}$", message = "닉네임은 특수문자를 제외한 2~10자여야 합니다.")
@@ -36,6 +39,7 @@ public class UserSignUpRequest {
         return User.builder()
             .userAccount(this.userAccount)
             .password(encodedPassword)
+            .name(this.name)
             .nickname(this.nickname)
             .email(this.email)
             .isSurvey(false)

@@ -31,6 +31,14 @@
                th:errors="*{password}"></div>
         </div>
         <div class="form-group">
+          <label for="name" class="font-semibold">이름</label>
+          <input type="text" th:field="*{name}" id="name"
+                 class="w-full border border-gray-300 rounded px-3 py-2"/>
+          <div class="error-message text-red-500 text-sm mt-1"
+               th:if="${#fields.hasErrors('name')}"
+               th:errors="*{name}"></div>
+        </div>
+        <div class="form-group">
           <label for="nickname" class="font-semibold">닉네임</label>
           <input type="text" th:field="*{nickname}" id="nickname"
                  class="w-full border border-gray-300 rounded px-3 py-2" />
