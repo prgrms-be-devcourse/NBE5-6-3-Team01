@@ -34,6 +34,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String name;
+
     @Column(nullable = false, unique = true)
     private String nickname;
 
@@ -53,16 +56,23 @@ public class User extends BaseEntity {
     private Role role;
 
     @Builder
-    private User(String userAccount, String password, String nickname, String email,
+    private User(String userAccount, String password, String name, String nickname, String email,
         Boolean isSurvey,
         Boolean activated, LocalDateTime deletedAt, Role role) {
         this.userAccount = userAccount;
         this.password = password;
+        this.name = name;
         this.nickname = nickname;
         this.email = email;
         this.isSurvey = isSurvey;
         this.activated = activated;
         this.deletedAt = deletedAt;
         this.role = role;
+    }
+
+    public User(String userAccount, String name, String email) {
+        this.userAccount = userAccount;
+        this.name = name;
+        this.email = email;
     }
 }

@@ -3,12 +3,14 @@ package com.grepp.synapse4.app.model.user.dto;
 import com.grepp.synapse4.app.model.user.entity.User;
 import java.util.Collection;
 import java.util.List;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails {
 
+    @Getter
     private final User user;
     private final List<GrantedAuthority> authorities;
 
@@ -19,10 +21,6 @@ public class CustomUserDetails implements UserDetails {
         this.authorities = List.of(
                 new SimpleGrantedAuthority(roleName)
         );
-    }
-
-    public User getUser() {
-        return user;
     }
 
     @Override

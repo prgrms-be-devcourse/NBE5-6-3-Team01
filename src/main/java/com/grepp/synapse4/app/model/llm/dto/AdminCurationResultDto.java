@@ -1,10 +1,14 @@
 package com.grepp.synapse4.app.model.llm.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter @Setter @ToString
+import java.time.LocalDateTime;
+
+@Getter
+@AllArgsConstructor
+@Builder
 
 public class AdminCurationResultDto {
 
@@ -13,13 +17,6 @@ public class AdminCurationResultDto {
     private String name;
     private String address;
     private boolean active;
-
-    public AdminCurationResultDto(Long id, String title, String name, String address, Boolean active) {
-        this.id = id;
-        this.title = title;
-        this.name = name;
-        this.address = address;
-        this.active = active;
-    }
+    private LocalDateTime createdAt;
 
 }

@@ -2,53 +2,297 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin-layout}">
+      layout:decorate="~{admin-layout-curation}">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"/>
   <title layout:fragment="title">큐레이션 결과 리스트</title>
 </head>
 
 <section layout:fragment="content" class="p-10 bg-gray-50 flex-1">
-
   <div class="flex items-center justify-between mb-6">
     <h2 class="text-2xl font-semibold">큐레이션 추천 리스트</h2>
     <button type="button"
             th:onclick="|location.href='@{/admin/curation/register}'|"
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            class="btn-detail px-3 py-1 bg-gray-700 text-white rounded hover:bg-blue-700">
       새로운 큐레이션 등록
     </button>
   </div>
+  <div class="mb-6 flex items-center">
+    <input
+            type="text"
+            id="searchKeyword"
+            placeholder="큐레이션 제목을 입력하세요."
+            class="border rounded-l-lg px-3 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    />
+    <button
+            id="searchButton"
+            type="button"
+            class="bg-gray-700 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg"
+    >
+      검색
+    </button>
+  </div>
+  <th:block th:each="result, iterStat : ${curationResults}"
+            th:with="
+              prevTitle = ${iterStat.index > 0} ? ${curationResults[iterStat.index - 1].title} : '',
+              nextTitle = ${(iterStat.index + 1) < #lists.size(curationResults)} ? ${curationResults[iterStat.index + 1].title} : ''">
 
-  <div class="grid grid-cols-3 gap-6">
-    <div th:each="result : ${curationResults}"
-         class="border rounded-lg bg-white p-4 shadow-sm hover:shadow-md transition">
+    <th:block th:if="${iterStat.index == 0} or ${result.title} != ${prevTitle}">
+      <div class="mb-8">
+        <h3 class="text-xl font-semibold mb-2" th:text="${result.title}">테마명</h3>
+        <div class="grid grid-cols-3 gap-6 mt-2">
+    </th:block>
 
+    <div class="border rounded-lg bg-white p-4 shadow-sm hover:shadow-md transition">
       <p class="text-xs text-gray-400 mb-2">
-        주제명: <span th:text="${result.title}">주제명</span>
+        주제명: <span th:text="${result.title}">테마명</span>
       </p>
+      <h4 class="font-medium text-lg mb-1" th:text="${result.name}">식당명</h4>
+      <p class="text-sm text-gray-600 mb-3" th:text="${result.address}">식당 위치</p>
+      <p th:text="${result.active} ? '현재: 활성' : '현재: 비활성'"
+         th:class="'status-text text-sm mb-2 ' + (${result.active} ? 'text-gray-600' : 'text-indigo-600')">
+        현재: 상태
+      </p>
+      <button
+              type="button"
+              class="main-toggle-btn"
+              th:classappend="${result.active}
+          ? ' px-3 py-1 rounded text-white bg-gray-500 hover:bg-gray-600'
+          : ' px-3 py-1 rounded text-white bg-indigo-500 hover:bg-indigo-600'"
+              th:data-id="${result.id}"
+              th:text="${result.active} ? '비활성화' : '활성화'">
+        토글
+      </button>
+    </div>
 
-      <h3 class="font-medium text-lg mb-1"
-          th:text="${result.name}">식당명</h3>
+    <th:block th:if="
+        (${iterStat.index + 1} == ${#lists.size(curationResults)})
+        or
+        ${result.title} != ${nextTitle}">
+      </div>
+      </div>
+    </th:block>
 
-      <p class="text-sm text-gray-600 mb-3"
-         th:text="${result.address}">식당 위치</p>
+  </th:block>
 
-      <p class="text-sm mb-2"
-         th:text="${result.active} ? '현재: 활성' : '현재: 비활성'">현재 상태</p>
-
-      <form th:action="@{/admin/curation/toggle/{id}(id=${result.id})}"
-            method="post">
-        <button type="submit"
-                class="px-3 py-1 border rounded"
-                th:text="${result.active} ? '비활성화' : '활성화'">
-          토글
-        </button>
-      </form>
-
+  <div id="resultsModalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+  <div id="resultsModal" class="fixed inset-0 flex items-center justify-center hidden z-50 px-4">
+    <div class="bg-white rounded-lg w-full max-w-2xl mx-auto shadow-lg h-[80vh] overflow-hidden">
+      <div class="flex justify-between items-center border-b px-4 py-2">
+        <h2 id="modalTitle" class="text-lg font-semibold">검색 결과</h2>
+        <button id="modalCloseBtn" class="text-gray-500 hover:text-gray-700">&times;</button>
+      </div>
+      <div id="modalBody" class="p-4 max-h-[70vh] overflow-y-auto">
+        <p class="text-center text-gray-500">검색 중...</p>
+      </div>
     </div>
   </div>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchBtn    = document.getElementById('searchButton');
+      const keywordInput = document.getElementById('searchKeyword');
+      const modalOverlay = document.getElementById('resultsModalOverlay');
+      const modal        = document.getElementById('resultsModal');
+      const modalClose   = document.getElementById('modalCloseBtn');
+      const modalTitle   = document.getElementById('modalTitle');
+      const modalBody    = document.getElementById('modalBody');
+
+      function openModal() {
+        modal.classList.remove('hidden');
+        modalOverlay.classList.remove('hidden');
+      }
+      function closeModal() {
+        modal.classList.add('hidden');
+        modalOverlay.classList.add('hidden');
+        modalBody.innerHTML = '<p class="text-center text-gray-500">검색 중...</p>';
+        modalTitle.textContent = '검색 결과';
+      }
+      modalOverlay.addEventListener('click', closeModal);
+      modalClose.addEventListener('click', closeModal);
+
+      document.querySelectorAll('.main-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          fetch(`/admin/curation/toggle/${id}`, {
+            method: 'POST',
+            redirect: 'manual',
+            headers: { 'Content-Type': 'application/json' }
+          })
+                  .then(response => {
+                    const status = response.status;
+                    const type   = response.type;
+                    if ((status >= 200 && status < 300) || status === 302 || (status === 0 && type === 'opaqueredirect')) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error(`서버 오류: status ${status}, type ${type}`));
+                  })
+                  .then(() => {
+                    const isCurrentlyActive = this.textContent.includes('비활성화');
+                    if (isCurrentlyActive) {
+                      this.textContent = '활성화';
+                      this.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+                      this.classList.add('bg-indigo-500', 'hover:bg-indigo-600');
+                      alert('비활성화되었습니다');
+                    } else {
+                      this.textContent = '비활성화';
+                      this.classList.remove('bg-indigo-500', 'hover:bg-indigo-600');
+                      this.classList.add('bg-gray-500', 'hover:bg-gray-600');
+                      alert('활성화되었습니다');
+                    }
+                    const statusElem = this.closest('div').querySelector('.status-text');
+                    if (statusElem) {
+                      if (isCurrentlyActive) {
+                        statusElem.textContent = '현재: 비활성';
+                        statusElem.classList.remove('text-gray-600');
+                        statusElem.classList.add('text-indigo-600');
+                      } else {
+                        statusElem.textContent = '현재: 활성';
+                        statusElem.classList.remove('text-indigo-600');
+                        statusElem.classList.add('text-gray-600');
+                      }
+                    }
+                  })
+                  .catch(err => {
+                    console.error('메인 토글 중 오류 발생:', err);
+                    alert('상태 변경 실패: ' + err.message);
+                  });
+        });
+      });
+
+      searchBtn.addEventListener('click', function() {
+        const keyword = keywordInput.value.trim();
+        if (!keyword) {
+          alert('검색어를 입력해주세요.');
+          return;
+        }
+
+        fetch(`/api/admin/search/curation?keyword=${encodeURIComponent(keyword)}`)
+                .then(response => {
+                  if (!response.ok) throw new Error(`검색 실패 (status: ${response.status})`);
+                  return response.json();
+                })
+                .then(data => {
+                  const allResults = data.data || [];
+
+                  if (allResults.length === 0) {
+                    modalBody.innerHTML = '<p class="text-center text-gray-500">검색 결과가 없습니다.</p>';
+                    modalTitle.textContent = `"${keyword}" 검색 결과`;
+                    openModal();
+                    return;
+                  }
+                  const grouped = {};
+                  allResults.forEach(item => {
+                    const titleKey = item.title;
+                    if (!grouped[titleKey]) grouped[titleKey] = [];
+                    grouped[titleKey].push(item);
+                  });
+                  let html = '';
+                  Object.keys(grouped).forEach(titleKey => {
+                    html += `<h3 class="text-lg font-semibold mt-4">${titleKey}</h3>`;
+                    html += '<div class="grid grid-cols-3 gap-4 mt-2">';
+
+                    grouped[titleKey].forEach(r => {html += `
+                  <div class="border rounded-lg p-3 shadow-sm card ${
+                              r.active ? 'bg-gray-50' : 'bg-indigo-50'
+                      }" data-id="${r.curationResultId}">
+                    <p class="text-md font-medium mb-1">${r.restaurantName}</p>
+                    <p class="text-sm text-gray-600 mb-1">${r.address}</p>
+                    <p class="text-sm font-medium mb-2 status-text ${
+                              r.active ? 'text-gray-600' : 'text-indigo-600'
+                      }" data-id="${r.curationResultId}">
+                      현재: ${r.active ? '활성' : '비활성'}
+                    </p>
+                    <button
+                      type="button"
+                      class="w-full text-center px-2 py-1 rounded toggle-btn ${
+                              r.active
+                                      ? 'bg-gray-500 text-white hover:bg-gray-600'
+                                      : 'bg-indigo-500 text-white hover:bg-indigo-600'
+                      }"
+                      data-id="${r.curationResultId}"
+                    >
+                      ${r.active ? '비활성화' : '활성화'}
+                    </button>
+                  </div>
+                `;
+                    });
+
+                    html += '</div>';
+                  });
+
+                  modalBody.innerHTML = html;
+                  modalTitle.textContent = `"${keyword}" 검색 결과`;
+                  openModal();
+                })
+                .catch(err => {
+                  console.error('검색 중 오류 발생:', err);
+                  modalBody.innerHTML = `<p class="text-center text-red-500">검색 오류: ${err.message}</p>`;
+                  modalTitle.textContent = '검색 오류';
+                  openModal();
+                });
+      });
+
+      modalBody.addEventListener('click', function(e) {
+        const btn = e.target.closest('.toggle-btn');
+        if (!btn) return;
+
+        const id = btn.getAttribute('data-id');
+        if (!id) return;
+
+        fetch(`/admin/curation/toggle/${id}`, {
+          method: 'POST',
+          redirect: 'manual',
+          headers: { 'Content-Type': 'application/json' }
+        })
+                .then(response => {
+                  const status = response.status;
+                  const type   = response.type;
+                  if ((status >= 200 && status < 300) || status === 302 || (status === 0 && type === 'opaqueredirect')) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error(`서버 오류: status ${status}, type ${type}`));
+                })
+                .then(() => {
+                  const cardElem   = modalBody.querySelector(`.card[data-id="${id}"]`);
+                  const statusElem = cardElem.querySelector(`.status-text[data-id="${id}"]`);
+                  const btnElem    = cardElem.querySelector(`.toggle-btn[data-id="${id}"]`);
+
+                  const isNowActive = statusElem.textContent.includes('현재: 활성');
+                  if (isNowActive) {
+                    statusElem.textContent = '현재: 비활성';
+                    statusElem.classList.remove('text-gray-600');
+                    statusElem.classList.add('text-indigo-600');
+
+                    btnElem.textContent = '활성화';
+                    btnElem.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+                    btnElem.classList.add('bg-indigo-500', 'hover:bg-indigo-600');
+
+                    cardElem.classList.remove('bg-gray-50');
+                    cardElem.classList.add('bg-indigo-50');
+
+                    alert('비활성화되었습니다');
+                  } else {
+                    statusElem.textContent = '현재: 활성';
+                    statusElem.classList.remove('text-indigo-600');
+                    statusElem.classList.add('text-gray-600');
+
+                    btnElem.textContent = '비활성화';
+                    btnElem.classList.remove('bg-indigo-500', 'hover:bg-indigo-600');
+                    btnElem.classList.add('bg-gray-500', 'hover:bg-gray-600');
+
+                    cardElem.classList.remove('bg-indigo-50');
+                    cardElem.classList.add('bg-gray-50');
+
+                    alert('활성화되었습니다');
+                  }
+                })
+                .catch(err => {
+                  console.error('토글 중 오류 발생:', err);
+                  alert('상태 변경 도중 오류가 발생했습니다.\n' + err.message);
+                });
+      });
+    });
+  </script>
 </section>
 </html>
-
-

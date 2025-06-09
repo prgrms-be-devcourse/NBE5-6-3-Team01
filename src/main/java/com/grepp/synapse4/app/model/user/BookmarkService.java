@@ -4,13 +4,10 @@ package com.grepp.synapse4.app.model.user;
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import com.grepp.synapse4.app.model.restaurant.repository.RestaurantRepository;
 import com.grepp.synapse4.app.model.user.dto.BookMarkDto;
-import com.grepp.synapse4.app.model.user.dto.BookMarkRegistDto;
 import com.grepp.synapse4.app.model.user.dto.MyBookMarkDto;
 import com.grepp.synapse4.app.model.user.entity.Bookmark;
-import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.app.model.user.repository.BookMarkRepository;
 import com.grepp.synapse4.app.model.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,9 +31,8 @@ public class BookmarkService {
     }
 
     public List<MyBookMarkDto> findByBookmarkId(Long userId) throws NotFoundException {
-        // mybookMarkDtos no usages
         List<MyBookMarkDto> mybookMarkDtos = bookMarkRepository.findmybookmark(userId);
-        return bookMarkRepository.findmybookmark(userId);
+        return mybookMarkDtos;
     }
 
     public List<BookMarkDto> getUserBookmarks(Long userId) {

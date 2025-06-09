@@ -1,9 +1,11 @@
 package com.grepp.synapse4.app.model.user;
 
+import com.grepp.synapse4.app.model.user.dto.FindIdResponseDto;
 import com.grepp.synapse4.app.model.user.dto.request.EditInfoRequest;
 import com.grepp.synapse4.app.model.user.dto.request.UserSignUpRequest;
 import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.app.model.user.repository.UserRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -100,6 +102,7 @@ public class UserService {
         return User.builder()
                 .userAccount(req.getUserAccount())
                 .password(passwordEncoder.encode(req.getPassword()))
+                .name(req.getName())
                 .email(req.getEmail())
                 .nickname(req.getNickname())
                 .build();
@@ -110,5 +113,20 @@ public class UserService {
         user.setActivated(false);
         user.setDeletedAt(LocalDateTime.now());
         userRepository.save(user);
+    }
+
+    public Optional<FindIdResponseDto> findUserAccount(String name, String email) {
+        Optional<User> optionalUser = userRepository.findByNameAndEmail(name, email);
+
+        // User가 존재하면 아이디를 마스킹 처리하여 DTO로 변환
+        return optionalUser.map(user -> {
+            String maskedUserAccount = maskUserAccount(user.getUserAccount());
+            return new FindIdResponseDto(user.getName(), maskedUserAccount);
+        });
+    }
+
+    // 아이디 마스킹 로직
+    private String maskUserAccount(String userAccount) {
+        return userAccount.substring(0, 3) + "*".repeat(userAccount.length() - 3);
     }
 }
