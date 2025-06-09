@@ -25,7 +25,6 @@ import org.springframework.ui.Model;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
 public class MeetingService {
 
   private final MeetingRepository meetingRepository;
@@ -34,10 +33,20 @@ public class MeetingService {
   private final MeetingMemberRepository meetingMemberRepository;
 
 
+  // 관리자 모든 모임 불러오기
+  @Transactional(readOnly = true)
   public List<AdminMeetingDto> findAllForAdmin() {
     return meetingRepository.findAllWithCreatorAccount();
   }
 
+  // 관리자페이지 모임멤버보기
+  @Transactional(readOnly = true)
+  public List<AdminMeetingMemberDto> findAdminMeetingByUserNickname(Long meetingId) {
+    return meetingMemberRepository.findUserNicknamesByMeetingId(meetingId);
+  }
+
+  // 모임 등록하기
+  @Transactional
   public void registMeeting(MeetingDto dto){
     Meeting meeting = mapper.map(dto, Meeting.class);
     User user = userRepository.findById(dto.getCreatorId())
@@ -53,6 +62,8 @@ public class MeetingService {
     meetingMemberRepository.save(meetingMember);
   }
 
+  // 본인의 모임 리스트 불러오기
+  @Transactional(readOnly = true)
   public List<Meeting> findMeetingsByUserId(Long userId){
     List<MeetingMember> meetingMemberList =  meetingMemberRepository.findAllByUserIdAndStateAndDeletedAtIsNull(userId, State.ACCEPT);
 
@@ -62,15 +73,21 @@ public class MeetingService {
         .collect(Collectors.toList());
   }
 
+  // 모임 상세정보 불러오기
+  @Transactional(readOnly = true)
   public Meeting findMeetingsById(Long id) {
     return meetingRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("모임을 찾지 못했습니다."));
   }
 
+  // 모임의 멤버 수 불러오기
+  @Transactional(readOnly = true)
   public Integer countMemberByMeeting(Long id) {
     return meetingMemberRepository.countByMeetingIdAndState(id, State.ACCEPT);
   }
 
+  // 모임 탈퇴하기
+  @Transactional
   public void leaveMeeting(Long id, Long userId) {
     MeetingMember member = meetingMemberRepository.findByMeetingIdAndUserId(id, userId)
         .orElseThrow(() -> new RuntimeException("해당 멤버가 없습니다."));
@@ -86,31 +103,8 @@ public class MeetingService {
     }
   }
 
-  public List<User> findMemberListByMeetingId(Long meetingId, State state) {
-    List<MeetingMember> memberList = meetingMemberRepository.findAllByMeetingIdAndStateAndDeletedAtIsNull(meetingId, state);
-
-    return memberList.stream()
-        .map(MeetingMember::getUser)
-        .collect(Collectors.toList());
-  }
-
-  public Boolean findMemberByMeetingIdAndUserId(Long meetingId, Long userId) {
-    return meetingMemberRepository.existsAllByMeetingIdAndUserId(meetingId, userId);
-  }
-
-  public List<MeetingMember> findInviteByUserId(Long userId) {
-    return meetingMemberRepository.findAllByUserIdAndStateAndDeletedAtIsNull(userId, State.WAIT);
-  }
-
-  public void setInviteModel(Model model, Long meetingId, String errorMessage) {
-    List<User> invitedList = this.findMemberListByMeetingId(meetingId, State.WAIT);
-    model.addAttribute("invitedList", invitedList);
-    model.addAttribute("meetingId", meetingId);
-    if (errorMessage != null) {
-      model.addAttribute("error", errorMessage);
-    }
-  }
-
+  // 모임 초대하기
+  @Transactional
   public void inviteUser(MeetingMemberDto dto) {
     MeetingMember member = new MeetingMember();
     Meeting meeting = meetingRepository.findById(dto.getMeetingId())
@@ -125,6 +119,8 @@ public class MeetingService {
     meetingMemberRepository.save(member);
   }
 
+  // 모임 초대 수락, 거절
+  @Transactional
   public void updateInvitedState(Long meetingId, Long userId, State state) {
     MeetingMember member = meetingMemberRepository.findByMeetingIdAndUserId(meetingId, userId)
         .orElseThrow(() -> new EntityNotFoundException("데이터를 찾지 못했습니다"));
@@ -137,8 +133,37 @@ public class MeetingService {
     }
   }
 
-  // 관리자페이지 모임멤버보기
-  public List<AdminMeetingMemberDto> findAdminMeetingByUserNickname(Long meetingId) {
-    return meetingMemberRepository.findUserNicknamesByMeetingId(meetingId);
+  // 모임 초대 리스트 불러오기
+  @Transactional(readOnly = true)
+  public List<MeetingMember> findInviteByUserId(Long userId) {
+    return meetingMemberRepository.findAllByUserIdAndStateAndDeletedAtIsNull(userId, State.WAIT);
   }
+
+  // 모임에 유저 포함 여부 확인
+  @Transactional(readOnly = true)
+  public Boolean findMemberByMeetingIdAndUserId(Long meetingId, Long userId) {
+    return meetingMemberRepository.existsAllByMeetingIdAndUserId(meetingId, userId);
+  }
+
+  // 모임의 멤버 리스트 불러오기
+  @Transactional(readOnly = true)
+  public List<User> findMemberListByMeetingId(Long meetingId, State state) {
+    List<MeetingMember> memberList = meetingMemberRepository.findAllByMeetingIdAndStateAndDeletedAtIsNull(meetingId, state);
+
+    return memberList.stream()
+            .map(MeetingMember::getUser)
+            .collect(Collectors.toList());
+  }
+
+
+  // 멤버 리스트 관련 설정
+  public void setInviteModel(Model model, Long meetingId, String errorMessage) {
+    List<User> invitedList = this.findMemberListByMeetingId(meetingId, State.WAIT);
+    model.addAttribute("invitedList", invitedList);
+    model.addAttribute("meetingId", meetingId);
+    if (errorMessage != null) {
+      model.addAttribute("error", errorMessage);
+    }
+  }
+  
 }

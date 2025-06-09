@@ -79,7 +79,7 @@ public class VoteController {
 
     voteService.registVoteMember(vote, dto.getMeetingId());
 
-    return "redirect:/meetings/detail/"+dto.getMeetingId();
+    return "redirect:/meetings/vote/"+vote.getId();
   }
 
   @GetMapping("vote/{id}")
@@ -88,24 +88,14 @@ public class VoteController {
       @PathVariable Long id,
       Model model
   ){
+    Long userId = customUserDetailsService.loadUserIdByAccount();
+
     Vote vote = voteService.findVoteByVoteId(id);
     model.addAttribute("vote", vote);
+    Boolean isJoined = voteService.findJoinedByUserId(id, userId);
+    model.addAttribute("isJoined", isJoined);
 
     return "meetings/vote/vote";
-  }
-
-  @PostMapping("vote/{id}")
-  @PreAuthorize("isAuthenticated()")
-  public String voteDetail(
-      @Valid Boolean isJoined,
-      @PathVariable Long id
-  ){
-    Long userId = customUserDetailsService.loadUserIdByAccount();
-    voteService.vote(id, userId, isJoined);
-
-    Vote vote = voteService.findVoteByVoteId(id);
-
-    return "redirect:/meetings/detail/"+vote.getMeeting().getId();
   }
 
   @GetMapping("vote-result/{id}")
