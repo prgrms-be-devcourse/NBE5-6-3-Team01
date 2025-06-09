@@ -1,10 +1,7 @@
 package com.grepp.synapse4.app.model.meeting;
 
 import com.grepp.synapse4.app.model.meeting.code.State;
-import com.grepp.synapse4.app.model.meeting.dto.AdminMeetingDto;
-import com.grepp.synapse4.app.model.meeting.dto.AdminMeetingMemberDto;
-import com.grepp.synapse4.app.model.meeting.dto.MeetingDto;
-import com.grepp.synapse4.app.model.meeting.dto.MeetingMemberDto;
+import com.grepp.synapse4.app.model.meeting.dto.*;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.meeting.entity.MeetingMember;
 import com.grepp.synapse4.app.model.meeting.repository.MeetingMemberRepository;
@@ -165,5 +162,9 @@ public class MeetingService {
       model.addAttribute("error", errorMessage);
     }
   }
-  
+
+  // 관리자페이지 모임검색
+  public List<AdminMeetingSearchDto> findAdminMeetingByTitle(String title) {
+    return meetingRepository.findByTitleContaining(title);
+  }
 }
