@@ -63,10 +63,11 @@
                class="vote-move">
               투표하기
             </a>
-            <button th:if="${isVotedMap[vote.id] == true}"
-                    class="vote-move disabled">
-              이미 투표함
-            </button>
+            <a th:if="${isVotedMap[vote.id] == true}"
+               th:href="@{'/meetings/vote/'+${vote.id}}"
+               class="vote-move">
+              수정하기
+            </a>
             <button th:if="${isVotedMap[vote.id] == null}"
                     class="vote-move disabled">
               투표 불가능

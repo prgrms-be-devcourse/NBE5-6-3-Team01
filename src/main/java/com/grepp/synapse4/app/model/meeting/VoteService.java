@@ -16,17 +16,14 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
 public class VoteService {
 
   private final VoteRepository voteRepository;
@@ -34,8 +31,9 @@ public class VoteService {
   private final MeetingRepository meetingRepository;
   private final MeetingMemberRepository meetingMemberRepository;
   private final RestaurantRepository restaurantRepository;
-  private final ModelMapper mapper;
 
+  // 투표 등록
+  @Transactional
   public Vote registVote(VoteDto dto) {
     Vote vote = new Vote();
     Meeting meeting = meetingRepository.findById(dto.getMeetingId())
@@ -54,6 +52,8 @@ public class VoteService {
     return voteRepository.save(vote);
   }
 
+  // 투표 멤버 추가
+  @Transactional
   public void registVoteMember(Vote vote, Long meetingId){
     List<MeetingMember> memberList = meetingMemberRepository.findAllByMeetingIdAndState(meetingId, State.ACCEPT);
 
@@ -66,10 +66,14 @@ public class VoteService {
     }
   }
 
+  // 해당 모임의 투표 리스트 불러오기
+  @Transactional(readOnly = true)
   public List<Vote> findVoteListByMeetingId(Long meetingId) {
     return voteRepository.findAllByMeetingIdOrderByMeetingDate(meetingId);
   }
 
+  // 유저의 투표 알림 리스트 불러오기
+  @Transactional(readOnly = true)
   public List<VoteMember> findVoteListByUserId(Long userId) {
     List<VoteMember> memberList = voteMemberRepository.findAllByUserIdAndIsVoted(userId, false);
 
@@ -84,12 +88,21 @@ public class VoteService {
     return filteredList;
   }
 
-
+  // 정보 불러오기
+  @Transactional(readOnly = true)
   public Vote findVoteByVoteId(Long id) {
     return voteRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("투표를 찾지 못했습니다."));
   }
 
+  // 본인의 투표값 불러오기
+  @Transactional(readOnly = true)
+  public Boolean findJoinedByUserId(Long voteId, Long userId) {
+    return voteMemberRepository.findIsJoinedByVoteIdAndUserId(voteId, userId);
+  }
+
+  // 투표하기
+  @Transactional
   public void vote(Long voteId, Long userId, Boolean isJoined) {
     VoteMember voteMember = voteMemberRepository.findByVoteIdAndUserId(voteId, userId);
 
@@ -99,6 +112,8 @@ public class VoteService {
   }
 
 
+  // 투표 별 유저의 투표 상태 불러오기
+  @Transactional(readOnly = true)
   public Map<Long, Boolean> isVotedByUser(List<Vote> voteList, Long userId) {
     Map<Long, Boolean> isVotedMap = new HashMap<>();
 
@@ -114,6 +129,8 @@ public class VoteService {
     return isVotedMap;
   }
 
+  // 해당 투표의 모든 멤버의 투표 O,X 결과 불러오기
+  @Transactional(readOnly = true)
   public List<VoteMember> findJoinedListByVoteId(Long id, Boolean isJoined) {
     return voteMemberRepository.findAllByVoteIdAndIsJoined(id, isJoined);
   }
