@@ -25,31 +25,54 @@
       </div>
       <a th:href="@{'/restaurant/detail/'+ ${vote.restaurant.getId()}}" class="restaurant-move">식당 보기</a>
     </div>
-    <form th:action="@{'/meetings/vote/'+${vote.id}}" onsubmit="return confirmVote();" method="post">
-      <input type="hidden" name="id" th:value="${vote.id}" />
-      <div class="radio-group">
-        <label class="radio-label">
-          <input type="radio" name="isJoined" value="true" checked/>
-          <span>참석 O</span>
-        </label>
-        <label class="radio-label">
-          <input type="radio" name="isJoined" value="false"/>
-          <span>참석 X</span>
-        </label>
-      </div>
 
-      <div class="button-wrapper">
-        <button type="submit" class="complete">
-          투표하기
-        </button>
-      </div>
+    <div class="radio-group">
+      <label class="radio-label">
+        <!-- 투표하기로 들어올 경우 Default 값을 참석 O로 고정 -->
+        <input type="radio" name="isJoined" value="true"
+               th:checked="${isJoined == null or isJoined == true}" />
+        <span>참석 O</span>
+      </label>
+      <label class="radio-label">
+        <input type="radio" name="isJoined" value="false"
+               th:checked="${isJoined == false}" />
+        <span>참석 X</span>
+      </label>
+    </div>
 
-    </form>
+
+    <div class="button-wrapper">
+      <button type="button" onclick="vote()" class="complete">
+        투표하기
+      </button>
+    </div>
+    <input type="hidden" id="id" th:value="${vote.id}" />
   </div>
 
   <script th:inline="javascript">
-    function confirmVote() {
-      return confirm("투표하시겠습니까?");
+    function vote(){
+      const id = document.getElementById("id").value;
+      const isJoined = document.querySelector('input[name="isJoined"]:checked').value;
+
+      if(confirm("투표하시겠습니까?")){
+        fetch(`/api/v1/vote/${id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            voteId: parseInt(id),
+            isJoined: isJoined === 'true'
+          })
+        })
+        .then(res => {
+          if (res.ok) {
+            window.location.href = "/meetings/vote-result/"+id;
+          } else {
+            alert("투표를 실패했습니다.");
+          }
+        });
+      }
     }
   </script>
 </main>
