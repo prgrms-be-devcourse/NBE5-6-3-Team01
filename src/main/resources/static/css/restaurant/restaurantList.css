@@ -99,6 +99,13 @@ main{
     color: black;
 }
 
+.restaurant-reason {
+    font-size: 15px;
+    /*font-weight: bold;*/
+    color: black;
+    margin-right: 8px;
+}
+
 .restaurant-branch {
     font-size: 14px;
     color: #555;

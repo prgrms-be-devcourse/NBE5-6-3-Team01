@@ -1,5 +1,6 @@
 package com.grepp.synapse4.app.model.llm.dto;
 
+import com.grepp.synapse4.app.model.llm.entity.CurationResult;
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,9 @@ public class CurationRestaurantDto {
     private String tel;
     private String branch;
 
-    public static CurationRestaurantDto fromEntity(Restaurant restaurant) {
+    private String reason;
+
+    public static CurationRestaurantDto fromEntity(Restaurant restaurant, CurationResult curationResult) {
         return new CurationRestaurantDto(
                 restaurant.getId(),
                 restaurant.getName(),
@@ -30,7 +33,8 @@ public class CurationRestaurantDto {
                 restaurant.getDetail().getRowBusinessTime(),
                 restaurant.getDetail().getDayOff(),
                 restaurant.getDetail().getTel(),
-                restaurant.getBranch()
+                restaurant.getBranch(),
+                curationResult.getReason()
         );
     }
 
