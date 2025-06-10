@@ -1,5 +1,6 @@
 package com.grepp.synapse4.app.model.user;
 
+import com.grepp.synapse4.app.model.user.dto.AdminUserSearchDto;
 import com.grepp.synapse4.app.model.user.dto.FindIdResponseDto;
 import com.grepp.synapse4.app.model.user.dto.request.EditInfoRequest;
 import com.grepp.synapse4.app.model.user.dto.request.UserSignUpRequest;
@@ -128,5 +129,11 @@ public class UserService {
     // 아이디 마스킹 로직
     private String maskUserAccount(String userAccount) {
         return userAccount.substring(0, 3) + "*".repeat(userAccount.length() - 3);
+    }
+
+    // 관리자 유저 검색기능
+    @Transactional(readOnly = true)
+    public List<AdminUserSearchDto> findByUserAccountContaining(String userAccount) {
+        return userRepository.findByUserAccountContaining(userAccount);
     }
 }

@@ -1,6 +1,9 @@
 package com.grepp.synapse4.app.model.user.repository;
 
+import com.grepp.synapse4.app.model.user.dto.AdminUserSearchDto;
 import com.grepp.synapse4.app.model.user.entity.User;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -14,4 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByNameAndEmail(String name, String email);
 
     boolean existsByUserAccount(String userAccount);
+
+    List<AdminUserSearchDto> findByUserAccountContaining(String userAccount);
+
 }
