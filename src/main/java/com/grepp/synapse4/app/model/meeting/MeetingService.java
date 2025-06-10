@@ -167,4 +167,5 @@ public class MeetingService {
   public List<AdminMeetingSearchDto> findAdminMeetingByTitle(String title) {
     return meetingRepository.findByTitleContaining(title);
   }
+
 }
