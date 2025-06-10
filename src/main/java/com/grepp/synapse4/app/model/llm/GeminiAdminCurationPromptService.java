@@ -44,7 +44,7 @@ public class GeminiAdminCurationPromptService {
         // 3. 응답 파싱
         GeminiResponseDto responseDto = parseGeminiResponse(geminiResponse);
 
-//         4. 응답 저장! 구조 다시 짜야함..
+//         4. 응답 저장!
         saveResults(id, responseDto);
 
         return responseDto;
@@ -117,14 +117,16 @@ public class GeminiAdminCurationPromptService {
                 %s
 
                 위 정보를 참고하여, 주제에 어울리는 식당을 3개 추천해 주세요.
+                이유는 형용사로 꾸며줄 수 있게 서술해 주세요.
+                
                 결과는 아래 Json 형식 그대로만 반환해 주세요
                 백틱은 절대절대절대 포함하지 말아주세요.
 
 
                 {
                   "recommendations": [
-                    { "restaurantId": 7, "reason": "혼밥하기 좋고 조용한 분위기" },
-                    { "restaurantId": 14, "reason": "프라이빗하고 고급스러운 분위기" }
+                    { "restaurantId": 7, "reason": "혼밥하기 좋고 조용한" },
+                    { "restaurantId": 14, "reason": "프라이빗하고 고급스러운" }
                   ]
                 }
                 """.formatted(userText, tagBuilder.toString());

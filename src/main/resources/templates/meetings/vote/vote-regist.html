@@ -54,26 +54,19 @@
         </div>
       </div>
 
-      <div class="bookmark">
-        <div class="bookmark-header">
-          <div style="font-size: 40px; font-weight: bold;">북마크 리스트</div>
-          <div>나의 북마크에서 투표에 부칠 식당을 선택해주세요.</div>
+      <div class="search">
+        <div style="display: flex; gap: 20px;">
+          <input type="text" id="restaurantKeyword" placeholder="식당명을 입력하세요">
+          <button type="button" onclick="searchRestaurants()" class="complete" style="width: 5vw;">검색</button>
         </div>
-        <div class="empty" th:if="${#lists.isEmpty(bookmarkList)}">
-          저장한 북마크가 없습니다.<br/>
-          북마크를 저장하시고 투표를 생성해보세요!
-        </div>
+        <div>멤버와 함께 할 식당을 검색해서 찾아보세요!</div>
         <div class="scroll-container">
-          <div th:each="bookmark:${bookmarkList}" class="bookmark-card">
-            <div style="justify-items: start;">
-              <div th:text="${bookmark.restaurant.getName()}" style="font-size: 20px; font-weight: bold;">식당명</div>
-              <div th:text="${bookmark.restaurant.getAddress()}">주소</div>
-            </div>
-            <label style="width: 2vh; height: 2vh;">
-              <input type="radio" th:field="*{restaurantId}" th:value="${bookmark.restaurant.id}">
-              <span></span>
-            </label>
-          </div>
+          <ul id="restaurantList" class="restaurant-list">
+            <!-- 식당 결과값 렌더링 -->
+          </ul>
+        </div>
+        <div id="selectedRestaurantName" class="error" style="margin-left: 5px; color: #333;">
+          <!-- 선택한 식당 출력 -->
         </div>
         <span th:if="${#fields.hasErrors('restaurantId')}" th:errors="*{restaurantId}"
               class="error" style="margin-left: 5px;"></span>
@@ -87,6 +80,62 @@
   <script>
     function confirmRegist() {
       return confirm("투표를 생성하겠습니까?");
+    }
+
+    function searchRestaurants() {
+      const keyword = document.getElementById('restaurantKeyword').value.trim();
+      if (!keyword) {
+        alert("식당명을 입력하세요.");
+        return;
+      }
+
+      fetch(`/api/restaurants/search?keyword=${encodeURIComponent(keyword)}`)
+      .then(response => {
+        if (!response.ok) throw new Error("검색 실패");
+        return response.json();
+      })
+      .then(data => {
+        const results = data.data;
+        const listEl = document.getElementById('restaurantList');
+        listEl.innerHTML = "";
+
+        if (results.length === 0) {
+          listEl.innerHTML = `
+            <div class='no-results'>
+              검색 결과가 없습니다.
+            </div>`;
+          return;
+        }
+
+        results.forEach(res => {
+          const li = document.createElement("li");
+          li.className = "restaurant-card";
+          li.innerHTML = `
+            <a href="/restaurant/detail/${res.id}" style="display: flex; justify-content: space-between; width: 100%;">
+              <div>
+                <div style="font-size: 20px; font-weight: bold;">${res.name}</div>
+                <div>${res.roadAddress}</div>
+              </div>
+            </a>
+            <label style="display: flex; justify-items: end;">
+              <input type="radio" name="restaurantId" value="${res.id}">
+              <span></span>
+            </label>
+          `;
+
+          // 라디오 버튼 이벤트 추가
+          li.querySelector('input[type="radio"]').addEventListener('change', () => {
+            const selectedNameEl = document.getElementById('selectedRestaurantName');
+            selectedNameEl.textContent = `선택한 식당: ${res.name}`;
+          });
+
+          listEl.appendChild(li);
+        });
+      })
+      .catch(error => {
+        console.error(error);
+        alert("검색 중 오류가 발생했습니다.");
+      });
     }
   </script>
 </main>

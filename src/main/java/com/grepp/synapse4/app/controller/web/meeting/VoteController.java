@@ -61,17 +61,10 @@ public class VoteController {
   @PostMapping("vote-regist/{id}")
   @PreAuthorize("isAuthenticated()")
   public String voteRegist(
-      @PathVariable Long id,
       @Valid VoteRegistRequest form,
-      BindingResult bindingResult,
-      Model model
+      BindingResult bindingResult
   ){
     if(bindingResult.hasErrors()){
-      Long userId = customUserDetailsService.loadUserIdByAccount();
-
-      List<Bookmark> bookmarkList = bookmarkService.findByUserId(userId);
-      model.addAttribute("bookmarkList", bookmarkList);
-
       return "meetings/vote/vote-regist";
     }
     VoteDto dto = form.toDto();

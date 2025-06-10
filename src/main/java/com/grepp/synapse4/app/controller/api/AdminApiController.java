@@ -9,6 +9,8 @@ import com.grepp.synapse4.app.model.meeting.dto.AdminMeetingMemberDto;
 import com.grepp.synapse4.app.model.meeting.dto.AdminMeetingSearchDto;
 import com.grepp.synapse4.app.model.user.BookmarkService;
 import com.grepp.synapse4.app.model.user.PreferService;
+import com.grepp.synapse4.app.model.user.UserService;
+import com.grepp.synapse4.app.model.user.dto.AdminUserSearchDto;
 import com.grepp.synapse4.app.model.user.dto.BookMarkDto;
 import com.grepp.synapse4.app.model.user.dto.SurveyDto;
 import com.grepp.synapse4.infra.response.ApiResponse;
@@ -30,6 +32,7 @@ public class AdminApiController {
     private final PreferService preferService;
     private final MeetingService meetingService;
     private final CurationResultService curationResultService;
+    private final UserService userService;
 
     @GetMapping("/users/prefer/{userId}")
     public ResponseEntity<ApiResponse<List<SurveyDto>>> getUserPrefer(
@@ -65,4 +68,12 @@ public class AdminApiController {
         List<AdminMeetingSearchDto> results = meetingService.findAdminMeetingByTitle(title);
         return ResponseEntity.ok(ApiResponse.success(results));
     }
+
+    @GetMapping("search/users")
+    public ResponseEntity<ApiResponse<List<AdminUserSearchDto>>> getUsers(
+            @RequestParam(value = "userAccount", required = false) String userAccount) {
+        List<AdminUserSearchDto> results = userService.findByUserAccountContaining(userAccount);
+        return ResponseEntity.ok(ApiResponse.success(results));
+    }
+
 }

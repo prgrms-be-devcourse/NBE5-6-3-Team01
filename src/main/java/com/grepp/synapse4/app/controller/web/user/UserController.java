@@ -1,8 +1,9 @@
 package com.grepp.synapse4.app.controller.web.user;
 
 import com.grepp.synapse4.app.model.user.UserService;
-import com.grepp.synapse4.app.model.user.dto.FindIdRequestDto;
-import com.grepp.synapse4.app.model.user.dto.FindIdResponseDto;
+import com.grepp.synapse4.app.model.user.dto.request.FindIdRequestDto;
+import com.grepp.synapse4.app.model.user.dto.request.FindPasswordRequestDto;
+import com.grepp.synapse4.app.model.user.dto.response.FindIdResponseDto;
 import com.grepp.synapse4.app.model.user.dto.request.UserSignUpRequest;
 import jakarta.validation.Valid;
 import java.util.Optional;
@@ -72,6 +73,26 @@ public class UserController {
         else {
             model.addAttribute("error", "입력하신 정보와 일치하는 사용자가 없습니다.");
             return "user/find-id";
+        }
+    }
+
+    @GetMapping("/find-password")
+    public String showFindPasswordForm(Model model) {
+        model.addAttribute("findPasswordRequestDto", new FindPasswordRequestDto());
+        return "user/find-password";
+    }
+
+    @PostMapping("/find-password")
+    public String processFindPassword(@ModelAttribute FindPasswordRequestDto requestDto, Model model) {
+        try {
+            userService.sendTemporaryPassword(
+                requestDto.getUserAccount(), requestDto.getName(), requestDto.getEmail());
+
+            model.addAttribute("message", "입력하신 이메일로 임시 비밀번호를 전송했습니다.");
+            return "user/find-password-result";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "user/find-password";
         }
     }
 }
