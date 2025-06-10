@@ -1,4 +1,4 @@
-package com.grepp.synapse4.app.model.user.dto;
+package com.grepp.synapse4.app.model.user.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

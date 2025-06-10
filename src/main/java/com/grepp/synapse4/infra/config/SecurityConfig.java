@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -71,7 +70,9 @@ public class SecurityConfig {
                         // user
                         .requestMatchers("/css/**", "/js/**", "/img/**","/static/**").permitAll()
                         .requestMatchers(
-                                "/", "/user/signin", "/user/signup","/user/find-id", "/user/find-id/result",
+                                "/", "/user/signin", "/user/signup",
+                                "/user/find-id", "/user/find-id/result",
+                                "/user/find-password", "/user/find-password/result",
                                 "/search/**", "/curation/**",
                                 "/restaurant/**", "/ranking/**"
                         ).permitAll()

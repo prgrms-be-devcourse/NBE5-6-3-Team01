@@ -49,6 +49,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <!--    mail 전송용-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
     <!--   csv 파싱용   -->
     <dependency>
       <groupId>com.opencsv</groupId>
