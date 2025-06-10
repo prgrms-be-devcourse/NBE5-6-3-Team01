@@ -1,6 +1,7 @@
 package com.grepp.synapse4.app.model.llm.repository;
 
 import com.grepp.synapse4.app.model.llm.dto.AdminCurationResultDto;
+import com.grepp.synapse4.app.model.llm.dto.AdminSearchCurationDto;
 import com.grepp.synapse4.app.model.llm.entity.CurationResult;
 import feign.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +18,8 @@ public interface CurationResultRepository extends JpaRepository<CurationResult, 
         c.title,
         r.name,
         r.address,
-        cr.active
+        cr.active,
+              cr.createdAt
       )
       FROM CurationResult cr
       JOIN cr.curation c
@@ -35,9 +37,20 @@ public interface CurationResultRepository extends JpaRepository<CurationResult, 
 
     List<CurationResult> findAll();
 
-
-
-
-
+        @Query("SELECT new com.grepp.synapse4.app.model.llm.dto.AdminSearchCurationDto( " +
+            "  cr.id," +
+            "  c.title," +
+            "  r.id," +
+            "  r.name," +
+            "  r.category," +
+            "  r.address,   " +
+            "  r.branch," +
+            "  c.activated" +
+            ") " +
+            "FROM CurationResult cr " +
+            "JOIN cr.curation c " +
+            "JOIN cr.restaurant r " +
+            "WHERE LOWER(c.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "ORDER BY c.title, r.name")
+    List<AdminSearchCurationDto> findByCurationTitleContaining(@Param("keyword") String keyword);
 }
-

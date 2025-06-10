@@ -43,6 +43,7 @@ public class AdminController {
     public String meetings(Model model) {
         List<AdminMeetingDto> meetings = meetingService.findAllForAdmin();
         model.addAttribute("meetings", meetings);
+        model.addAttribute("purpose",Purpose.values());
         return "admin/meetings";
     }
 

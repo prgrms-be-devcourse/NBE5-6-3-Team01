@@ -1,20 +1,23 @@
 package com.grepp.synapse4.app.model.user;
 
+import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_ADMIN;
+import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_USER;
+
+import com.grepp.synapse4.app.model.user.dto.AdminUserSearchDto;
 import com.grepp.synapse4.app.model.user.dto.request.EditInfoRequest;
 import com.grepp.synapse4.app.model.user.dto.request.UserSignUpRequest;
+import com.grepp.synapse4.app.model.user.dto.response.FindIdResponseDto;
 import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.app.model.user.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_ADMIN;
-import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_USER;
 
 @Service
 @Transactional
@@ -24,6 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserValidator userValidator;
+    private final MailService mailService;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -100,6 +104,7 @@ public class UserService {
         return User.builder()
                 .userAccount(req.getUserAccount())
                 .password(passwordEncoder.encode(req.getPassword()))
+                .name(req.getName())
                 .email(req.getEmail())
                 .nickname(req.getNickname())
                 .build();
@@ -110,5 +115,46 @@ public class UserService {
         user.setActivated(false);
         user.setDeletedAt(LocalDateTime.now());
         userRepository.save(user);
+    }
+
+    public Optional<FindIdResponseDto> findUserAccount(String name, String email) {
+        Optional<User> optionalUser = userRepository.findByNameAndEmail(name, email);
+
+        // User가 존재하면 아이디를 마스킹 처리하여 DTO로 변환
+        return optionalUser.map(user -> {
+            String maskedUserAccount = maskUserAccount(user.getUserAccount());
+            return new FindIdResponseDto(user.getName(), maskedUserAccount);
+        });
+    }
+
+    // 아이디 마스킹 로직
+    private String maskUserAccount(String userAccount) {
+        return userAccount.substring(0, 3) + "*".repeat(userAccount.length() - 3);
+    }
+
+    // 임시 비밀번호 전송
+    public void sendTemporaryPassword(String userAccount, String name, String email) {
+        Optional<User> userOptional = userRepository.findByUserAccountAndNameAndEmail(userAccount, name, email);
+        if (userOptional.isEmpty()) {
+            throw new IllegalArgumentException("입력하신 정보와 일치하는 사용자가 없습니다.");
+        }
+
+        User user = userOptional.get();
+
+        String tempPassword = generateTempPassword();
+        user.setPassword(passwordEncoder.encode(tempPassword));
+        userRepository.save(user);
+
+        mailService.sendTempPasswordEmail(user.getEmail(), tempPassword);
+    }
+
+    private String generateTempPassword() {
+        return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
+    }
+
+    // 관리자 유저 검색기능
+    @Transactional(readOnly = true)
+    public List<AdminUserSearchDto> findByUserAccountContaining(String userAccount) {
+        return userRepository.findByUserAccountContaining(userAccount);
     }
 }

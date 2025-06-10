@@ -7,10 +7,25 @@
     <meta charset="UTF-8">
     <title layout:fragment="title">사용자 현황</title>
 </head>
-
 <section layout:fragment="content" class="p-10">
     <h2 class="text-2xl mb-4">사용자 정보</h2>
 
+    <!-- 검색 입력 & 버튼 -->
+    <div class="flex items-center mb-4">
+        <input
+                type="text"
+                id="userSearchKeyword"
+                placeholder="아이디를 검색하세요."
+                class="border rounded-l-lg px-3 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-400"/>
+        <button
+                id="userSearchButton"
+                type="button"
+                class="-ml-px bg-gray-700 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg focus:outline-none">
+            검색
+        </button>
+    </div>
+
+    <!-- 기존 테이블 -->
     <div class="mx-auto w-full border overflow-y-auto bg-white" style="height: 80vh;">
         <table class="min-w-full w-full table-fixed border-collapse">
             <thead class="bg-gray-100 sticky top-0 z-10">
@@ -29,14 +44,14 @@
                 <td class="py-2 px-4 border-b border-r border-gray-200" th:text="${u.nickname}"></td>
                 <td class="py-2 px-4 border-b border-r border-gray-200 text-center">
                     <button type="button"
-                            class="btn-detail px-3 py-1 bg-gray-700 text-white rounded"
+                            class="btn-detail px-3 py-1 whitespace-nowrap bg-gray-700 text-white rounded"
                             th:attr="data-action='prefer',data-user-id=${u.id}">
                         선호 목록 더보기
                     </button>
                 </td>
                 <td class="py-2 px-4 border-b border-gray-200 text-center">
                     <button type="button"
-                            class="btn-detail px-3 py-1 bg-gray-700 text-white rounded"
+                            class="btn-detail px-3 py-1 whitespace-nowrap bg-gray-700 text-white rounded"
                             th:attr="data-action='bookmark',data-user-id=${u.id},data-user-nickname=${u.nickname}">
                         북마크 목록 더보기
                     </button>
@@ -44,6 +59,36 @@
             </tr>
             </tbody>
         </table>
+    </div>
+
+    <!-- 검색 결과 모달 -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content rounded-4">
+                <div class="modal-header bg-gray-100 py-3 px-6">
+                    <h5 class="modal-title text-lg font-semibold">검색 결과</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-6">
+                    <div class="mx-auto w-full border overflow-y-auto bg-white" style="max-height: 60vh;">
+                        <table class="min-w-full w-full table-fixed border-collapse">
+                            <thead class="bg-gray-100 sticky top-0 z-10">
+                            <tr>
+                                <th class="w-1/5 py-2 px-4 border-b border-r border-gray-200">아이디</th>
+                                <th class="w-1/5 py-2 px-4 border-b border-r border-gray-200">이메일</th>
+                                <th class="w-1/5 py-2 px-4 border-b border-r border-gray-200">닉네임</th>
+                                <th class="w-1/5 py-2 px-4 border-b border-r border-gray-200">선호목록</th>
+                                <th class="w-1/5 py-2 px-4 border-b border-gray-200">북마크</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- JS가 검색 결과로 채웁니다 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- 선호목록 모달 -->
@@ -103,75 +148,113 @@
     <!-- 공통 스크립트 -->
     <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.btn-detail').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const action   = btn.dataset.action;
-                    const userId   = btn.dataset.userId;
-                    let modalEl, url;
+            const searchBtn = document.getElementById('userSearchButton');
 
-                    if (action === 'prefer') {
-                        modalEl = document.getElementById('preferenceModal');
-                        url     = `/api/admin/users/prefer/${userId}`;
-                    } else {  // bookmark
-                        modalEl = document.getElementById('bookmarkModal');
-                        url     = `/api/admin/users/bookmark/${userId}`;
-                        // 헤더에 닉네임 반영
-                        const nickname = btn.dataset.userNickname;
-                        document.getElementById('bookmarkModalLabel')
-                            .textContent = `${nickname}님의 북마크`;
-                        // 카드 컨테이너 초기화
-                        document.getElementById('bookmarkListContainer').innerHTML = '';
-                    }
+            // 이벤트 위임: 동적 버튼도 처리
+            document.body.addEventListener('click', e => {
+                const btn = e.target.closest('.btn-detail');
+                if (!btn) return;
 
-                    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                const action = btn.dataset.action;
+                const userId = btn.dataset.userId;
+                let modalEl, url;
 
-                    // 초기화 (선호목록)
-                    if (action === 'prefer') {
-                        ['companyLocation','useCase','companion','favoriteCategory','preferMood']
-                            .forEach(id => document.getElementById(id).value = '');
-                    }
+                if (action === 'prefer') {
+                    modalEl = document.getElementById('preferenceModal');
+                    url     = `/api/admin/users/prefer/${userId}`;
+                } else if (action === 'bookmark') {
+                    modalEl = document.getElementById('bookmarkModal');
+                    url     = `/api/admin/users/bookmark/${userId}`;
+                    // 닉네임 반영
+                    const nickname = btn.dataset.userNickname;
+                    document.getElementById('bookmarkModalLabel').textContent = `${nickname}님의 북마크`;
+                    document.getElementById('bookmarkListContainer').innerHTML = '';
+                } else {
+                    return;
+                }
 
-                    fetch(url)
-                        .then(res => res.ok ? res.json() : Promise.reject(res.status))
-                        .then(json => {
-                            if (action === 'bookmark') {
-                                (json.data || []).forEach(item => {
-                                    const card = document.createElement('div');
-                                    card.className = 'bg-white rounded shadow-sm p-4';
-                                    card.innerHTML = `
-                                    <h6 class="font-medium text-base mb-1">${item.restaurantName}</h6>
-                                        <p class="text-sm text-gray-500">${item.restaurantAddress}</p>
-                                                                    <small class="text-xs text-gray-400">
-                                                                    추가일: ${new Date(item.createdAt).toLocaleString()}
-                                    </small>
-                                    `;
-                                    document.getElementById('bookmarkListContainer').append(card);
-                                });
-                            } else {
-                                const s = (json.data && json.data[0]) || {};
-                                document.getElementById('companyLocation').value  = s.companyLocation || '';
-                                document.getElementById('useCase').value          = s.purpose         || '';
-                                document.getElementById('companion').value        = s.companion       || '';
-                                document.getElementById('favoriteCategory').value = s.favoriteCategory|| '';
-                                document.getElementById('preferMood').value       = s.preferMood      || '';
-                            }
-                        })
-                        .catch(err => {
-                            console.error(err);
-                            if (action === 'bookmark') {
-                                document.getElementById('bookmarkListContainer').innerHTML =
-                                    `<p class="text-center text-red-500">로딩 실패: ${err}</p>`;
-                            } else {
-                                document.getElementById('preferenceForm').innerHTML =
-                                    `<p class="text-center text-danger">로딩 실패: ${err}</p>`;
-                            }
-                        })
-                        .finally(() => modal.show());
-                });
+                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+                if (action === 'prefer') {
+                    ['companyLocation','useCase','companion','favoriteCategory','preferMood']
+                        .forEach(id => document.getElementById(id).value = '');
+                }
+
+                fetch(url)
+                    .then(res => res.ok ? res.json() : Promise.reject(res.status))
+                    .then(json => {
+                        if (action === 'bookmark') {
+                            (json.data || []).forEach(item => {
+                                const card = document.createElement('div');
+                                card.className = 'bg-white rounded shadow-sm p-4';
+                                card.innerHTML = `
+                  <h6 class="font-medium text-base mb-1">${item.restaurantName}</h6>
+                  <p class="text-sm text-gray-500">${item.restaurantAddress}</p>
+                  <small class="text-xs text-gray-400">
+                    추가일: ${new Date(item.createdAt).toLocaleString()}
+                  </small>`;
+                                document.getElementById('bookmarkListContainer').append(card);
+                            });
+                        } else {
+                            const s = (json.data && json.data[0]) || {};
+                            document.getElementById('companyLocation').value  = s.companyLocation  || '';
+                            document.getElementById('useCase').value          = s.purpose          || '';
+                            document.getElementById('companion').value        = s.companion        || '';
+                            document.getElementById('favoriteCategory').value = s.favoriteCategory || '';
+                            document.getElementById('preferMood').value       = s.preferMood       || '';
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        const target = action === 'bookmark'
+                            ? document.getElementById('bookmarkListContainer')
+                            : document.getElementById('preferenceForm');
+                        target.innerHTML = `<p class="text-center text-red-500">로딩 실패: ${err}</p>`;
+                    })
+                    .finally(() => modal.show());
+            });
+
+            // 검색 버튼 클릭 시
+            searchBtn.addEventListener('click', () => {
+                const keyword = document.getElementById('userSearchKeyword').value.trim();
+                if (!keyword) return alert('검색어를 입력하세요.');
+
+                fetch(`/api/admin/search/users?userAccount=${encodeURIComponent(keyword)}`)
+                    .then(res => res.ok ? res.json() : Promise.reject(res.status))
+                    .then(json => {
+                        const tbody = document.querySelector('#searchModal tbody');
+                        tbody.innerHTML = '';
+                        (json.data || []).forEach(u => {
+                            const tr = document.createElement('tr');
+                            tr.className = 'hover:bg-gray-50';
+                            tr.innerHTML = `
+                <td class="py-2 px-4 border-b border-r border-gray-200">${u.userAccount}</td>
+                <td class="py-2 px-4 border-b border-r border-gray-200">${u.email}</td>
+                <td class="py-2 px-4 border-b border-r border-gray-200">${u.nickname}</td>
+                <td class="py-2 px-4 border-b border-r border-gray-200 text-center">
+                  <button type="button"
+                          class="btn-detail px-3 py-1 whitespace-nowrap bg-gray-700 text-white rounded"
+                          data-action="prefer" data-user-id="${u.id}">
+                    선호 목록 더보기
+                  </button>
+                </td>
+                <td class="py-2 px-4 border-b border-gray-200 text-center">
+                  <button type="button"
+                          class="btn-detail px-3 py-1 whitespace-nowrap bg-gray-700 text-white rounded"
+                          data-action="bookmark"
+                          data-user-id="${u.id}"
+                          data-user-nickname="${u.nickname}">
+                    북마크 목록 더보기
+                  </button>
+                </td>`;
+                            tbody.append(tr);
+                        });
+                        bootstrap.Modal.getOrCreateInstance(document.getElementById('searchModal')).show();
+                    })
+                    .catch(err => alert(`검색 실패: ${err}`));
             });
         });
     </script>
 
 </section>
 </html>
-

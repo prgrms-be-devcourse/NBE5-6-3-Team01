@@ -2,20 +2,20 @@ package com.grepp.synapse4.app.model.meeting.dto;
 
 import com.grepp.synapse4.app.model.meeting.code.Purpose;
 import com.grepp.synapse4.app.model.user.entity.User;
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder
 @AllArgsConstructor
-
-public class AdminMeetingDto {
+public class AdminMeetingSearchDto {
 
     private Long id;
     private String title;
-    private User user;
-    private String description;
-    private boolean isDutch;
     private Purpose purpose;
+    private String description;
+    private User user;
+    private boolean isDutch;
 
 }
