@@ -1,5 +1,6 @@
 package com.grepp.synapse4.app.model.user;
 
+import com.grepp.synapse4.app.model.user.dto.AdminUserSearchDto;
 import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
 import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.app.model.user.repository.UserRepository;
@@ -11,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,5 +49,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public Boolean findUserByAccount(String account) throws UsernameNotFoundException{
         return userRepository.existsByUserAccount(account);
+    }
+
+    // 관리자 유저 검색기능
+    @Transactional(readOnly = true)
+    public List<AdminUserSearchDto> findByUserAccountContaining(String userAccount) {
+        return userRepository.findByUserAccountContaining(userAccount);
     }
 }

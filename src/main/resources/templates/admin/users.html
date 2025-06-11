@@ -31,6 +31,7 @@
             <thead class="bg-gray-100 sticky top-0 z-10">
             <tr>
                 <th class="w-1/5 py-2 px-4 border-b border-r border-gray-200">아이디</th>
+                <th class="w-1/5 py-2 px-4 border-b border-r border-gray-200">이름</th>
                 <th class="w-1/5 py-2 px-4 border-b border-r border-gray-200">이메일</th>
                 <th class="w-1/5 py-2 px-4 border-b border-r border-gray-200">닉네임</th>
                 <th class="w-1/5 py-2 px-4 border-b border-r border-gray-200">선호목록</th>
@@ -40,6 +41,7 @@
             <tbody>
             <tr th:each="u : ${users}" class="hover:bg-gray-50">
                 <td class="py-2 px-4 border-b border-r border-gray-200" th:text="${u.userAccount}"></td>
+                <td class="py-2 px-4 border-b border-r border-gray-200" th:text="${u.name}"></td>
                 <td class="py-2 px-4 border-b border-r border-gray-200" th:text="${u.email}"></td>
                 <td class="py-2 px-4 border-b border-r border-gray-200" th:text="${u.nickname}"></td>
                 <td class="py-2 px-4 border-b border-r border-gray-200 text-center">

@@ -152,9 +152,4 @@ public class UserService {
         return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
     }
 
-    // 관리자 유저 검색기능
-    @Transactional(readOnly = true)
-    public List<AdminUserSearchDto> findByUserAccountContaining(String userAccount) {
-        return userRepository.findByUserAccountContaining(userAccount);
-    }
 }
