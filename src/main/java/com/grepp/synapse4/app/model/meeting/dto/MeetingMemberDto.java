@@ -8,15 +8,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Data
+@Data @ToString
 @NoArgsConstructor
-@Getter @Setter @ToString
 public class MeetingMemberDto {
-  private Long id;
   private Long meetingId;
   private Long userId;
-  private State state;
-  private LocalDateTime createdAt;
-  private LocalDateTime deletedAt;
+  private State state = State.WAIT;
+  private LocalDateTime createdAt = LocalDateTime.now();
+  private LocalDateTime deletedAt = null;
+
+  public MeetingMemberDto(Long meetingId, Long userId) {
+    this.meetingId = meetingId;
+    this.userId = userId;
+  }
 }
 
