@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Data @ToString
+@Getter @ToString
 @NoArgsConstructor
 public class MeetingMemberDto {
   private Long meetingId;
