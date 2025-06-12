@@ -6,7 +6,9 @@ public enum ResponseCode {
     OK("0000", HttpStatus.OK, "정상적으로 완료되었습니다."),
     BAD_REQUEST("4000", HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     UNAUTHORIZED("4001", HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
-    INTERNAL_SERVER_ERROR("5000", HttpStatus.INTERNAL_SERVER_ERROR, "서버에러 입니다.");
+    INTERNAL_SERVER_ERROR("5000", HttpStatus.INTERNAL_SERVER_ERROR, "서버에러 입니다."),
+    USER_NOT_FOUND("40401", HttpStatus.BAD_REQUEST, "존재하지 않는 유저입니다."),
+    USER_ALREADY_INVITED("40901", HttpStatus.CONFLICT, "이미 초대된 유저입니다.");
     
     private final String code;
     private final HttpStatus status;
