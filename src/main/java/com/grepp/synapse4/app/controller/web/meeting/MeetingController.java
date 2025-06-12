@@ -118,18 +118,6 @@ public class MeetingController {
     return "meetings/modal/alarm-invite";
   }
 
-  @PostMapping("/modal/alarm-invite.html")
-  @PreAuthorize("isAuthenticated()")
-  public String invitePopup(
-      @RequestParam Long id,
-      @RequestParam State state
-  ){
-    Long userId = customUserDetailsService.loadUserIdByAccount();
-    meetingService.updateInvitedState(id, userId, state);
-
-    return "redirect:/meetings/modal/alarm-invite.html";
-  }
-
   @GetMapping("/modal/meeting-members/{id}.html")
   @PreAuthorize("isAuthenticated()")
   public String meetingMemberListPopup(
