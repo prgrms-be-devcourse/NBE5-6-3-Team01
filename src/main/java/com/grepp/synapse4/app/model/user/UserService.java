@@ -3,6 +3,8 @@ package com.grepp.synapse4.app.model.user;
 import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_ADMIN;
 import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_USER;
 
+import com.grepp.synapse4.app.model.meeting.repository.MeetingMemberRepository;
+import com.grepp.synapse4.app.model.meeting.repository.vote.VoteMemberRepository;
 import com.grepp.synapse4.app.model.user.dto.AdminUserSearchDto;
 import com.grepp.synapse4.app.model.user.dto.request.EditInfoRequest;
 import com.grepp.synapse4.app.model.user.dto.request.UserSignUpRequest;
@@ -28,6 +30,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserValidator userValidator;
     private final MailService mailService;
+    private final MeetingMemberRepository meetingMemberRepository;
+    private final VoteMemberRepository voteMemberRepository;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -114,6 +118,10 @@ public class UserService {
     public void softDelete(User user) {
         user.setActivated(false);
         user.setDeletedAt(LocalDateTime.now());
+
+        meetingMemberRepository.deleteByUser(user);
+        voteMemberRepository.deleteByUser(user);
+
         userRepository.save(user);
     }
 
