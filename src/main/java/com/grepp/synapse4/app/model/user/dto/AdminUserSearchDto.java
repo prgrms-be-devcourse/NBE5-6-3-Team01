@@ -11,6 +11,7 @@ public class AdminUserSearchDto {
 
     private Long id;
     private String userAccount;
+    private String name;
     private String password;
     private String nickname;
     private String email;
