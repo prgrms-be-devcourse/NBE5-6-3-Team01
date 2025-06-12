@@ -40,4 +40,6 @@ public interface MeetingMemberRepository extends JpaRepository<MeetingMember, Lo
 
   void deleteByUser(User user);
 
+  List<MeetingMember> findAllByMeetingId(Long meetingId);
+
 }

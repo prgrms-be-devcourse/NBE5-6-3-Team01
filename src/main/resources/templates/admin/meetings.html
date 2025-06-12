@@ -30,7 +30,7 @@
         </div>
 
         <div id="meetingList" style="max-height:80vh; overflow-y:auto;">
-            <div class="max-w-4xl mx-auto space-y-4">
+            <div id="cardsContainer" class="max-w-4xl mx-auto space-y-4">
                 <div th:each="m : ${meetings}"
                      class="meeting-card flex items-center justify-between bg-white border rounded-lg shadow-sm p-4 hover:shadow-md transition"
                      th:attr="data-meeting-id=${m.id}">
@@ -50,10 +50,16 @@
                             <span th:text="${m.isDutch()} ? 'O' : 'X'">O/X</span>
                         </p>
                     </div>
-                    <button type="button"
-                            class="btn-detail px-3 py-1 bg-gray-700 text-white rounded btn-show-members">
-                        멤버 보기
-                    </button>
+                    <div class="space-x-2">
+                        <button type="button"
+                                class="btn-detail px-3 py-1 bg-gray-700 text-white rounded btn-show-members">
+                            멤버 보기
+                        </button>
+                        <button type="button"
+                                class="btn-delete px-3 py-1 bg-red-600 text-white rounded btn-delete-meeting">
+                            삭제
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,20 +96,17 @@
     </div>
 
     <script>
-        console.log('INLINE SCRIPT LOADED');
-
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOMContentLoaded — 실행 확인');
-
-            const searchBtn   = document.getElementById('searchButton');
-            const searchInput = document.getElementById('searchKeyword');
-            const searchModal = new bootstrap.Modal(document.getElementById('searchModal'));
-            const searchCont  = document.getElementById('searchResultsContainer');
-            const memberModal = new bootstrap.Modal(document.getElementById('memberModal'));
-            const memberList  = document.getElementById('memberListContainer');
+            const searchBtn      = document.getElementById('searchButton');
+            const searchInput    = document.getElementById('searchKeyword');
+            const cardsContainer = document.getElementById('cardsContainer');
+            const memberModal    = new bootstrap.Modal(document.getElementById('memberModal'));
+            const memberList     = document.getElementById('memberListContainer');
+            const originalCards = Array.from(
+                document.querySelectorAll('#cardsContainer .meeting-card')
+            ).map(card => card.cloneNode(true));
 
             function showMembers(meetingId) {
-                console.log('showMembers()', meetingId);
                 memberList.innerHTML = '';
                 fetch(`/api/admin/meetingmember/${meetingId}`)
                     .then(r => r.ok ? r.json() : Promise.reject(r.status))
@@ -124,38 +127,60 @@
             }
 
             document.body.addEventListener('click', function(e) {
-                const btn = e.target.closest('.btn-show-members');
-                if (btn) {
-                    console.log('멤버 보기 버튼 클릭');
-                    const card = btn.closest('.meeting-card');
+                // 멤버 보기
+                const showBtn = e.target.closest('.btn-show-members');
+                if (showBtn) {
+                    const card = showBtn.closest('.meeting-card');
                     showMembers(card.getAttribute('data-meeting-id'));
+                    return;
+                }
+                // 삭제 버튼
+                const delBtn = e.target.closest('.btn-delete-meeting');
+                if (delBtn) {
+                    const card = delBtn.closest('.meeting-card');
+                    const meetingId = card.getAttribute('data-meeting-id');
+                    if (!confirm('정말 이 모임을 삭제하시겠습니까?')) {
+                        return;
+                    }
+                    fetch(`/api/admin/${meetingId}`, {
+                        method: 'DELETE'
+                    })
+                        .then(res => {
+                            if (res.ok) {
+                                card.remove();
+                            } else {
+                                return res.json().then(err => Promise.reject(err));
+                            }
+                        })
+                        .catch(err => {
+                            alert('삭제에 실패했습니다.');
+                            console.error(err);
+                        });
+                    return;
                 }
             });
 
+            // 검색 기능
             searchBtn.addEventListener('click', function() {
-                console.log('검색 버튼 클릭');
                 const kw = searchInput.value.trim().toLowerCase();
                 if (!kw) {
                     alert('검색어를 입력해주세요.');
                     return;
                 }
-                const cards = Array.from(document.querySelectorAll('.meeting-card'));
-                console.log('전체 cards:', cards.length);
-                const filtered = cards.filter(card => {
-                    const titleEl = card.querySelector('.meeting-title');
-                    return titleEl && titleEl.textContent.toLowerCase().includes(kw);
-                });
-                console.log('필터된 cards:', filtered.length);
 
-                searchCont.innerHTML = '';
-                if (!filtered.length) {
-                    searchCont.innerHTML = '<p class="text-center text-gray-500">검색 결과가 없습니다.</p>';
+                const filtered = originalCards.filter(card => {
+                    const title = card.querySelector('.meeting-title')?.textContent.toLowerCase() || '';
+                    return title.includes(kw);
+                });
+
+                cardsContainer.innerHTML = '';
+                if (filtered.length === 0) {
+                    cardsContainer.innerHTML = '<p class="text-center text-gray-500">검색 결과가 없습니다.</p>';
                 } else {
                     filtered.forEach(card => {
-                        searchCont.appendChild(card.cloneNode(true));
+                        cardsContainer.appendChild(card.cloneNode(true));
                     });
                 }
-                searchModal.show();
             });
         });
     </script>

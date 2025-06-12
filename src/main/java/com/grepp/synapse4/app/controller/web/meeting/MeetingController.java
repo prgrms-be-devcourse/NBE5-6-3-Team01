@@ -118,18 +118,6 @@ public class MeetingController {
     return "meetings/modal/alarm-invite";
   }
 
-  @PostMapping("/modal/alarm-invite.html")
-  @PreAuthorize("isAuthenticated()")
-  public String invitePopup(
-      @RequestParam Long id,
-      @RequestParam State state
-  ){
-    Long userId = customUserDetailsService.loadUserIdByAccount();
-    meetingService.updateInvitedState(id, userId, state);
-
-    return "redirect:/meetings/modal/alarm-invite.html";
-  }
-
   @GetMapping("/modal/meeting-members/{id}.html")
   @PreAuthorize("isAuthenticated()")
   public String meetingMemberListPopup(
@@ -154,32 +142,6 @@ public class MeetingController {
     meetingService.setInviteModel(model, id, null);
 
     return "meetings/modal/meeting-invite";
-  }
-  @PostMapping("/modal/meeting-invite/{id}.html")
-  @PreAuthorize("isAuthenticated()")
-  public String meetingInvite(
-      @Valid MeetingInviteRequest invite,
-      @PathVariable Long id,
-      @RequestParam String account,
-      Model model
-  ){
-    Boolean existByUser = customUserDetailsService.findUserByAccount(account);
-    if(!existByUser){
-      meetingService.setInviteModel(model, id, "존재하지 않는 유저입니다.");
-      return "meetings/modal/meeting-invite";
-    }
-
-    Long userId = customUserDetailsService.loadUserIdByAccount(account);
-    Boolean existByMeetingMember = meetingService.findMemberByMeetingIdAndUserId(id, userId);
-    if(existByMeetingMember){
-      meetingService.setInviteModel(model, id, "이미 초대된 유저입니다.");
-      return "meetings/modal/meeting-invite";
-    }
-
-    MeetingMemberDto dto = invite.toDto(id, userId);
-    meetingService.inviteUser(dto);
-
-    return "redirect:/meetings/modal/meeting-invite/"+id+".html";
   }
 
 }
