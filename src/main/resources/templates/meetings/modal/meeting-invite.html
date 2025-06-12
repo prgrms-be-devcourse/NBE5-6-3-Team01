@@ -58,8 +58,8 @@
       if(res.ok){
         window.location.href = meetingId + ".html";
       } else {
-        const message = await res.text();
-        alert(message);
+        const error = await res.json();
+        alert(error.message);
       }
     })
     .catch(error => {

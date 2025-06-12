@@ -5,11 +5,13 @@ import com.grepp.synapse4.app.controller.web.meeting.payload.meeting.MeetingInvi
 import com.grepp.synapse4.app.model.meeting.MeetingService;
 import com.grepp.synapse4.app.model.meeting.code.State;
 import com.grepp.synapse4.app.model.meeting.dto.MeetingMemberDto;
+import com.grepp.synapse4.app.model.notification.NotificationService;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
 import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
+import com.grepp.synapse4.infra.response.ApiResponse;
+import com.grepp.synapse4.infra.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,14 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class MeetingApiController {
 
-    @Autowired
-    private MeetingService meetingService;
+    private final MeetingService meetingService;
     private final CustomUserDetailsService customUserDetailsService;
 
     // 모임 초대
     @PostMapping("/invite/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> invite(
+    public ResponseEntity<ApiResponse<Void>> invite(
         @RequestBody MeetingInviteRequest invite
     ){
         Long meetingId = invite.getMeetingId();
@@ -42,14 +43,14 @@ public class MeetingApiController {
         Boolean existByUser = customUserDetailsService.findUserByAccount(account);
         if(!existByUser){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("존재하지 않는 유저입니다.");
+                .body(ApiResponse.error(ResponseCode.USER_NOT_FOUND));
         }
 
         Long userId = customUserDetailsService.loadUserIdByAccount(account);
         Boolean existByMeetingMember = meetingService.findMemberByMeetingIdAndUserId(meetingId, userId);
         if(existByMeetingMember){
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body("이미 초대된 유저입니다.");
+                .body(ApiResponse.error(ResponseCode.USER_ALREADY_INVITED));
         }
 
         MeetingMemberDto dto = new MeetingMemberDto(meetingId, userId);
@@ -68,8 +69,6 @@ public class MeetingApiController {
         Long meetingId = alarm.getMeetingId();
         Long userId = userDetails.getUser().getId();
         State state = alarm.getState();
-
-        log.info("meetingId, userId, state: {} {} {}", meetingId, userId, state);
 
         meetingService.updateInvitedState(meetingId, userId, state);
 
