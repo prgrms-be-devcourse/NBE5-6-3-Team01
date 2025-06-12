@@ -36,4 +36,6 @@ public interface MeetingMemberRepository extends JpaRepository<MeetingMember, Lo
       where mm.meeting.id = :meetingId
     """)
   List<AdminMeetingMemberDto> findUserNicknamesByMeetingId(@Param("meetingId") Long meetingId);
+
+  List<MeetingMember> findAllByMeetingId(Long meetingId);
 }
