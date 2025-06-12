@@ -77,4 +77,10 @@ public class AdminApiController {
         return ResponseEntity.ok(ApiResponse.success(results));
     }
 
+    @DeleteMapping("{meetingId}")
+    public ResponseEntity<ApiResponse<Void>> deleteMeeting(@PathVariable Long meetingId) {
+        meetingService.deleteAdminMeeting(meetingId);
+        ApiResponse<Void> body = ApiResponse.success(null);
+        return ResponseEntity.ok(body);
+    }
 }

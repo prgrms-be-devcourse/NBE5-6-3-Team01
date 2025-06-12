@@ -169,4 +169,10 @@ public class MeetingService {
     return meetingRepository.findByTitleContaining(title);
   }
 
+  @Transactional
+  public void deleteAdminMeeting(Long meetingId) {
+    List<MeetingMember> members = meetingMemberRepository.findAllByMeetingId(meetingId);
+    meetingMemberRepository.deleteAll(members);
+    meetingRepository.deleteById(meetingId);
+  }
 }

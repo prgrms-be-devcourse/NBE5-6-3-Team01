@@ -50,10 +50,16 @@
                             <span th:text="${m.isDutch()} ? 'O' : 'X'">O/X</span>
                         </p>
                     </div>
-                    <button type="button"
-                            class="btn-detail px-3 py-1 bg-gray-700 text-white rounded btn-show-members">
-                        멤버 보기
-                    </button>
+                    <div class="space-x-2">
+                        <button type="button"
+                                class="btn-detail px-3 py-1 bg-gray-700 text-white rounded btn-show-members">
+                            멤버 보기
+                        </button>
+                        <button type="button"
+                                class="btn-delete px-3 py-1 bg-red-600 text-white rounded btn-delete-meeting">
+                            삭제
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,13 +127,40 @@
             }
 
             document.body.addEventListener('click', function(e) {
-                const btn = e.target.closest('.btn-show-members');
-                if (btn) {
-                    const card = btn.closest('.meeting-card');
+                // 멤버 보기
+                const showBtn = e.target.closest('.btn-show-members');
+                if (showBtn) {
+                    const card = showBtn.closest('.meeting-card');
                     showMembers(card.getAttribute('data-meeting-id'));
+                    return;
+                }
+                // 삭제 버튼
+                const delBtn = e.target.closest('.btn-delete-meeting');
+                if (delBtn) {
+                    const card = delBtn.closest('.meeting-card');
+                    const meetingId = card.getAttribute('data-meeting-id');
+                    if (!confirm('정말 이 모임을 삭제하시겠습니까?')) {
+                        return;
+                    }
+                    fetch(`/api/admin/${meetingId}`, {
+                        method: 'DELETE'
+                    })
+                        .then(res => {
+                            if (res.ok) {
+                                card.remove();
+                            } else {
+                                return res.json().then(err => Promise.reject(err));
+                            }
+                        })
+                        .catch(err => {
+                            alert('삭제에 실패했습니다.');
+                            console.error(err);
+                        });
+                    return;
                 }
             });
 
+            // 검색 기능
             searchBtn.addEventListener('click', function() {
                 const kw = searchInput.value.trim().toLowerCase();
                 if (!kw) {
