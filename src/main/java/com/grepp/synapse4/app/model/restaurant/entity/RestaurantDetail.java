@@ -15,6 +15,7 @@ import java.util.List;
 public class RestaurantDetail {
 
     @Id
+    @Setter
     private Long id;
 
     @OneToOne

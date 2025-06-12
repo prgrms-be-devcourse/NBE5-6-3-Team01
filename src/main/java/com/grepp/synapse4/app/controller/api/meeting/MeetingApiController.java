@@ -5,7 +5,6 @@ import com.grepp.synapse4.app.controller.web.meeting.payload.meeting.MeetingInvi
 import com.grepp.synapse4.app.model.meeting.MeetingService;
 import com.grepp.synapse4.app.model.meeting.code.State;
 import com.grepp.synapse4.app.model.meeting.dto.MeetingMemberDto;
-import com.grepp.synapse4.app.model.notification.NotificationService;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
 import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
 import com.grepp.synapse4.infra.response.ApiResponse;
