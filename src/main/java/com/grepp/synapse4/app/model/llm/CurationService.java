@@ -27,7 +27,6 @@ public class CurationService {
     private final CurationRepository curationRepository;
     private final GeminiAdminCurationPromptService geminiAdminCurationPromptService;
     private final SurveyRepository surveyRepository;
-    private final CurationResultRepository curationResultRepository;
 
     @Transactional
     public void setCuration(AdminCurationDto dto) {
@@ -52,7 +51,7 @@ public class CurationService {
 
 
     //     우선 가장 최신 등록한 큐레이션만 노출하도록 로직 설계
-//     4개 테이블 조인해서 lazy 이슈로 서비스단에서 트랜젝션 리드온니처리
+    //     4개 테이블 조인해서 lazy 이슈로 서비스단에서 트랜젝션 리드온니처리
     @Transactional(readOnly = true)
     public UserCurationDto getLatestCurationRestaurants() {
 
@@ -82,17 +81,16 @@ public class CurationService {
     }
 
 
-
     public List<UserCurationSurveyDto> recommendCurationSurveys(Long userId) {
         // 사용자 설문 조회
         Survey survey = surveyRepository.findByUserId(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("Survey not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("해당유저의 설문조사가 없습니다."));
 
-        String loc              = survey.getCompanyLocation();
-        String companion        = survey.getCompanion();
-        String purpose          = survey.getPurpose();
+        String loc = survey.getCompanyLocation();
+        String companion = survey.getCompanion();
+        String purpose = survey.getPurpose();
         String favoriteCategory = survey.getFavoriteCategory();
-        String preferredMood    = survey.getPreferredMood();
+        String preferredMood = survey.getPreferredMood();
 
         // 모든 큐레이션 조회
         List<Curation> allCurations = curationRepository.findCurationIdWithRestaurantId();
