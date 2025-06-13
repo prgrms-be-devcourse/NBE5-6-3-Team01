@@ -162,7 +162,3 @@ public class CurationService {
         }
     }
 }
-
-
-
-
