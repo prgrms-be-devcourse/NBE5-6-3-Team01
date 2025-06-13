@@ -68,7 +68,7 @@ public class MeetingApiController {
                 .build();
 
         boolean noti = notificationService.registNotification(notiDto);
-        if(noti) notificationService.sendInviteNotification(userId, meetingId, meeting.getTitle());
+        if(noti) notificationService.sendInviteNotification(userId, notiDto, NotificationType.MEETING);
 
         return ResponseEntity.ok().build();
     }

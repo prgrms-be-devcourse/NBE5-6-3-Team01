@@ -1,6 +1,8 @@
 package com.grepp.synapse4.app.model.notification;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grepp.synapse4.app.model.notification.code.NotificationType;
+import com.grepp.synapse4.app.model.notification.code.NotificationEventInfo;
 import com.grepp.synapse4.app.model.notification.dto.NotificationDto;
 import com.grepp.synapse4.app.model.notification.entity.Notification;
 import com.grepp.synapse4.app.model.notification.repository.NotificationRepository;
@@ -43,19 +45,30 @@ public class NotificationService {
         return emitter;
     }
 
-    public void sendInviteNotification(Long receiverId, Long meetingId, String title) {
+    public void sendInviteNotification(Long receiverId, NotificationDto dto, NotificationType type) {
         SseEmitter emitter = emitters.get(receiverId);
         if (emitter != null) {
             executor.execute(() -> {
                 try {
-                    Map<String, Object> data = Map.of(
-                            "meetingId", meetingId,
-                            "title", title
-                    );
+                    NotificationEventInfo eventInfo = switch (type) {
+                        // 초대 알림에 필요한 정보
+                        case MEETING -> new NotificationEventInfo("meeting", Map.of(
+                                "meetingId", dto.getMeeting().getId(),
+                                "title", dto.getMeeting().getTitle()
+                        ));
+                        // 투표 알림에 필요한 정보
+                        case VOTE -> new NotificationEventInfo("vote", Map.of(
+                                "voteId", dto.getVote().getId(),
+                                "meetingTitle", dto.getMeeting().getTitle(),
+                                "voteTitle", dto.getVote().getTitle()
+                        ));
+                    };
+
                     emitter.send(SseEmitter.event()
-                            .name("invite")
-                            .data(new ObjectMapper().writeValueAsString(data))
+                            .name(eventInfo.name()) // 결정된 이벤트 이름 사용
+                            .data(new ObjectMapper().writeValueAsString(eventInfo.data())) // 결정된 데이터 사용
                     );
+
                 } catch (IOException e) {
                     emitters.remove(receiverId);
                 }
@@ -70,7 +83,6 @@ public class NotificationService {
         notification.setMeeting(notiDto.getMeeting());
         notification.setType(notiDto.getType());
         notification.setRedirectURL(notiDto.getRedirectUrl());
-        log.info("notification: {}", notification);
 
         notificationRepository.save(notification);
 
