@@ -11,32 +11,43 @@
   <p class="restaurant-title">강남구 맛집 큐레이팅</p>
 
   <div class="restaurant-container" style="margin-top: 10vh;">
-    <th:block th:if="${curation == null or #lists.isEmpty(curation.restaurants)}">
+
+    <!-- 1) 리스트 전체가 비어 있을 때 -->
+    <th:block th:if="${curation == null or #lists.isEmpty(curation)}">
       <div class="empty">
         큐레이션이 없습니다.
       </div>
     </th:block>
 
-    <div th:if="${curation != null and not #lists.isEmpty(curation.restaurants)}">
-      <p th:text="${curation.title}"
-         style="font-size: 22px; font-weight: bold; margin-bottom: 10px;">큐레이션 제목</p>
-      <div>
-        <ul style="width: 100%; list-style: none;">
-          <li th:each="res : ${curation.restaurants}" class="curation-card">
-            <a th:href="@{/restaurant/detail/{id}(id=${res.id})}">
-              <div>
-                <span class="restaurant-name" th:text="${res.name}">식당명</span>
-                <span class="restaurant-branch" th:text="${res.branch}">지점명</span>
-                <span class="restaurant-category" th:text="${res.category}">한식</span>
-              </div>
-              <span class="restaurant-reason" th:text="${res.reason}">추천 이유</span>
-              <p class="restaurant-time" th:text="${res.businessTime}">영업시간</p>
-              <p class="restaurant-address" th:text="${res.roadAddress}">주소</p>
-            </a>
-          </li>
-        </ul>
-      </div>
+    <!-- 2) 리스트가 있으면, 각 SurveyDto 별로 순회 -->
+    <div th:if="${curation != null and not #lists.isEmpty(curation)}">
+      <ul style="width: 100%; list-style: none;">
+        <li th:each="survey : ${curation}" class="curation-section">
+          <!-- 한 SurveyDto 당 제목 한 번 출력 -->
+          <p th:text="${survey.title}"
+             style="font-size: 22px; font-weight: bold; margin-bottom: 10px;">
+            큐레이션 제목
+          </p>
+
+          <!-- SurveyDto.restaurants 순회 -->
+          <ul style="width: 100%; list-style: none;">
+            <li th:each="res : ${survey.restaurants}" class="curation-card">
+              <a th:href="@{/restaurant/detail/{id}(id=${res.id})}">
+                <div>
+                  <span class="restaurant-name" th:text="${res.name}">식당명</span>
+                  <span class="restaurant-branch" th:text="${res.branch}">지점명</span>
+                  <span class="restaurant-category" th:text="${res.category}">카테고리</span>
+                </div>
+                <span class="restaurant-reason" th:text="${res.reason}">추천 이유</span>
+                <p class="restaurant-time" th:text="${res.businessTime}">영업시간</p>
+                <p class="restaurant-address" th:text="${res.roadAddress}">도로명 주소</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
+
   </div>
 </main>
 </body>
