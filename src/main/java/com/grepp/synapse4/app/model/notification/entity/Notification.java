@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
@@ -26,6 +27,7 @@ public class Notification extends BaseEntity {
     @Column(name = "notification_id")
     private Long id;
 
+    @NotNull
     @Column(name = "user_id")
     private Long userId;
 
@@ -33,8 +35,9 @@ public class Notification extends BaseEntity {
     private NotificationType type;
 
     @Column(name = "is_sended")
-    private Boolean isSended;
+    private Boolean isSended = true;
 
+    @Column(name = "rediredt_URL")
     private String redirectURL;
 
     @ManyToOne(fetch = FetchType.LAZY)

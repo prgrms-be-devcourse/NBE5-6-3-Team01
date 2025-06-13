@@ -24,11 +24,11 @@ public class MeetingMember extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 

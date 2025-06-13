@@ -102,7 +102,7 @@ public class MeetingService {
 
   // 모임 초대하기
   @Transactional
-  public void inviteUser(MeetingMemberDto dto) {
+  public Meeting inviteUser(MeetingMemberDto dto) {
     MeetingMember member = new MeetingMember();
     Meeting meeting = meetingRepository.findById(dto.getMeetingId())
         .orElseThrow(() -> new RuntimeException("모임을 찾지 못했습니다."));
@@ -114,6 +114,8 @@ public class MeetingService {
     member.setUser(user);
 
     meetingMemberRepository.save(member);
+
+    return meeting;
   }
 
   // 모임 초대 수락, 거절
