@@ -1,12 +1,15 @@
 package com.grepp.synapse4.app.model.notification;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grepp.synapse4.app.model.meeting.entity.MeetingMember;
+import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
 import com.grepp.synapse4.app.model.notification.code.NotificationType;
 import com.grepp.synapse4.app.model.notification.code.NotificationEventInfo;
 import com.grepp.synapse4.app.model.notification.dto.NotificationDto;
 import com.grepp.synapse4.app.model.notification.entity.Notification;
 import com.grepp.synapse4.app.model.notification.repository.NotificationRepository;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -45,7 +48,8 @@ public class NotificationService {
         return emitter;
     }
 
-    public void sendInviteNotification(Long receiverId, NotificationDto dto, NotificationType type) {
+    // 실시간 알림 전송하기
+    public void sendNotification(Long receiverId, NotificationDto dto, NotificationType type) {
         SseEmitter emitter = emitters.get(receiverId);
         if (emitter != null) {
             executor.execute(() -> {
@@ -76,6 +80,7 @@ public class NotificationService {
         }
     }
 
+    // 알림 등록
     @Transactional
     public boolean registNotification(NotificationDto notiDto) {
         Notification notification = new Notification();
@@ -87,5 +92,22 @@ public class NotificationService {
         notificationRepository.save(notification);
 
         return true;
+    }
+
+    // 모임에 포함된 모든 멤버의 알림 생성
+    @Transactional
+    public void memberNotification(Vote vote, List<MeetingMember> memberList) {
+        for(MeetingMember member : memberList){
+            NotificationDto notificationDto = NotificationDto.builder()
+                    .userId(member.getUser().getId())
+                    .vote(vote)
+                    .meeting(member.getMeeting())
+                    .type(NotificationType.VOTE)
+                    .redirectUrl("meetings/vote/"+vote.getId())
+                    .build();
+
+            registNotification(notificationDto);
+            sendNotification(member.getUser().getId(), notificationDto, NotificationType.VOTE);
+        }
     }
 }

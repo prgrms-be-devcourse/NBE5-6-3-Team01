@@ -67,8 +67,8 @@ public class MeetingApiController {
                 .redirectUrl("meetings/detail/"+meetingId)
                 .build();
 
-        boolean noti = notificationService.registNotification(notiDto);
-        if(noti) notificationService.sendInviteNotification(userId, notiDto, NotificationType.MEETING);
+        notificationService.registNotification(notiDto);
+        notificationService.sendNotification(userId, notiDto, NotificationType.MEETING);
 
         return ResponseEntity.ok().build();
     }
