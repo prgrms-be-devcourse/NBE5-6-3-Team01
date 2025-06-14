@@ -3,9 +3,13 @@ package com.grepp.synapse4.app.controller.api.vote;
 import com.grepp.synapse4.app.controller.web.meeting.payload.vote.VoteRegistRequest;
 import com.grepp.synapse4.app.controller.web.meeting.payload.vote.VoteRequest;
 import com.grepp.synapse4.app.model.meeting.VoteService;
+import com.grepp.synapse4.app.model.meeting.dto.VoteDto;
 import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
 import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
+import jakarta.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -34,16 +38,6 @@ public class VoteApiController {
     ){
         Long userId = userDetails.getUser().getId();
         voteService.vote(request.getVoteId(), userId, request.getIsJoined());
-
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("regist/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> voteRegist(
-        @AuthenticationPrincipal CustomUserDetails userDetails,
-        @RequestBody VoteRegistRequest registRequest
-    ){
 
         return ResponseEntity.ok().build();
     }

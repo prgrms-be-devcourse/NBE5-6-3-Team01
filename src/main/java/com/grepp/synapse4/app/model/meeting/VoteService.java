@@ -54,7 +54,7 @@ public class VoteService {
 
   // 투표 멤버 추가
   @Transactional
-  public void registVoteMember(Vote vote, Long meetingId){
+  public List<MeetingMember> registVoteMember(Vote vote, Long meetingId){
     List<MeetingMember> memberList = meetingMemberRepository.findAllByMeetingIdAndState(meetingId, State.ACCEPT);
 
     for(MeetingMember member:memberList){
@@ -64,6 +64,8 @@ public class VoteService {
 
       voteMemberRepository.save(voteMember);
     }
+
+    return memberList;
   }
 
   // 해당 모임의 투표 리스트 불러오기

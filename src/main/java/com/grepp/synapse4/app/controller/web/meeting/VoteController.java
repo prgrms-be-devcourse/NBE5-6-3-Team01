@@ -5,8 +5,10 @@ import com.grepp.synapse4.app.model.meeting.MeetingService;
 import com.grepp.synapse4.app.model.meeting.VoteService;
 import com.grepp.synapse4.app.model.meeting.dto.VoteDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
+import com.grepp.synapse4.app.model.meeting.entity.MeetingMember;
 import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
 import com.grepp.synapse4.app.model.meeting.entity.vote.VoteMember;
+import com.grepp.synapse4.app.model.notification.NotificationService;
 import com.grepp.synapse4.app.model.user.BookmarkService;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
 import com.grepp.synapse4.app.model.user.entity.Bookmark;
@@ -33,6 +35,7 @@ public class VoteController {
   private final BookmarkService bookmarkService;
   private final VoteService voteService;
   private final MeetingService meetingService;
+  private final NotificationService notificationService;
 
   // 투표 등록 화면
   @GetMapping("vote-regist/{id}")
@@ -70,7 +73,9 @@ public class VoteController {
     VoteDto dto = form.toDto();
     Vote vote = voteService.registVote(dto);
 
-    voteService.registVoteMember(vote, dto.getMeetingId());
+    List<MeetingMember> memberList = voteService.registVoteMember(vote, dto.getMeetingId());
+
+    notificationService.memberNotification(vote, memberList);
 
     return "redirect:/meetings/vote/"+vote.getId();
   }

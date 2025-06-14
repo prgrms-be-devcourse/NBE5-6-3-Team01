@@ -24,8 +24,6 @@ public class MeetingMember extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    private LocalDateTime deletedAt;
-
     @ManyToOne
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
@@ -39,7 +37,6 @@ public class MeetingMember extends BaseEntity {
         return "MeetingMember{" +
             "id=" + id +
             ", state=" + state +
-            ", deletedAt=" + deletedAt +
             ", meetingId=" + (meeting != null ? meeting.getId() : "null") +
             ", userId=" + (user != null ? user.getId() : "null") +
             '}';
