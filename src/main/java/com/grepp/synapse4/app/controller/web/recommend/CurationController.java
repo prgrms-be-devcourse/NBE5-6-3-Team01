@@ -25,7 +25,7 @@ public class CurationController {
     public String curationList(Model model,
                                @AuthenticationPrincipal UserDetails userDetails) {
 
-        List<UserCurationSurveyDto> surveys;
+        UserCurationSurveyDto surveys;
 
         if (userDetails != null) {
             // 로그인 유저: SurveyDto 리스트 그대로
@@ -48,7 +48,7 @@ public class CurationController {
                     ))
                     .collect(Collectors.toList());
 
-            surveys = List.of(new UserCurationSurveyDto(
+            surveys = (new UserCurationSurveyDto(
                     publicDto.getId(),
                     publicDto.getTitle(),
                     restaurants

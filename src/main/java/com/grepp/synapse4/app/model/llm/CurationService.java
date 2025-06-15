@@ -80,27 +80,32 @@ public class CurationService {
                 dtos);
     }
 
-
-    public List<UserCurationSurveyDto> recommendCurationSurveys(Long userId) {
-        // 사용자 설문 조회
-        Survey survey = surveyRepository.findByUserId(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("해당유저의 설문조사가 없습니다."));
-
-        String loc = survey.getCompanyLocation();
-        String companion = survey.getCompanion();
-        String purpose = survey.getPurpose();
-        String favoriteCategory = survey.getFavoriteCategory();
-        String preferredMood = survey.getPreferredMood();
-
-        // 모든 큐레이션 조회
+    // 추천 메서드
+    public UserCurationSurveyDto recommendCurationSurveys(Long userId) {
+        Survey survey = loadUserSurvey(userId);
         List<Curation> allCurations = curationRepository.findCurationIdWithRestaurantId();
+        Curation best = findBestCurationMatch(survey, allCurations);
+        return buildSurveyDtoFromCuration(best);
+    }
 
-        // 매칭 점수 계산 및 최고점 큐레이션 선택
-        Curation best = allCurations.stream()
+    // 유저 설문조회
+    private Survey loadUserSurvey(Long userId) {
+        return surveyRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("해당유저의 설문조사가 없습니다."));
+    }
+
+    // 최조 점수 큐레이션
+    private Curation findBestCurationMatch(Survey survey, List<Curation> curations) {
+        return curations.stream()
                 .map(c -> new MatchPair(
                         c,
                         calcScore(
-                                loc, purpose, companion, favoriteCategory, preferredMood,
+                                survey.getCompanyLocation(),
+                                survey.getPurpose(),
+                                survey.getCompanion(),
+                                survey.getFavoriteCategory(),
+                                survey.getPreferredMood(),
+
                                 c.getCompanyLocation(),
                                 c.getPurpose(),
                                 c.getCompanion(),
@@ -111,12 +116,12 @@ public class CurationService {
                 .max(Comparator.comparingInt(MatchPair::getScore))
                 .orElseThrow(() -> new RuntimeException("적합한 큐레이션이 없습니다."))
                 .getCuration();
+    }
 
-        // 최고 점수 Curation의 식당 리스트 DTO 생성 (최대 3개)
+    // dto 생성
+    private UserCurationSurveyDto buildSurveyDtoFromCuration(Curation best) {
         List<UserCurationSurveyDto.RestaurantDto> restaurants = best.getResults().stream()
-                // CurationResult → CurationRestaurantDto
                 .map(cr -> CurationRestaurantDto.fromEntity(cr.getRestaurant(), cr))
-                // CurationRestaurantDto → SurveyDto.RestaurantDto
                 .map(dto -> new UserCurationSurveyDto.RestaurantDto(
                         dto.getId(),
                         dto.getName(),
@@ -129,12 +134,11 @@ public class CurationService {
                 .limit(3)
                 .toList();
 
-        // 단일 Survey DTO 반환
-        return Collections.singletonList(new UserCurationSurveyDto(
+        return new UserCurationSurveyDto(
                 best.getId(),
                 best.getTitle(),
                 restaurants
-        ));
+        );
     }
 
     // 점수 계산기
