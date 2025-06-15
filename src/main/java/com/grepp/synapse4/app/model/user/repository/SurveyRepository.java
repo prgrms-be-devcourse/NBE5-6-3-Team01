@@ -11,6 +11,6 @@ import java.util.List;
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
     Optional<Survey> findByUser(User user);
-    List<Survey> findByUserId(Long userId);
+    Optional<Survey> findByUserId(Long userId);
 
 }
