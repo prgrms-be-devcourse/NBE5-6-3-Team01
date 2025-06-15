@@ -21,6 +21,7 @@ public interface CurationRepository extends JpaRepository<Curation, Long>{
                 FROM Curation c
                 JOIN FETCH c.results cr
                 JOIN FETCH cr.restaurant r
+                                WHERE cr.active = true 
                 """)
     List<Curation> findCurationIdWithRestaurantId();
 
