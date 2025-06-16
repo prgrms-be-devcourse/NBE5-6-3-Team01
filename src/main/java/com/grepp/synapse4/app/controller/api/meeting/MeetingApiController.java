@@ -9,6 +9,7 @@ import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.notification.NotificationService;
 import com.grepp.synapse4.app.model.notification.code.NotificationType;
 import com.grepp.synapse4.app.model.notification.dto.NotificationDto;
+import com.grepp.synapse4.app.model.notification.entity.Notification;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
 import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
 import com.grepp.synapse4.infra.response.ApiResponse;
@@ -67,8 +68,8 @@ public class MeetingApiController {
                 .redirectUrl("meetings/detail/"+meetingId)
                 .build();
 
-        notificationService.registNotification(notiDto);
-        notificationService.sendNotification(userId, notiDto, NotificationType.MEETING);
+        Notification notification = notificationService.registNotification(notiDto);
+        notificationService.sendNotification(userId, notification, NotificationType.MEETING);
 
         return ResponseEntity.ok().build();
     }

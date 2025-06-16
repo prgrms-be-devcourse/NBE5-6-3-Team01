@@ -3,6 +3,7 @@ package com.grepp.synapse4.app.model.notification.dto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
 import com.grepp.synapse4.app.model.notification.code.NotificationType;
+import com.grepp.synapse4.app.model.notification.entity.Notification;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,5 +18,15 @@ public class NotificationDto {
     private Vote vote;
     private NotificationType type;
     private String redirectUrl;
+
+    public static NotificationDto from(Notification n){
+        return NotificationDto.builder()
+            .userId(n.getUserId())
+            .meeting(n.getMeeting())
+            .vote(n.getVote())
+            .type(n.getType())
+            .redirectUrl(n.getRedirectURL())
+            .build();
+    }
 
 }

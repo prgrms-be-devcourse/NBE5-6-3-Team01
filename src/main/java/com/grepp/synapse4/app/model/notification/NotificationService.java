@@ -50,7 +50,7 @@ public class NotificationService {
     }
 
     // 실시간 알림 전송하기
-    public void sendNotification(Long receiverId, NotificationDto dto, NotificationType type) {
+    public void sendNotification(Long receiverId, Notification notification, NotificationType type) {
         SseEmitter emitter = emitters.get(receiverId);
         if (emitter != null) {
             executor.execute(() -> {
@@ -58,14 +58,16 @@ public class NotificationService {
                     NotificationEventInfo eventInfo = switch (type) {
                         // 초대 알림에 필요한 정보
                         case MEETING -> new NotificationEventInfo("meeting", Map.of(
-                                "meetingId", dto.getMeeting().getId(),
-                                "title", dto.getMeeting().getTitle()
+                                "notiId", notification.getId(),
+                                "meetingId", notification.getMeeting().getId(),
+                                "title", notification.getMeeting().getTitle()
                         ));
                         // 투표 알림에 필요한 정보
                         case VOTE -> new NotificationEventInfo("vote", Map.of(
-                                "voteId", dto.getVote().getId(),
-                                "meetingTitle", dto.getVote().getMeeting().getTitle(),
-                                "voteTitle", dto.getVote().getTitle()
+                                "notiId", notification.getId(),
+                                "voteId", notification.getVote().getId(),
+                                "meetingTitle", notification.getVote().getMeeting().getTitle(),
+                                "voteTitle", notification.getVote().getTitle()
                         ));
                         case DUMMY -> new NotificationEventInfo("dummy", Map.of());
                     };
@@ -90,16 +92,15 @@ public class NotificationService {
 
     // 알림 등록
     @Transactional
-    public boolean registNotification(NotificationDto notiDto) {
+    public Notification registNotification(NotificationDto notiDto) {
         Notification notification = new Notification();
         notification.setUserId(notiDto.getUserId());
         notification.setMeeting(notiDto.getMeeting());
+        notification.setVote(notiDto.getVote());
         notification.setType(notiDto.getType());
         notification.setRedirectURL(notiDto.getRedirectUrl());
 
-        notificationRepository.save(notification);
-
-        return true;
+        return notificationRepository.save(notification);
     }
 
     // 모임에 포함된 모든 멤버의 알림 생성
@@ -117,5 +118,10 @@ public class NotificationService {
             registNotification(notificationDto);
             sendNotification(member.getUser().getId(), notificationDto, NotificationType.VOTE);
         }
+    }
+
+    @Transactional
+    public void removeMeetingNotification(Long notiId) {
+        notificationRepository.deleteById(notiId);
     }
 }
