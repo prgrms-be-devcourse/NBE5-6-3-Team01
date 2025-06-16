@@ -1,9 +1,7 @@
 package com.grepp.synapse4.app.controller.api.meeting;
 
-import com.grepp.synapse4.app.controller.web.meeting.payload.meeting.MeetingAlarmRequest;
 import com.grepp.synapse4.app.controller.web.meeting.payload.meeting.MeetingInviteRequest;
 import com.grepp.synapse4.app.model.meeting.MeetingService;
-import com.grepp.synapse4.app.model.meeting.code.State;
 import com.grepp.synapse4.app.model.meeting.dto.MeetingMemberDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.notification.NotificationService;
@@ -11,7 +9,6 @@ import com.grepp.synapse4.app.model.notification.code.NotificationType;
 import com.grepp.synapse4.app.model.notification.dto.NotificationDto;
 import com.grepp.synapse4.app.model.notification.entity.Notification;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
-import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
 import com.grepp.synapse4.infra.response.ApiResponse;
 import com.grepp.synapse4.infra.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

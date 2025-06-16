@@ -1,4 +1,4 @@
-package com.grepp.synapse4.app.model.meeting.entity.vote;
+package com.grepp.synapse4.app.model.vote.entity;
 
 import com.grepp.synapse4.app.model.user.entity.User;
 import jakarta.persistence.*;

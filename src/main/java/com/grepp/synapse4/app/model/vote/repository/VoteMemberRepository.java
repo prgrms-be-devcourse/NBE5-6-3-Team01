@@ -1,6 +1,6 @@
-package com.grepp.synapse4.app.model.meeting.repository.vote;
+package com.grepp.synapse4.app.model.vote.repository;
 
-import com.grepp.synapse4.app.model.meeting.entity.vote.VoteMember;
+import com.grepp.synapse4.app.model.vote.entity.VoteMember;
 import com.grepp.synapse4.app.model.user.entity.User;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

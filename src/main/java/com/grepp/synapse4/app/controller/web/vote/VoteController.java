@@ -1,12 +1,12 @@
-package com.grepp.synapse4.app.controller.web.meeting;
+package com.grepp.synapse4.app.controller.web.vote;
 
-import com.grepp.synapse4.app.controller.web.meeting.payload.vote.VoteRegistRequest;
+import com.grepp.synapse4.app.controller.web.vote.payload.VoteRegistRequest;
 import com.grepp.synapse4.app.model.meeting.MeetingService;
 import com.grepp.synapse4.app.model.meeting.VoteService;
-import com.grepp.synapse4.app.model.meeting.dto.VoteDto;
+import com.grepp.synapse4.app.model.vote.dto.VoteDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
-import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
-import com.grepp.synapse4.app.model.meeting.entity.vote.VoteMember;
+import com.grepp.synapse4.app.model.vote.entity.Vote;
+import com.grepp.synapse4.app.model.vote.entity.VoteMember;
 import com.grepp.synapse4.app.model.notification.NotificationService;
 import com.grepp.synapse4.app.model.user.BookmarkService;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;

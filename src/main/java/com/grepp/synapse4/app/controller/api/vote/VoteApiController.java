@@ -1,6 +1,6 @@
 package com.grepp.synapse4.app.controller.api.vote;
 
-import com.grepp.synapse4.app.controller.web.meeting.payload.vote.VoteRequest;
+import com.grepp.synapse4.app.controller.web.vote.payload.VoteRequest;
 import com.grepp.synapse4.app.model.meeting.VoteService;
 import com.grepp.synapse4.app.model.notification.NotificationService;
 import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;

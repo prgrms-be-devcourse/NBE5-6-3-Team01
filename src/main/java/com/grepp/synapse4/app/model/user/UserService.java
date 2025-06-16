@@ -4,8 +4,7 @@ import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_ADMIN;
 import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_USER;
 
 import com.grepp.synapse4.app.model.meeting.repository.MeetingMemberRepository;
-import com.grepp.synapse4.app.model.meeting.repository.vote.VoteMemberRepository;
-import com.grepp.synapse4.app.model.user.dto.AdminUserSearchDto;
+import com.grepp.synapse4.app.model.vote.repository.VoteMemberRepository;
 import com.grepp.synapse4.app.model.user.dto.request.EditInfoRequest;
 import com.grepp.synapse4.app.model.user.dto.request.UserSignUpRequest;
 import com.grepp.synapse4.app.model.user.dto.response.FindIdResponseDto;

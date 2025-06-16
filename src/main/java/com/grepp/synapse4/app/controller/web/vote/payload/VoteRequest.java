@@ -1,4 +1,4 @@
-package com.grepp.synapse4.app.controller.web.meeting.payload.vote;
+package com.grepp.synapse4.app.controller.web.vote.payload;
 
 import lombok.Data;
 

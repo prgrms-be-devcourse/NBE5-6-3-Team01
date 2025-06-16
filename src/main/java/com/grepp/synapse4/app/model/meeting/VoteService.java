@@ -1,15 +1,15 @@
 package com.grepp.synapse4.app.model.meeting;
 
 import com.grepp.synapse4.app.model.meeting.code.State;
-import com.grepp.synapse4.app.model.meeting.dto.VoteDto;
+import com.grepp.synapse4.app.model.vote.dto.VoteDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.meeting.entity.MeetingMember;
-import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
-import com.grepp.synapse4.app.model.meeting.entity.vote.VoteMember;
+import com.grepp.synapse4.app.model.vote.entity.Vote;
+import com.grepp.synapse4.app.model.vote.entity.VoteMember;
 import com.grepp.synapse4.app.model.meeting.repository.MeetingMemberRepository;
 import com.grepp.synapse4.app.model.meeting.repository.MeetingRepository;
-import com.grepp.synapse4.app.model.meeting.repository.vote.VoteMemberRepository;
-import com.grepp.synapse4.app.model.meeting.repository.vote.VoteRepository;
+import com.grepp.synapse4.app.model.vote.repository.VoteMemberRepository;
+import com.grepp.synapse4.app.model.vote.repository.VoteRepository;
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import com.grepp.synapse4.app.model.restaurant.repository.RestaurantRepository;
 import java.time.LocalDateTime;
