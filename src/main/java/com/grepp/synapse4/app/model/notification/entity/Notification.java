@@ -37,7 +37,7 @@ public class Notification extends BaseEntity {
     @Column(name = "is_sended")
     private Boolean isSended = true;
 
-    @Column(name = "rediredt_URL")
+    @Column(name = "redirect_URL")
     private String redirectURL;
 
     @ManyToOne(fetch = FetchType.LAZY)

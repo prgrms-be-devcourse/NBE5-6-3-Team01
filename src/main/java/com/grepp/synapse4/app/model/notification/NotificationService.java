@@ -28,6 +28,7 @@ public class NotificationService {
     private static final Long TIMEOUT = 60 * 60 * 1000L; // 1시간
     private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
     private final ExecutorService executor = Executors.newSingleThreadExecutor(); // 쓰레드 풀 생성
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final NotificationRepository notificationRepository;
 
     // SseEmiter 연결
@@ -43,7 +44,7 @@ public class NotificationService {
         emitter.onError((e) -> emitters.remove(userId));
 
         // 최초 연결 시 더미데이터가 없으면 503 오류가 발생하기 때문에 해당 더미 데이터 생성
-//        sendHandle(emitter, userId, "EventStream Created. [userId=" + userId + "]");
+        sendNotification(userId, null, NotificationType.DUMMY);
 
         return emitter;
     }
@@ -63,14 +64,15 @@ public class NotificationService {
                         // 투표 알림에 필요한 정보
                         case VOTE -> new NotificationEventInfo("vote", Map.of(
                                 "voteId", dto.getVote().getId(),
-                                "meetingTitle", dto.getMeeting().getTitle(),
+                                "meetingTitle", dto.getVote().getMeeting().getTitle(),
                                 "voteTitle", dto.getVote().getTitle()
                         ));
+                        case DUMMY -> new NotificationEventInfo("dummy", Map.of());
                     };
 
                     emitter.send(SseEmitter.event()
                             .name(eventInfo.name()) // 결정된 이벤트 이름 사용
-                            .data(new ObjectMapper().writeValueAsString(eventInfo.data())) // 결정된 데이터 사용
+                            .data(objectMapper.writeValueAsString(eventInfo.data())) // 결정된 데이터 사용
                     );
 
                 } catch (IOException e) {
@@ -78,6 +80,12 @@ public class NotificationService {
                 }
             });
         }
+    }
+
+    // 유저의 모든 알람 리스트 불러오기
+    @Transactional(readOnly = true)
+    public List<Notification> findAllByUserId(Long userId) {
+        return notificationRepository.findByUserId(userId);
     }
 
     // 알림 등록
