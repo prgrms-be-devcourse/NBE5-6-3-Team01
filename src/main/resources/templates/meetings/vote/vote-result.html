@@ -36,7 +36,7 @@
         </div>
         <div class="scroll-container">
           <div th:each="member : ${joinedList}" class="member">
-            <div th:text="${member.user.nickname}"></div>
+            <div th:text="${member}"></div>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
         </div>
         <div class="scroll-container">
           <div th:each="member : ${notJoinedList}" class="member">
-            <div th:text="${member.user.nickname}"></div>
+            <div th:text="${member}"></div>
           </div>
         </div>
       </div>

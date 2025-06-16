@@ -1,6 +1,7 @@
 package com.grepp.synapse4.app.model.notification;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
 import com.grepp.synapse4.app.model.meeting.entity.vote.VoteMember;
 import com.grepp.synapse4.app.model.notification.code.NotificationType;
 import com.grepp.synapse4.app.model.notification.code.NotificationEventInfo;
@@ -121,5 +122,10 @@ public class NotificationService {
     @Transactional
     public void removeMeetingNotification(Long notiId) {
         notificationRepository.deleteById(notiId);
+    }
+
+    @Transactional
+    public void removeVoteNotification(Long userId, Long voteId) {
+        notificationRepository.deleteByUserIdAndVoteId(userId, voteId);
     }
 }

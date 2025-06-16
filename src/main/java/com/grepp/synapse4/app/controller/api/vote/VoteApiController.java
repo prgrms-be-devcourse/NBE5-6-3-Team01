@@ -5,6 +5,8 @@ import com.grepp.synapse4.app.controller.web.meeting.payload.vote.VoteRequest;
 import com.grepp.synapse4.app.model.meeting.VoteService;
 import com.grepp.synapse4.app.model.meeting.dto.VoteDto;
 import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
+import com.grepp.synapse4.app.model.meeting.entity.vote.VoteMember;
+import com.grepp.synapse4.app.model.notification.NotificationService;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
 import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
 import jakarta.validation.Valid;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class VoteApiController {
 
     private final VoteService voteService;
+    private final NotificationService notificationService;
 
     @PatchMapping("{id}")
     @PreAuthorize("isAuthenticated()")
@@ -38,6 +41,7 @@ public class VoteApiController {
     ){
         Long userId = userDetails.getUser().getId();
         voteService.vote(request.getVoteId(), userId, request.getIsJoined());
+        notificationService.removeVoteNotification(userId, request.getVoteId());
 
         return ResponseEntity.ok().build();
     }

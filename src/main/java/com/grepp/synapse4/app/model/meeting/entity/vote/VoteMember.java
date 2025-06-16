@@ -30,7 +30,7 @@ public class VoteMember {
 //    @JoinColumn(name = "restaurant_id")
 //    private Restaurant restaurant;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 }

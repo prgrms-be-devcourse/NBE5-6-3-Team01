@@ -105,10 +105,11 @@ public class VoteController {
     Vote vote = voteService.findVoteByVoteId(id);
     model.addAttribute("vote", vote);
 
-    List<VoteMember> joinedList = voteService.findJoinedListByVoteId(id, true);
+    List<String> joinedList = voteService.findJoinedNicknamesByVoteId(id, true);
     model.addAttribute("joinedList", joinedList);
     model.addAttribute("joinedCount", joinedList.size());
-    List<VoteMember> notJoinedList = voteService.findJoinedListByVoteId(id, false);
+
+    List<String> notJoinedList = voteService.findJoinedNicknamesByVoteId(id, false);
     model.addAttribute("notJoinedList", notJoinedList);
     model.addAttribute("notJoinedCount", notJoinedList.size());
 

@@ -136,7 +136,7 @@ public class VoteService {
 
   // 해당 투표의 모든 멤버의 투표 O,X 결과 불러오기
   @Transactional(readOnly = true)
-  public List<VoteMember> findJoinedListByVoteId(Long id, Boolean isJoined) {
-    return voteMemberRepository.findAllByVoteIdAndIsJoined(id, isJoined);
+  public List<String> findJoinedNicknamesByVoteId(Long id, Boolean isJoined) {
+    return voteMemberRepository.findNicknamesByVoteIdAndIsJoined(id, isJoined);
   }
 }

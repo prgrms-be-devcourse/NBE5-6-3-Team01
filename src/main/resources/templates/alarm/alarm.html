@@ -116,13 +116,14 @@
             <div>투표 명: <span>${voteTitle}</span></div>
           </div>
         </div>
-        <button class="button vote" th:attr="vote-id=${voteId}">투표하기</button>
+        <button class="button vote" vote-id="${voteId}">투표하기</button>
       `;
 
       list.appendChild(li);
       buttonEventHandlers(li);
       alert(`${meetingTitle}에서 투표가 생성되었습니다!`);
     }
+
     function buttonEventHandlers(li) {
       const notiId = li.getAttribute("noti-id");
       const buttons = li.querySelector(".buttons");

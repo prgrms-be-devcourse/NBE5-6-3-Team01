@@ -1,5 +1,6 @@
 package com.grepp.synapse4.app.model.notification.repository;
 
+import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
 import com.grepp.synapse4.app.model.notification.entity.Notification;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<Notification> findByUserId(Long userId);
 
     void deleteById(Long notiId);
+
+    void deleteByUserIdAndVoteId(Long userId, Long voteId);
 }
