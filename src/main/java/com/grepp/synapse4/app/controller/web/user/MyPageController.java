@@ -12,7 +12,9 @@ import com.grepp.synapse4.app.model.user.dto.request.EditInfoRequest;
 import com.grepp.synapse4.app.model.user.dto.request.SurveyRequest;
 import com.grepp.synapse4.app.model.user.entity.User;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,20 +28,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/mypage")
 @RequiredArgsConstructor
+@Slf4j
 public class MyPageController {
 
     private final UserService userService;
     private final SurveyService surveyService;
 
-    @GetMapping(value = {"","/"})
+    @GetMapping
     public String myPage(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+        if (userDetails == null) {
+            return "redirect:/user/signin";
+        }
+
         User user = userDetails.getUser();
+
         model.addAttribute("user", user);
         return "user/mypage";
     }
 
     @GetMapping("/edit-info")
-    public String editInfoForm(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+    public String editInfoForm(@AuthenticationPrincipal CustomUserDetails userDetails,
+        Model model) {
         User user = userDetails.getUser();
         EditInfoRequest dto = new EditInfoRequest();
         dto.setUserAccount(user.getUserAccount());
@@ -69,25 +78,35 @@ public class MyPageController {
     public String showEditForm(@AuthenticationPrincipal CustomUserDetails userDetails,
         Model model) {
 
-        User user = userDetails.getUser();
+        Long userId = userDetails.getUser().getId();
 
-        SurveyRequest request = surveyService.getSurveyRequest(user);
-        Long id = surveyService.getSurveyId(userDetails.getUser());
+        Optional<SurveyRequest> optionalSurvey = surveyService.findSurveyRequest(userId);
 
-        model.addAttribute("surveyRequest", request);
-        model.addAttribute("surveyId", id);
+        if (optionalSurvey.isPresent()) {
+            model.addAttribute("surveyRequest", optionalSurvey.get());
+            model.addAttribute("hasSurvey", true);
+
+            Long surveyId = surveyService.getSurveyId(userDetails.getUser());
+            model.addAttribute("surveyId", surveyId);
+
+        } else {
+            model.addAttribute("surveyRequest", new SurveyRequest());
+            model.addAttribute("hasSurvey", false);
+        }
 
         addEnumsAttributes(model);
-
         return "user/edit-survey";
     }
 
-    @PostMapping("/edit-prefer/{id}")
-    public String updateSurvey(@PathVariable Long id,
-                                @ModelAttribute SurveyRequest request,
-                                @AuthenticationPrincipal CustomUserDetails userDetails) {
-        surveyService.updateSurvey(id, request, userDetails.getUser());
-        return "redirect:/mypage";
+    @PostMapping("/edit-prefer")
+    public String updateSurvey(@ModelAttribute SurveyRequest request,
+        @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Long userId = userDetails.getUser().getId();
+        Long surveyId = surveyService.getSurveyId(userDetails.getUser());
+
+        surveyService.updateSurvey(surveyId, request, userDetails.getUser());
+        return "redirect:/mypage/edit-prefer?success";
     }
 
     private void addEnumsAttributes(Model model) {
