@@ -10,7 +10,6 @@
   <div class="flex">
     <!-- 사이드바 -->
     <aside class="pt-8 pb-8 pl-2 pr-2 w-26 bg-gray-200 min-h-screen flex flex-col items-center py-10" style="flex: 1;">
-
       <!-- 상단: 로고 -->
       <div class="mb-12">
         <a href="/" class="flex flex-col text-black items-center justify-center">
@@ -48,14 +47,14 @@
       </div>
 
       <div class="flex flex-col items-center mt-auto">
-        <!-- 로그인 : 마이페이지, 로그아웃 -->
+        <!-- 로그인 시: 로그아웃 -->
         <div sec:authorize="isAuthenticated()" class="flex flex-col items-center space-y-6 mt-auto">
-          <a th:href="@{/logout}" class="flex flex-col items-center justify-center space-y-1">
+          <a href="#" id="logout-btn" class="flex flex-col items-center justify-center space-y-1">
             <img src="/img/logout.png" alt="로그아웃" class="w-6 h-6"/>
           </a>
         </div>
 
-        <!-- 미로그인: 로그인, 회원가입 -->
+        <!-- 미로그인 시: 로그인, 회원가입 -->
         <div sec:authorize="isAnonymous()" class="flex flex-col items-center space-y-6 mt-auto">
           <a th:href="@{/admin/signin}" class="flex flex-col items-center justify-center space-y-1">
             <img src="/img/login.png" alt="로그인" class="w-6 h-6"/>
@@ -65,9 +64,30 @@
           </a>
         </div>
       </div>
-
     </aside>
   </div>
+  <script>
+    document.getElementById('logout-btn')?.addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      try {
+        const res = await fetch('/api/auth/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+
+        if (res.ok) {
+          alert('로그아웃 완료');
+          location.href = '/admin/signin';
+        } else {
+          alert('로그아웃 실패');
+        }
+      } catch (err) {
+        alert('서버 오류 발생');
+        console.error(err);
+      }
+    });
+  </script>
 </th:block>
 </body>
 </html>

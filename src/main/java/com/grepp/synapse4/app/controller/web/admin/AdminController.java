@@ -43,7 +43,7 @@ public class AdminController {
     public String meetings(Model model) {
         List<AdminMeetingDto> meetings = meetingService.findAllForAdmin();
         model.addAttribute("meetings", meetings);
-        model.addAttribute("purpose",Purpose.values());
+        model.addAttribute("purpose", Purpose.values());
         return "admin/meetings";
     }
 
@@ -81,7 +81,7 @@ public class AdminController {
 
     @GetMapping("/signin")
     public String signin(Model model) {
-        return "/admin/signin";
+        return "admin/signin";
     }
 
     @GetMapping("/signup")
@@ -91,8 +91,9 @@ public class AdminController {
     }
 
     @PostMapping("/signup")
-    public String processSignUp(@Valid @ModelAttribute("userSignUpRequest") UserSignUpRequest request,
-                                BindingResult bindingResult) {
+    public String processSignUp(
+        @Valid @ModelAttribute("userSignUpRequest") UserSignUpRequest request,
+        BindingResult bindingResult) {
 
         // 1차: @Valid 유효성 검사 실패 시
         if (bindingResult.hasErrors()) {
@@ -107,7 +108,7 @@ public class AdminController {
         }
 
         userService.signupAdmin(request);
-        return "redirect:admin/signin";
+        return "redirect:/admin/signin";
     }
 
 }
