@@ -10,7 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
+//@Component
 @RequiredArgsConstructor
 public class BatchJobStarter implements CommandLineRunner {     //CommandLineRunner : 서버 실행 시 배치를 실행하게 하는 인터페이스
 
