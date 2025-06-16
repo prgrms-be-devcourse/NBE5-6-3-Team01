@@ -62,7 +62,7 @@ public class MeetingService {
   // 본인의 모임 리스트 불러오기
   @Transactional(readOnly = true)
   public List<Meeting> findMeetingsByUserId(Long userId){
-    List<MeetingMember> meetingMemberList =  meetingMemberRepository.findAllByUserIdAndStateAndDeletedAtIsNull(userId, State.ACCEPT);
+    List<MeetingMember> meetingMemberList =  meetingMemberRepository.findAllByUserIdAndState(userId, State.ACCEPT);
 
     return meetingMemberList.stream()
         .map(MeetingMember::getMeeting)
@@ -102,7 +102,7 @@ public class MeetingService {
 
   // 모임 초대하기
   @Transactional
-  public void inviteUser(MeetingMemberDto dto) {
+  public Meeting inviteUser(MeetingMemberDto dto) {
     MeetingMember member = new MeetingMember();
     Meeting meeting = meetingRepository.findById(dto.getMeetingId())
         .orElseThrow(() -> new RuntimeException("모임을 찾지 못했습니다."));
@@ -114,6 +114,8 @@ public class MeetingService {
     member.setUser(user);
 
     meetingMemberRepository.save(member);
+
+    return meeting;
   }
 
   // 모임 초대 수락, 거절
@@ -133,7 +135,7 @@ public class MeetingService {
   // 모임 초대 리스트 불러오기
   @Transactional(readOnly = true)
   public List<MeetingMember> findInviteByUserId(Long userId) {
-    return meetingMemberRepository.findAllByUserIdAndStateAndDeletedAtIsNull(userId, State.WAIT);
+    return meetingMemberRepository.findAllByUserIdAndState(userId, State.WAIT);
   }
 
   // 모임에 유저 포함 여부 확인
@@ -145,7 +147,7 @@ public class MeetingService {
   // 모임의 멤버 리스트 불러오기
   @Transactional(readOnly = true)
   public List<User> findMemberListByMeetingId(Long meetingId, State state) {
-    List<MeetingMember> memberList = meetingMemberRepository.findAllByMeetingIdAndStateAndDeletedAtIsNull(meetingId, state);
+    List<MeetingMember> memberList = meetingMemberRepository.findAllByMeetingIdAndState(meetingId, state);
 
     return memberList.stream()
             .map(MeetingMember::getUser)

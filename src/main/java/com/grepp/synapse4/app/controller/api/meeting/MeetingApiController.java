@@ -5,6 +5,10 @@ import com.grepp.synapse4.app.controller.web.meeting.payload.meeting.MeetingInvi
 import com.grepp.synapse4.app.model.meeting.MeetingService;
 import com.grepp.synapse4.app.model.meeting.code.State;
 import com.grepp.synapse4.app.model.meeting.dto.MeetingMemberDto;
+import com.grepp.synapse4.app.model.meeting.entity.Meeting;
+import com.grepp.synapse4.app.model.notification.NotificationService;
+import com.grepp.synapse4.app.model.notification.code.NotificationType;
+import com.grepp.synapse4.app.model.notification.dto.NotificationDto;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
 import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
 import com.grepp.synapse4.infra.response.ApiResponse;
@@ -28,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MeetingApiController {
 
     private final MeetingService meetingService;
+    private final NotificationService notificationService;
     private final CustomUserDetailsService customUserDetailsService;
 
     // 모임 초대
@@ -52,8 +57,18 @@ public class MeetingApiController {
                 .body(ApiResponse.error(ResponseCode.USER_ALREADY_INVITED));
         }
 
-        MeetingMemberDto dto = new MeetingMemberDto(meetingId, userId);
-        meetingService.inviteUser(dto);
+        MeetingMemberDto memberDto = new MeetingMemberDto(meetingId, userId);
+        Meeting meeting = meetingService.inviteUser(memberDto);
+
+        NotificationDto notiDto = NotificationDto.builder()
+                .userId(userId)
+                .meeting(meeting)
+                .type(NotificationType.MEETING)
+                .redirectUrl("meetings/detail/"+meetingId)
+                .build();
+
+        notificationService.registNotification(notiDto);
+        notificationService.sendNotification(userId, notiDto, NotificationType.MEETING);
 
         return ResponseEntity.ok().build();
     }
