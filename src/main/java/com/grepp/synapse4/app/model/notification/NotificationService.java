@@ -1,8 +1,7 @@
 package com.grepp.synapse4.app.model.notification;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grepp.synapse4.app.model.meeting.entity.MeetingMember;
-import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
+import com.grepp.synapse4.app.model.meeting.entity.vote.VoteMember;
 import com.grepp.synapse4.app.model.notification.code.NotificationType;
 import com.grepp.synapse4.app.model.notification.code.NotificationEventInfo;
 import com.grepp.synapse4.app.model.notification.dto.NotificationDto;
@@ -73,8 +72,8 @@ public class NotificationService {
                     };
 
                     emitter.send(SseEmitter.event()
-                            .name(eventInfo.name()) // 결정된 이벤트 이름 사용
-                            .data(objectMapper.writeValueAsString(eventInfo.data())) // 결정된 데이터 사용
+                            .name(eventInfo.name()) // 결정된 이벤트 이름 설정
+                            .data(eventInfo.data()) // 데이터 실시간 전송
                     );
 
                 } catch (IOException e) {
@@ -105,18 +104,17 @@ public class NotificationService {
 
     // 모임에 포함된 모든 멤버의 알림 생성
     @Transactional
-    public void memberNotification(Vote vote, List<MeetingMember> memberList) {
-        for(MeetingMember member : memberList){
+    public void memberNotification(List<VoteMember> memberList) {
+        for(VoteMember member : memberList){
             NotificationDto notificationDto = NotificationDto.builder()
                     .userId(member.getUser().getId())
-                    .vote(vote)
-                    .meeting(member.getMeeting())
+                    .vote(member.getVote())
                     .type(NotificationType.VOTE)
-                    .redirectUrl("meetings/vote/"+vote.getId())
+                    .redirectUrl("meetings/vote/"+member.getVote().getId())
                     .build();
 
-            registNotification(notificationDto);
-            sendNotification(member.getUser().getId(), notificationDto, NotificationType.VOTE);
+            Notification notification = registNotification(notificationDto);
+            sendNotification(member.getUser().getId(), notification, NotificationType.VOTE);
         }
     }
 

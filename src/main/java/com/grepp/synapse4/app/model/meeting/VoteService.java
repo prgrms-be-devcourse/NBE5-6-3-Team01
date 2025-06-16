@@ -13,6 +13,7 @@ import com.grepp.synapse4.app.model.meeting.repository.vote.VoteRepository;
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import com.grepp.synapse4.app.model.restaurant.repository.RestaurantRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,8 +55,9 @@ public class VoteService {
 
   // 투표 멤버 추가
   @Transactional
-  public List<MeetingMember> registVoteMember(Vote vote, Long meetingId){
+  public List<VoteMember> registVoteMember(Vote vote, Long meetingId) {
     List<MeetingMember> memberList = meetingMemberRepository.findAllByMeetingIdAndState(meetingId, State.ACCEPT);
+    List<VoteMember> voteMemberList = new ArrayList<>();
 
     for(MeetingMember member:memberList){
       VoteMember voteMember = new VoteMember();
@@ -63,9 +65,10 @@ public class VoteService {
       voteMember.setVote(vote);
 
       voteMemberRepository.save(voteMember);
+      voteMemberList.add(voteMember);
     }
 
-    return memberList;
+    return voteMemberList;
   }
 
   // 해당 모임의 투표 리스트 불러오기

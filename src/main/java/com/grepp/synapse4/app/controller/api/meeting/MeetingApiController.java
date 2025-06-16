@@ -74,19 +74,4 @@ public class MeetingApiController {
         return ResponseEntity.ok().build();
     }
 
-    // 모임 수락 or 거절
-    @PatchMapping("/invite/change/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> handleInvite(
-        @AuthenticationPrincipal CustomUserDetails userDetails,
-        @RequestBody MeetingAlarmRequest alarm
-    ){
-        Long meetingId = alarm.getMeetingId();
-        Long userId = userDetails.getUser().getId();
-        State state = alarm.getState();
-
-        meetingService.updateInvitedState(meetingId, userId, state);
-
-        return ResponseEntity.ok().build();
-    }
 }

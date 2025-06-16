@@ -73,9 +73,9 @@ public class VoteController {
     VoteDto dto = form.toDto();
     Vote vote = voteService.registVote(dto);
 
-    List<MeetingMember> memberList = voteService.registVoteMember(vote, dto.getMeetingId());
+    List<VoteMember> memberList = voteService.registVoteMember(vote, dto.getMeetingId());
 
-    notificationService.memberNotification(vote, memberList);
+    notificationService.memberNotification(memberList);
 
     return "redirect:/meetings/vote/"+vote.getId();
   }
