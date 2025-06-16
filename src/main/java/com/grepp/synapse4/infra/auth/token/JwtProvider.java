@@ -1,10 +1,8 @@
 package com.grepp.synapse4.infra.auth.token;
 
-import com.grepp.synapse4.app.model.auth.domain.Principal;
 import com.grepp.synapse4.app.model.auth.token.RefreshTokenRepository;
 import com.grepp.synapse4.app.model.auth.token.dto.AccessTokenDto;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
-import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
 import com.grepp.synapse4.infra.auth.token.code.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -17,11 +15,9 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import javax.crypto.SecretKey;
 import lombok.Getter;
@@ -31,7 +27,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
