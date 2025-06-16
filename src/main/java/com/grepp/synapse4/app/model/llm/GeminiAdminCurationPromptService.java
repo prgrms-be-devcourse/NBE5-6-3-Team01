@@ -34,7 +34,7 @@ public class GeminiAdminCurationPromptService {
     private final CurationResultRepository curationResultRepository;
 
     @Transactional
-    public GeminiResponseDto generateRecommendations(Long id, String curationTitle) {
+    public void generateRecommendations(Long id, String curationTitle) {
         // 1. text로 문자열 prompt 생성
         String prompt = buildAdminCurationPrompt(curationTitle);
 
@@ -46,8 +46,6 @@ public class GeminiAdminCurationPromptService {
 
 //         4. 응답 저장!
         saveResults(id, responseDto);
-
-        return responseDto;
     }
 
     // 4. 도착한 응답 result DB 에 저장
@@ -104,7 +102,7 @@ public class GeminiAdminCurationPromptService {
         // 추후 태깅된 식당 모두 추가 시 findAll 로직을 따로 아래 메서드로 빼서 비즈니스 로직을 제작해야!
         for (RestaurantTagsDocument doc : restaurantTagsDocumentRepository.findAll()) {
             tagBuilder.append("식당 ID ").append(doc.getRestaurantId()).append(": ");
-            tagBuilder.append(String.join(", ", doc.getTags())).append("\n");
+            tagBuilder.append(String.join(", ", doc.getTag())).append("\n");
         }
 
         return """
