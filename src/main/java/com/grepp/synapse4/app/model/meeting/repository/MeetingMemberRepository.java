@@ -13,16 +13,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MeetingMemberRepository extends JpaRepository<MeetingMember, Long> {
-  List<MeetingMember> findAllByUserIdAndStateAndDeletedAtIsNull(Long userId, State state);
-  List<MeetingMember> findAllByMeetingIdAndStateAndDeletedAtIsNull(Long meeting_id, State state);
+  List<MeetingMember> findAllByUserIdAndState(Long userId, State state);
+  List<MeetingMember> findAllByMeetingIdAndState(Long meeting_id, State state);
 
   Optional<MeetingMember> findByMeetingIdAndUserId(Long meetingId, Long userId);
 
   Boolean existsAllByMeetingIdAndUserId(Long meetingId, Long userId);
 
   Integer countByMeetingIdAndState(Long meetingId, State state);
-
-  List<MeetingMember> findAllByMeetingIdAndState(Long meetingId, State state);
 
   Integer countByMeetingId(Long meetingId);
 
