@@ -80,7 +80,7 @@ public class AdminController {
     }
 
     @GetMapping("/signin")
-    public String signin(Model model) {
+    public String signin() {
         return "admin/signin";
     }
 
