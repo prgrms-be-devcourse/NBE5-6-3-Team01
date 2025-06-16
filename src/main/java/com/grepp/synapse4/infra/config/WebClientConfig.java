@@ -24,5 +24,11 @@ public class WebClientConfig {
                 .baseUrl("https://generativelanguage.googleapis.com/v1")
                 .build();
     }
+    @Bean
+    public WebClient mailWebClient() {
+        return WebClient.builder()
+                .baseUrl("http://localhost:8083")
+                .build();
+    }
 
 }
