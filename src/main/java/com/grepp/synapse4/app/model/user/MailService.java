@@ -20,20 +20,6 @@ public class MailService {
     @Qualifier("mailWebClient")
     private final WebClient mailWebClient;
 
-    public void sendTempPasswordEmail(String toEmail, String tempPassword) {
-        String subject = "[밥로드] 임시 비밀번호 안내";
-        String content = "요청하신 임시 비밀번호는 아래와 같습니다.\n\n"
-            + "임시 비밀번호: " + tempPassword + "\n\n"
-            + "로그인 후 반드시 비밀번호를 변경해주세요.";
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject(subject);
-        message.setText(content);
-
-        mailSender.send(message);
-    }
-
     // 메일서버로 요청
     public void sendToServerTempPasswordEmail(String toEmail, String tempPassword) {
         MailRequest request = new MailRequest(toEmail, tempPassword);
