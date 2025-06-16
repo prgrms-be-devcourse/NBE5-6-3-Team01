@@ -4,7 +4,7 @@ import com.grepp.synapse4.app.controller.web.meeting.payload.meeting.MeetingAlar
 import com.grepp.synapse4.app.controller.web.meeting.payload.meeting.MeetingInviteRequest;
 import com.grepp.synapse4.app.model.meeting.MeetingService;
 import com.grepp.synapse4.app.model.meeting.code.State;
-import com.grepp.synapse4.app.model.meeting.dto.MeetingMemberDto;
+import com.grepp.synapse4.app.model.meeting.dto.MeetingMemberDto
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.notification.NotificationService;
 import com.grepp.synapse4.app.model.notification.code.NotificationType;

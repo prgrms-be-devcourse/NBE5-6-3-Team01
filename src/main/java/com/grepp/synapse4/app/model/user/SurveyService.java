@@ -25,10 +25,6 @@ public class SurveyService {
     private final SurveyRepository surveyRepository;
     private final UserRepository userRepository;
 
-    public List<Survey> findByUserId(Long userId) {
-        return surveyRepository.findByUserId(userId);
-    }
-
     // 설문 최초 제출
     public void submitSurvey(SurveyRequest request, User user) {
         Survey survey = mapToSurveyEntity(request);
