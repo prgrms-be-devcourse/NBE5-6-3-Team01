@@ -1,6 +1,7 @@
 package com.grepp.synapse4.app.model.meeting;
 
 import com.grepp.synapse4.app.model.meeting.code.State;
+import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.app.model.vote.dto.VoteDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.meeting.entity.MeetingMember;
@@ -138,5 +139,9 @@ public class VoteService {
   @Transactional(readOnly = true)
   public List<String> findJoinedNicknamesByVoteId(Long id, Boolean isJoined) {
     return voteMemberRepository.findNicknamesByVoteIdAndIsJoined(id, isJoined);
+  }
+
+  public void deleteByUser(User user) {
+    voteMemberRepository.deleteByUser(user);
   }
 }
