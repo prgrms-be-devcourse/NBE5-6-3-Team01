@@ -84,12 +84,19 @@ public class MeetingController {
     model.addAttribute("meeting", meeting);
     Integer count = meetingService.countMemberByMeeting(id);
     model.addAttribute("count", count);
-    List<Vote> voteList = voteService.findVoteListByMeetingId(id);
-    model.addAttribute("voteList", voteList);
 
-    if(!voteList.isEmpty()){ // 모임의 투표에 대한 정보
-      Map<Long, Boolean> isVotedMap = voteService.isVotedByUser(voteList, userId);
-      model.addAttribute("isVotedMap", isVotedMap);
+    List<Vote> upcomingList = voteService.findUpcomingVotesByMeetingId(id);
+    model.addAttribute("upcomingList", upcomingList);
+    List<Vote> pastList = voteService.findPastVotesByMeetingId(id);
+    model.addAttribute("pastList", pastList);
+
+    if(!upcomingList.isEmpty()){ // 모임의 투표에 대한 정보
+      Map<Long, Boolean> isVotedMap = voteService.isVotedByUser(upcomingList, userId);
+      model.addAttribute("upcomingMap", isVotedMap);
+    }
+    if(!pastList.isEmpty()){ // 모임의 투표에 대한 정보
+      Map<Long, Boolean> isVotedMap = voteService.isVotedByUser(pastList, userId);
+      model.addAttribute("pastMap", isVotedMap);
     }
 
     return "meetings/meeting-detail";

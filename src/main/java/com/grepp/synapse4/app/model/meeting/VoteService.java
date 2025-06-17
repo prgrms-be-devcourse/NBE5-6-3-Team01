@@ -71,10 +71,16 @@ public class VoteService {
     return voteMemberList;
   }
 
-  // 해당 모임의 투표 리스트 불러오기
+  // 해당 모임의 진행중인 투표 리스트 불러오기
   @Transactional(readOnly = true)
-  public List<Vote> findVoteListByMeetingId(Long meetingId) {
-    return voteRepository.findAllByMeetingIdOrderByMeetingDate(meetingId);
+  public List<Vote> findUpcomingVotesByMeetingId(Long meetingId) {
+    return voteRepository.findUpcomingVotesByMeetingId(meetingId, LocalDateTime.now());
+  }
+
+  // 해당 모임의 종료된 투표 리스트 불러오기
+  @Transactional(readOnly = true)
+  public List<Vote> findPastVotesByMeetingId(Long meetingId) {
+    return voteRepository.findPastVotesByMeetingId(meetingId, LocalDateTime.now());
   }
 
   // 유저의 투표 알림 리스트 불러오기
