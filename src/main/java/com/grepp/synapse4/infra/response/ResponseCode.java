@@ -11,8 +11,9 @@ public enum ResponseCode {
     USER_ALREADY_INVITED("40901", HttpStatus.CONFLICT, "이미 초대된 유저입니다."),
     BAD_CREDENTIAL("4011", HttpStatus.UNAUTHORIZED, "아이디나 비밀번호가 틀렸습니다."),
     INVALID_TOKEN("4002", HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
-    SECURITY_INCIDENT("6000", HttpStatus.UNAUTHORIZED, "계정에 비정상적인 접근이 감지되었습니다.");
-    
+    SECURITY_INCIDENT("6000", HttpStatus.UNAUTHORIZED, "계정에 비정상적인 접근이 감지되었습니다."),
+    VOTE_ENDED("40501", HttpStatus.CONFLICT, "마감된 투표입니다.");
+
     private final String code;
     private final HttpStatus status;
     private final String message;

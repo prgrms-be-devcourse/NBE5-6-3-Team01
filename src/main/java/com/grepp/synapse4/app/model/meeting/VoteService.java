@@ -114,14 +114,21 @@ public class VoteService {
 
   // 투표하기
   @Transactional
-  public void vote(Long voteId, Long userId, Boolean isJoined) {
+  public boolean vote(Long voteId, Long userId, Boolean isJoined) {
     VoteMember voteMember = voteMemberRepository.findByVoteIdAndUserId(voteId, userId);
+
+    // 마감된 투표는 false return
+    LocalDateTime endedAt = voteMember.getVote().getEndedAt();
+    if (endedAt.isBefore(LocalDateTime.now())) {
+      return false;
+    }
 
     voteMember.setIsJoined(isJoined);
     voteMember.setIsVoted(true);
     voteMemberRepository.save(voteMember);
-  }
 
+    return true;
+  }
 
   // 투표 별 유저의 투표 상태 불러오기
   @Transactional(readOnly = true)
