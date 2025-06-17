@@ -74,7 +74,11 @@ public class VoteController {
 
     List<VoteMember> memberList = voteService.registVoteMember(vote, dto.getMeetingId());
 
-    notificationService.memberNotification(memberList);
+    // 마감일자 전 투표일지 알림 생성 X
+    LocalDateTime endedAt = vote.getEndedAt();
+    if(endedAt.isAfter(LocalDateTime.now())){
+      notificationService.memberNotification(memberList);
+    }
 
     return "redirect:/meetings/vote/"+vote.getId();
   }
