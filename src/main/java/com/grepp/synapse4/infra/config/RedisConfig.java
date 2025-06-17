@@ -58,7 +58,7 @@ public class RedisConfig {
         mapper.activateDefaultTyping(
             BasicPolymorphicTypeValidator.builder()
                 .allowIfBaseType("org.springframework.security.") // 기존 설정 (유지)
-                .allowIfBaseType("com.grepp.spring.")    // 당신의 도메인 객체 패키지 (유지)
+                .allowIfBaseType("com.grepp.synapse4.")    // 당신의 도메인 객체 패키지 (유지)
                 .build(),
             ObjectMapper.DefaultTyping.NON_FINAL,
             JsonTypeInfo.As.PROPERTY
