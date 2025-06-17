@@ -6,7 +6,6 @@ import com.grepp.synapse4.app.model.llm.dto.UserCurationDto;
 import com.grepp.synapse4.app.model.llm.dto.UserCurationSurveyDto;
 import com.grepp.synapse4.app.model.llm.entity.Curation;
 import com.grepp.synapse4.app.model.llm.repository.CurationRepository;
-import com.grepp.synapse4.app.model.llm.repository.CurationResultRepository;
 import com.grepp.synapse4.app.model.user.entity.Survey;
 import com.grepp.synapse4.app.model.user.repository.SurveyRepository;
 import lombok.Getter;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +24,10 @@ import java.util.Optional;
 public class CurationService {
 
     private final CurationRepository curationRepository;
-    private final GeminiAdminCurationPromptService geminiAdminCurationPromptService;
     private final SurveyRepository surveyRepository;
 
     @Transactional
-    public void setCuration(AdminCurationDto dto) {
+    public Curation setCuration(AdminCurationDto dto) {
 
         // 1. 큐레이션 엔티티 저장
         Curation curation = new Curation();
@@ -41,12 +38,9 @@ public class CurationService {
         curation.setFavoriteCategory(String.valueOf(dto.getFavoriteCategory()));
         curation.setPreferredMood(String.valueOf(dto.getPreferredMood()));
 
-        Curation savedCuration = curationRepository.save(curation);
-        Long id = savedCuration.getId();
-        String curationTitle = savedCuration.getTitle();
+        curationRepository.save(curation);
 
-        // 2. Gemini 호출
-        geminiAdminCurationPromptService.generateRecommendations(id, curationTitle);
+        return curation;
 
     }
 
