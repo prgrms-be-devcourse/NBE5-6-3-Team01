@@ -21,10 +21,6 @@
               <p class="text-sm text-gray-600" th:text="${user.email}">test@test.com</p>
             </div>
           </div>
-
-          <!--          <button id="logout-btn" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">-->
-          <!--            로그아웃-->
-          <!--          </button>-->
         </div>
 
         <div class="space-y-3">
@@ -74,27 +70,6 @@
         });
       }
     }
-
-    // document.getElementById('logout-btn')?.addEventListener('click', async (e) => {
-    //   e.preventDefault();
-    //
-    //   try {
-    //     const res = await fetch('/api/auth/logout', {
-    //       method: 'POST',
-    //       credentials: 'include'
-    //     });
-    //
-    //     if (res.ok) {
-    //       alert('로그아웃 완료');
-    //       location.href = '/';
-    //     } else {
-    //       alert('로그아웃 실패');
-    //     }
-    //   } catch (err) {
-    //     alert('서버 오류 발생');
-    //     console.error(err);
-    //   }
-    // });
   </script>
 </main>
 </body>
