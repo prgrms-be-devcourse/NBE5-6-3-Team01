@@ -153,7 +153,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(tempPassword));
         userRepository.save(user);
 
-        mailService.sendTempPasswordEmail(user.getEmail(), tempPassword);
+        mailService.sendToServerTempPasswordEmail(user.getEmail(), tempPassword);
     }
 
     private String generateTempPassword() {
