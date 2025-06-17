@@ -2,6 +2,8 @@ package com.grepp.synapse4.infra.config;
 
 import static org.springframework.http.HttpMethod.POST;
 
+import com.grepp.synapse4.infra.auth.oauth2.OAuth2FailureHandler;
+import com.grepp.synapse4.infra.auth.oauth2.OAuth2SuccessHandler;
 import com.grepp.synapse4.infra.auth.token.JwtAuthenticationEntryPoint;
 import com.grepp.synapse4.infra.auth.token.filter.AuthExceptionFilter;
 import com.grepp.synapse4.infra.auth.token.filter.JwtAuthenticationFilter;
@@ -35,6 +37,9 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint entryPoint;
     private final LogoutFilter logoutFilter;
 
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -48,10 +53,11 @@ public class SecurityConfig {
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-//            // oauth 2.0 login
-//            .oauth2Login(oauth -> oauth.successHandler(oAuth2SuccessHandler)
-//                .failureHandler(oAuth2FailureHandler)
-//            )
+            // oauth 2.0 login
+            .oauth2Login(oauth -> oauth
+                .successHandler(oAuth2SuccessHandler)
+                .failureHandler(oAuth2FailureHandler)
+            )
 
             .authorizeHttpRequests(auth -> auth
                 // 관리자(admin)
