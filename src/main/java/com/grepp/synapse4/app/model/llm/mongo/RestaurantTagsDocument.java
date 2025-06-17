@@ -17,5 +17,6 @@ public class RestaurantTagsDocument {
     @Id
     private String id;      // mongo id
     private Long restaurantId;
-    private List<String> tags;
+    private List<String> tag;
+    private String saurceText;
 }

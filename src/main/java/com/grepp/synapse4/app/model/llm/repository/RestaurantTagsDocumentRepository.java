@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface RestaurantTagsDocumentRepository extends MongoRepository<RestaurantTagsDocument, String> {
+public interface RestaurantTagsDocumentRepository extends MongoRepository<RestaurantTagsDocument, String>, CustomRestaurantTagsRepository{
 
-    List<RestaurantTagsDocument> findByRestaurantId(Long restaurantId);
+    List<RestaurantTagsDocument> findByTagIn(List<String> tags);
 }

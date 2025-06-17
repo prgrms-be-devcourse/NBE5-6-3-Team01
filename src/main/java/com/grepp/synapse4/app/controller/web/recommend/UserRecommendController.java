@@ -1,8 +1,9 @@
 package com.grepp.synapse4.app.controller.web.recommend;
 
-import com.grepp.synapse4.app.model.llm.GeminiUserRecommendPromptService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.grepp.synapse4.app.model.llm.LlmQuestionService;
 import com.grepp.synapse4.app.model.llm.LlmResultService;
+import com.grepp.synapse4.app.model.llm.RecommendationService;
 import com.grepp.synapse4.app.model.llm.dto.userrecommenddto.RecommendedRestaurantDto;
 import com.grepp.synapse4.app.model.llm.entity.LLMQuestion;
 import com.grepp.synapse4.app.model.user.dto.CustomUserDetails;
@@ -22,7 +23,7 @@ public class UserRecommendController {
 
     private final LlmQuestionService llmQuestionService;
     private final LlmResultService llmResultService;
-    private final GeminiUserRecommendPromptService geminiUserRecommendPromptService;
+    private final RecommendationService recommendationService;
 
 
     @GetMapping("/recommend")
@@ -32,7 +33,7 @@ public class UserRecommendController {
 
     @PostMapping("/recommend/init")
     public String refRecommendStarter(@RequestParam String questionText,
-                                      @AuthenticationPrincipal CustomUserDetails user){
+                                      @AuthenticationPrincipal CustomUserDetails user) throws JsonProcessingException {
 
         // 1. userId 갖고 오기
         Long userId = user.getUser().getId();
@@ -41,7 +42,7 @@ public class UserRecommendController {
         LLMQuestion question = llmQuestionService.saveQuestionText(userId, questionText);
 
         // 3. Gemini 호출 및 결과 파싱
-        geminiUserRecommendPromptService.getRecommendations(question.getId(), question.getText());
+        recommendationService.recommendation(question.getId(), question.getText(), userId);
 
         return "redirect:/recommend/result?questionId=" + question.getId();
     }
