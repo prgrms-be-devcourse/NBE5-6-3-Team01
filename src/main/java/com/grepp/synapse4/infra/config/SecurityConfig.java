@@ -48,10 +48,10 @@ public class SecurityConfig {
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-            // oauth 2.0 login
-            .oauth2Login(oauth -> oauth.successHandler(oAuth2SuccessHandler)
-                .failureHandler(oAuth2FailureHandler)
-            )
+//            // oauth 2.0 login
+//            .oauth2Login(oauth -> oauth.successHandler(oAuth2SuccessHandler)
+//                .failureHandler(oAuth2FailureHandler)
+//            )
 
             .authorizeHttpRequests(auth -> auth
                 // 관리자(admin)
