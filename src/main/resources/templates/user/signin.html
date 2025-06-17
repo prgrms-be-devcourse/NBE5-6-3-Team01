@@ -9,8 +9,9 @@
 <body>
 <main layout:fragment="content">
   <div class="flex justify-center items-center min-h-screen bg-white">
-    <div class="signin-container bg-gray-100 p-12 rounded-lg shadow-md w-full max-w-3xl">
-      <div class="text-2xl font-bold text-center mb-8">로그인</div>
+    <div class="bg-gray-100 p-10 rounded-xl shadow-lg w-full max-w-md">
+      <div class="text-2xl font-bold text-center mb-6">로그인</div>
+
       <form class="space-y-4" id="signin-form">
 
         <div
@@ -35,39 +36,37 @@
                  required type="password"/>
         </div>
 
-        <div class="flex justify-center" style="margin-top: 35px;">
-          <button class="w-1/2 text-white py-3 rounded" style="background-color: #27a69a;"
-                  type="submit">
+        <div>
+          <button type="submit"
+                  class="w-full text-white font-semibold py-3 rounded-md shadow hover:brightness-110 transition"
+                  style="background-color: #27a69a;">
             로그인
           </button>
         </div>
 
-        <div class="text-center mt-4">
-          <a class="text-sm text-black underline hover:text-gray-800" style="text-decoration: none;"
-             th:href="@{/user/signup}">회원가입</a>
+        <div class="flex justify-end items-center text-sm text-gray-400 mt-1">
+          <div class="space-x-2">
+            <a th:href="@{/user/find-id}" class="text-gray-400 hover:text-gray-600 hover:underline no-visited">아이디 찾기</a>
+            <span>|</span>
+            <a th:href="@{/user/find-password}" class="text-gray-400 hover:text-gray-600 hover:underline no-visited">비밀번호 찾기</a>
+          </div>
         </div>
 
-        <div class="text-center mt-2 space-x-4">
-          <a class="text-sm text-gray-600 underline hover:text-gray-800"
-             style="text-decoration: none;"
-             th:href="@{/user/find-id}">아이디 찾기</a>
-          <span class="text-gray-400">|</span>
-          <a class="text-sm text-gray-600 underline hover:text-gray-800"
-             style="text-decoration: none;"
-             th:href="@{/user/find-password}">비밀번호 찾기</a>
-        </div>
-
-        <!-- 구글 로그인 버튼 -->
-        <div class="mt-6">
-          <a class="flex items-center justify-center gap-3 w-1/2 py-3 px-4 border border-gray-300 rounded-lg shadow-sm
-            hover:bg-gray-100 transition bg-white"
-             href="/oauth2/authorization/google">
-            <img alt="Google Logo" class="w-5 h-5"
-                 src="https://developers.google.com/identity/images/g-logo.png">
-            <span class="text-sm font-medium text-gray-700">Google 계정으로 시작하기</span>
+        <!-- 구글 로그인 -->
+        <div class="mt-6 flex flex-col gap-3">
+          <!-- Google -->
+          <a href="/oauth2/authorization/google"
+             class="w-full flex items-center justify-center gap-2 border border-gray-300 bg-white text-gray-700 py-3 rounded-md shadow hover:bg-gray-100 transition">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" alt="Google"/>
+            <span class="font-medium">Google 계정으로 시작하기</span>
           </a>
         </div>
 
+        <div class="text-center mt-6 text-sm">
+          <a th:href="@{/user/signup}" class="text-black underline hover:text-gray-900">
+            회원가입
+          </a>
+        </div>
       </form>
     </div>
   </div>
