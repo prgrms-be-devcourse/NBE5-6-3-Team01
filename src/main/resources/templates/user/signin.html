@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>로그인</title>
 </head>
@@ -11,46 +11,91 @@
   <div class="flex justify-center items-center min-h-screen bg-white">
     <div class="signin-container bg-gray-100 p-12 rounded-lg shadow-md w-full max-w-3xl">
       <div class="text-2xl font-bold text-center mb-8">로그인</div>
-      <form th:action="@{/signin}" method="post" class="space-y-4">
-        <div th:if="${param.error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center">
+      <form class="space-y-4" id="signin-form">
+        <div class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-center"
+             id="error-msg">
           아이디 또는 비밀번호가 일치하지 않습니다.
         </div>
 
         <div class="form-group">
-          <label for="userAccount" class="font-semibold">아이디</label>
-          <input type="text" id="userAccount" name="userAccount"
-                 class="w-full border border-gray-300 rounded px-3 py-2"
-                 placeholder="아이디를 입력해주세요"/>
+          <label class="font-semibold" for="userAccount">아이디</label>
+          <input class="w-full border border-gray-300 rounded px-3 py-2" id="userAccount" name="userAccount"
+                 placeholder="아이디를 입력해주세요"
+                 required type="text"/>
         </div>
 
         <div class="form-group">
-          <label for="password" class="font-semibold">비밀번호</label>
-          <input type="password" id="password" name="password"
-                 class="w-full border border-gray-300 rounded px-3 py-2"
-                 placeholder="비밀번호를 입력해주세요"/>
+          <label class="font-semibold" for="password">비밀번호</label>
+          <input class="w-full border border-gray-300 rounded px-3 py-2" id="password" name="password"
+                 placeholder="비밀번호를 입력해주세요"
+                 required type="password"/>
         </div>
 
         <div class="flex justify-center" style="margin-top: 35px;">
-          <button type="submit" class="w-1/2 text-white py-3 rounded" style="background-color: #27a69a;">
+          <button class="w-1/2 text-white py-3 rounded" style="background-color: #27a69a;"
+                  type="submit">
             로그인
           </button>
         </div>
 
         <div class="text-center mt-4">
-          <a th:href="@{/user/signup}" class="text-sm text-black underline hover:text-gray-800" style="text-decoration: none;">회원가입</a>
+          <a class="text-sm text-black underline hover:text-gray-800" style="text-decoration: none;"
+             th:href="@{/user/signup}">회원가입</a>
         </div>
 
         <div class="text-center mt-2 space-x-4">
-          <a th:href="@{/user/find-id}" class="text-sm text-gray-600 underline hover:text-gray-800"
-             style="text-decoration: none;">아이디 찾기</a>
+          <a class="text-sm text-gray-600 underline hover:text-gray-800" style="text-decoration: none;"
+             th:href="@{/user/find-id}">아이디 찾기</a>
           <span class="text-gray-400">|</span>
-          <a th:href="@{/user/find-password}" class="text-sm text-gray-600 underline hover:text-gray-800"
-             style="text-decoration: none;">비밀번호 찾기</a>
+          <a class="text-sm text-gray-600 underline hover:text-gray-800"
+             style="text-decoration: none;"
+             th:href="@{/user/find-password}">비밀번호 찾기</a>
         </div>
-
       </form>
     </div>
   </div>
+  <script>
+    document.getElementById("signin-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("userAccount").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const res = await fetch("/api/auth/signin", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          credentials: "include", // 쿠키 저장을 위해 필요
+          body: JSON.stringify({
+            username,
+            password
+          })
+        });
+
+        if (res.ok) {
+
+          const result = await res.json();
+          const isSurvey = result?.data?.isSurvey;
+
+          alert("로그인 성공");
+
+          if (String(isSurvey) === "false") {
+            location.href = "/surveys";
+          } else {
+            location.href = "/";
+          }
+
+        } else {
+          document.getElementById("error-msg").classList.remove("hidden");
+        }
+      } catch (err) {
+        console.error("로그인 중 오류 발생:", err);
+        alert("서버 오류가 발생했습니다.");
+      }
+    });
+  </script>
 </main>
 </body>
 </html>

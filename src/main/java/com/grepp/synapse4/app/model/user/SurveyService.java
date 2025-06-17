@@ -11,11 +11,11 @@ import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.app.model.user.repository.SurveyRepository;
 import com.grepp.synapse4.app.model.user.repository.UserRepository;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @Service
 @Transactional
@@ -67,6 +67,11 @@ public class SurveyService {
         Survey survey = new Survey();
         updateSurveyFromRequest(survey, request);
         return survey;
+    }
+
+    public Optional<SurveyRequest> findSurveyRequest(Long userId) {
+        return surveyRepository.findByUserId(userId)
+            .map(this::mapToSurveyRequest);
     }
 
     private void updateSurveyFromRequest(Survey survey, SurveyRequest request) {
