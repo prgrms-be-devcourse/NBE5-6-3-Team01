@@ -1,18 +1,19 @@
 package com.grepp.synapse4.app.model.meeting;
 
 import com.grepp.synapse4.app.model.meeting.code.State;
-import com.grepp.synapse4.app.model.meeting.dto.VoteDto;
+import com.grepp.synapse4.app.model.vote.dto.VoteDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.meeting.entity.MeetingMember;
-import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
-import com.grepp.synapse4.app.model.meeting.entity.vote.VoteMember;
+import com.grepp.synapse4.app.model.vote.entity.Vote;
+import com.grepp.synapse4.app.model.vote.entity.VoteMember;
 import com.grepp.synapse4.app.model.meeting.repository.MeetingMemberRepository;
 import com.grepp.synapse4.app.model.meeting.repository.MeetingRepository;
-import com.grepp.synapse4.app.model.meeting.repository.vote.VoteMemberRepository;
-import com.grepp.synapse4.app.model.meeting.repository.vote.VoteRepository;
+import com.grepp.synapse4.app.model.vote.repository.VoteMemberRepository;
+import com.grepp.synapse4.app.model.vote.repository.VoteRepository;
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
 import com.grepp.synapse4.app.model.restaurant.repository.RestaurantRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,8 +55,9 @@ public class VoteService {
 
   // 투표 멤버 추가
   @Transactional
-  public List<MeetingMember> registVoteMember(Vote vote, Long meetingId){
+  public List<VoteMember> registVoteMember(Vote vote, Long meetingId) {
     List<MeetingMember> memberList = meetingMemberRepository.findAllByMeetingIdAndState(meetingId, State.ACCEPT);
+    List<VoteMember> voteMemberList = new ArrayList<>();
 
     for(MeetingMember member:memberList){
       VoteMember voteMember = new VoteMember();
@@ -63,9 +65,10 @@ public class VoteService {
       voteMember.setVote(vote);
 
       voteMemberRepository.save(voteMember);
+      voteMemberList.add(voteMember);
     }
 
-    return memberList;
+    return voteMemberList;
   }
 
   // 해당 모임의 투표 리스트 불러오기
@@ -133,7 +136,7 @@ public class VoteService {
 
   // 해당 투표의 모든 멤버의 투표 O,X 결과 불러오기
   @Transactional(readOnly = true)
-  public List<VoteMember> findJoinedListByVoteId(Long id, Boolean isJoined) {
-    return voteMemberRepository.findAllByVoteIdAndIsJoined(id, isJoined);
+  public List<String> findJoinedNicknamesByVoteId(Long id, Boolean isJoined) {
+    return voteMemberRepository.findNicknamesByVoteIdAndIsJoined(id, isJoined);
   }
 }

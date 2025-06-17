@@ -1,4 +1,4 @@
-package com.grepp.synapse4.app.model.meeting.entity.vote;
+package com.grepp.synapse4.app.model.vote.entity;
 
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.restaurant.entity.Restaurant;
@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 

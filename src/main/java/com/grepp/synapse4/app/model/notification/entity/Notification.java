@@ -1,7 +1,7 @@
 package com.grepp.synapse4.app.model.notification.entity;
 
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
-import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
+import com.grepp.synapse4.app.model.vote.entity.Vote;
 import com.grepp.synapse4.app.model.notification.code.NotificationType;
 import com.grepp.synapse4.infra.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -37,7 +37,7 @@ public class Notification extends BaseEntity {
     @Column(name = "is_sended")
     private Boolean isSended = true;
 
-    @Column(name = "rediredt_URL")
+    @Column(name = "redirect_URL")
     private String redirectURL;
 
     @ManyToOne(fetch = FetchType.LAZY)

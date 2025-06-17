@@ -1,7 +1,6 @@
-package com.grepp.synapse4.app.model.meeting.dto;
+package com.grepp.synapse4.app.model.vote.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

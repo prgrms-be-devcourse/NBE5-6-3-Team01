@@ -1,15 +1,13 @@
 package com.grepp.synapse4.app.model.meeting.entity;
 
 import com.grepp.synapse4.app.model.meeting.code.Purpose;
-import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
+import com.grepp.synapse4.app.model.vote.entity.Vote;
 import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.infra.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.annotations.DynamicInsert;

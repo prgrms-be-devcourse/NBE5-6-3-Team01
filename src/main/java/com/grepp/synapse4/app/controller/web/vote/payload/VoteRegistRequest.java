@@ -1,10 +1,9 @@
-package com.grepp.synapse4.app.controller.web.meeting.payload.vote;
+package com.grepp.synapse4.app.controller.web.vote.payload;
 
-import com.grepp.synapse4.app.model.meeting.dto.VoteDto;
+import com.grepp.synapse4.app.model.vote.dto.VoteDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Data;
 
 @Data

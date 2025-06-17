@@ -1,13 +1,12 @@
-package com.grepp.synapse4.app.controller.web.meeting;
+package com.grepp.synapse4.app.controller.web.vote;
 
-import com.grepp.synapse4.app.controller.web.meeting.payload.vote.VoteRegistRequest;
+import com.grepp.synapse4.app.controller.web.vote.payload.VoteRegistRequest;
 import com.grepp.synapse4.app.model.meeting.MeetingService;
 import com.grepp.synapse4.app.model.meeting.VoteService;
-import com.grepp.synapse4.app.model.meeting.dto.VoteDto;
+import com.grepp.synapse4.app.model.vote.dto.VoteDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
-import com.grepp.synapse4.app.model.meeting.entity.MeetingMember;
-import com.grepp.synapse4.app.model.meeting.entity.vote.Vote;
-import com.grepp.synapse4.app.model.meeting.entity.vote.VoteMember;
+import com.grepp.synapse4.app.model.vote.entity.Vote;
+import com.grepp.synapse4.app.model.vote.entity.VoteMember;
 import com.grepp.synapse4.app.model.notification.NotificationService;
 import com.grepp.synapse4.app.model.user.BookmarkService;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
@@ -73,9 +72,9 @@ public class VoteController {
     VoteDto dto = form.toDto();
     Vote vote = voteService.registVote(dto);
 
-    List<MeetingMember> memberList = voteService.registVoteMember(vote, dto.getMeetingId());
+    List<VoteMember> memberList = voteService.registVoteMember(vote, dto.getMeetingId());
 
-    notificationService.memberNotification(vote, memberList);
+    notificationService.memberNotification(memberList);
 
     return "redirect:/meetings/vote/"+vote.getId();
   }
@@ -105,10 +104,11 @@ public class VoteController {
     Vote vote = voteService.findVoteByVoteId(id);
     model.addAttribute("vote", vote);
 
-    List<VoteMember> joinedList = voteService.findJoinedListByVoteId(id, true);
+    List<String> joinedList = voteService.findJoinedNicknamesByVoteId(id, true);
     model.addAttribute("joinedList", joinedList);
     model.addAttribute("joinedCount", joinedList.size());
-    List<VoteMember> notJoinedList = voteService.findJoinedListByVoteId(id, false);
+
+    List<String> notJoinedList = voteService.findJoinedNicknamesByVoteId(id, false);
     model.addAttribute("notJoinedList", notJoinedList);
     model.addAttribute("notJoinedCount", notJoinedList.size());
 
