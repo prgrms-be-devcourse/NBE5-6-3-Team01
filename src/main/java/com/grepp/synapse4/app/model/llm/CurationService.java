@@ -19,6 +19,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,17 +54,17 @@ public class CurationService {
     //     우선 가장 최신 등록한 큐레이션만 노출하도록 로직 설계
     //     4개 테이블 조인해서 lazy 이슈로 서비스단에서 트랜젝션 리드온니처리
     @Transactional(readOnly = true)
-    public UserCurationDto getLatestCurationRestaurants() {
+    public Optional<UserCurationDto> getLatestCurationRestaurants() {
 
         // 1. 최신 큐레이션 엔티티
         Curation latest = curationRepository.findTopByOrderByCreatedAtDesc();
 
         if (ObjectUtils.isEmpty(latest)) {
-            return null;
+            return Optional.empty();
         }
 
         if (latest.getResults() == null || latest.getResults().isEmpty()) {
-            return null;
+            return Optional.empty();
         }
 
 
@@ -74,18 +75,23 @@ public class CurationService {
                 .map(result -> CurationRestaurantDto.fromEntity(result.getRestaurant(), result))
                 .toList();
 
-        return new UserCurationDto(
+        return Optional.of(new UserCurationDto(
                 latest.getId(),
                 latest.getTitle(),
-                dtos);
+                dtos));
     }
 
     // 추천 메서드
     public UserCurationSurveyDto recommendCurationSurveys(Long userId) {
         Survey survey = loadUserSurvey(userId);
         List<Curation> allCurations = curationRepository.findCurationIdWithRestaurantId();
-        Curation best = findBestCurationMatch(survey, allCurations);
-        return buildSurveyDtoFromCuration(best);
+        Optional<Curation> best = findBestCurationMatch(survey, allCurations);
+        return best.map(this::buildSurveyDtoFromCuration).orElseGet(this::buildEmptySurveyDto);
+    }
+
+    // 비어있는 dto 반환
+    private UserCurationSurveyDto buildEmptySurveyDto() {
+        return new UserCurationSurveyDto(null,"큐레이션이 없습니다.", List.of());
     }
 
     // 유저 설문조회
@@ -94,8 +100,8 @@ public class CurationService {
                 .orElseThrow(() -> new UsernameNotFoundException("해당유저의 설문조사가 없습니다."));
     }
 
-    // 최조 점수 큐레이션
-    private Curation findBestCurationMatch(Survey survey, List<Curation> curations) {
+    // 최초 점수 큐레이션
+    private Optional<Curation> findBestCurationMatch(Survey survey, List<Curation> curations) {
         return curations.stream()
                 .map(c -> new MatchPair(
                         c,
@@ -114,8 +120,7 @@ public class CurationService {
                         )
                 ))
                 .max(Comparator.comparingInt(MatchPair::getScore))
-                .orElseThrow(() -> new RuntimeException("적합한 큐레이션이 없습니다."))
-                .getCuration();
+                .map(MatchPair::getCuration);
     }
 
     // dto 생성

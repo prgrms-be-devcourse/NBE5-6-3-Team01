@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -28,31 +29,34 @@ public class CurationController {
         UserCurationSurveyDto surveys;
 
         if (userDetails != null) {
-            // 로그인 유저: SurveyDto 리스트 그대로
+            // 로그인 유저: SurveyDto 1개
             Long userId = ((CustomUserDetails) userDetails).getUser().getId();
             surveys = curationService.recommendCurationSurveys(userId);
 
         } else {
-            // 비로그인 유저: 기존 UserCurationDto → SurveyDto 로 변환
-            UserCurationDto publicDto = curationService.getLatestCurationRestaurants();
+            // 비로그인 유저: Optional<UserCurationDto> → UserCurationSurveyDto
+            surveys = curationService.getLatestCurationRestaurants()
+                    .filter(dto -> dto.getRestaurants() != null && !dto.getRestaurants().isEmpty())
+                    .map(dto -> {
+                        List<RestaurantDto> restaurants = dto.getRestaurants().stream()
+                                .map(cr -> new RestaurantDto(
+                                        cr.getId(),
+                                        cr.getName(),
+                                        cr.getCategory(),
+                                        cr.getRoadAddress(),
+                                        cr.getBranch(),
+                                        cr.getReason(),
+                                        cr.getBusinessTime()
+                                ))
+                                .toList();
 
-            List<RestaurantDto> restaurants = publicDto.getRestaurants().stream()
-                    .map(cr -> new RestaurantDto(
-                            cr.getId(),
-                            cr.getName(),
-                            cr.getCategory(),
-                            cr.getRoadAddress(),
-                            cr.getBranch(),
-                            cr.getReason(),
-                            cr.getBusinessTime()
-                    ))
-                    .collect(Collectors.toList());
-
-            surveys = (new UserCurationSurveyDto(
-                    publicDto.getId(),
-                    publicDto.getTitle(),
-                    restaurants
-            ));
+                        return new UserCurationSurveyDto(
+                                dto.getId(),
+                                dto.getTitle(),
+                                restaurants
+                        );
+                    })
+                    .orElse(new UserCurationSurveyDto(null, "큐레이션이 없습니다.", List.of()));
         }
 
         model.addAttribute("curation", surveys);
