@@ -1,6 +1,7 @@
 package com.grepp.synapse4.app.model.user.dto.request;
 
 import com.grepp.synapse4.app.model.auth.code.Role;
+import com.grepp.synapse4.app.model.auth.code.Provider;
 import com.grepp.synapse4.app.model.user.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -45,6 +46,8 @@ public class UserSignUpRequest {
             .isSurvey(false)
             .activated(true)
             .role(role)
+            .provider(Provider.LOCAL)
+            .providerId(null)
             .build();
     }
 }

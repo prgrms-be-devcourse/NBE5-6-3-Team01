@@ -1,6 +1,7 @@
 package com.grepp.synapse4.app.model.user.entity;
 
 import com.grepp.synapse4.app.model.auth.code.Role;
+import com.grepp.synapse4.app.model.auth.code.Provider;
 import com.grepp.synapse4.infra.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +32,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String userAccount;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
     @Column(nullable = false)
@@ -55,10 +56,19 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Provider provider; // 계정 출처 구분(ex_local, google 등)
+
+    @Column
+    private String providerId;  // 소셜 로그인의 고유 사용자 id 값
+
+
     @Builder
-    private User(String userAccount, String password, String name, String nickname, String email,
-        Boolean isSurvey,
-        Boolean activated, LocalDateTime deletedAt, Role role) {
+    public User(String userAccount, String password, String name, String nickname, String email,
+        Boolean isSurvey, Boolean activated, LocalDateTime deletedAt, Role role, Provider provider,
+        String providerId) {
         this.userAccount = userAccount;
         this.password = password;
         this.name = name;
@@ -68,6 +78,8 @@ public class User extends BaseEntity {
         this.activated = activated;
         this.deletedAt = deletedAt;
         this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 
     public User(String userAccount, String name, String email) {
