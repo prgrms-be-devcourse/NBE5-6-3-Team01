@@ -65,15 +65,23 @@ public class OAuth2Controller {
         // JWT 발급 및 쿠키 저장
         TokenDto tokenDto = authService.processTokenSignin(user);
 
-        ResponseCookie accessTokenCookie = TokenCookieFactory.create(TokenType.ACCESS_TOKEN.name(),
-            tokenDto.getAccessToken(), tokenDto.getAtExpiresIn());
-        ResponseCookie refreshTokenCookie = TokenCookieFactory.create(TokenType.REFRESH_TOKEN.name(),
-            tokenDto.getRefreshToken(), tokenDto.getRtExpiresIn());
+        ResponseCookie accessTokenCookie = TokenCookieFactory.create(
+            TokenType.ACCESS_TOKEN.name(),
+            tokenDto.getAccessToken(),
+            tokenDto.getAtExpiresIn());
+        ResponseCookie refreshTokenCookie = TokenCookieFactory.create(
+            TokenType.REFRESH_TOKEN.name(),
+            tokenDto.getRefreshToken(),
+            tokenDto.getRtExpiresIn());
 
         response.addHeader("Set-Cookie", accessTokenCookie.toString());
         response.addHeader("Set-Cookie", refreshTokenCookie.toString());
 
-        return "redirect:/";
+        // 설문조사 여부에 따라 리다이렉트 경로 분기
+        boolean done = Boolean.TRUE.equals(user.getIsSurvey());
+        String targetUrl = done ? "/" : "/surveys";
+
+        return "redirect:" + targetUrl;
     }
 }
 
