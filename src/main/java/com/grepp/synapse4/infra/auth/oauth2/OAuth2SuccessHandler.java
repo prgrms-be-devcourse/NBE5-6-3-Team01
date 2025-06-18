@@ -50,7 +50,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             userRepository.findByProviderAndProviderId(userInfo.getProvider(), userInfo.getProviderId());
 
         if (socialUser.isPresent()) {
-            TokenDto dto = authService.processTokenSignin(socialUser.get());
+            User user = socialUser.get();
+
+            TokenDto dto = authService.processTokenSignin(user);
 
             ResponseCookie accessCookie  = TokenCookieFactory.create(
                 TokenType.ACCESS_TOKEN.name(),
@@ -64,7 +66,12 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
             response.addHeader("Set-Cookie", accessCookie.toString());
             response.addHeader("Set-Cookie", refreshCookie.toString());
-            response.sendRedirect("/");
+
+            // 설문조사 여부에 따라 리다이렉트 경로 분기
+            String targetUrl = Boolean.TRUE.equals(user.getIsSurvey())
+                ? "/"
+                : "/surveys";
+            response.sendRedirect(targetUrl);
             return;
         }
 
