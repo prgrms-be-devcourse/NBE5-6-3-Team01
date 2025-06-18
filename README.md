@@ -5,7 +5,7 @@
   <img src="https://github.com/user-attachments/assets/88eb18aa-b7e7-4f8c-9472-ca87d43560ef" width="300"/>
 </p>
 
-## 코드 컨벤션
+## 💁‍♂️ 코드 컨벤션
 스타일 가이드
 https://www.notion.so/20f15a01205481778ececdeee9546ed8
 ### 🏷️ Git 커밋 태그 설명
@@ -21,7 +21,7 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 | 🔀 `merge` | 브랜치 병합 (예: `main` ← `feature/login`) |
 | 🎨 `design` | 뷰 디자인 변경 |
 
-# 프로젝트 소개
+# ✈️ 프로젝트 소개
 직장인의 평생고민 점심 뭐먹지? 회식 어디서 하지?
 업무에 바쁜데 반복되는 점심 메뉴 선택, 회식 식당 선택, 비즈니스 미팅 식당 선택...
 바쁜 회사 생활 속 식당을 고르기 어려운 직장인에게 구체적 상황에 기반하여, 식당을 추천해주고,
@@ -73,6 +73,82 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 | **Database** | ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) |
 | **AI** | ![Gemini](https://img.shields.io/badge/Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white) |
 | **협업 도구** | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white) ![Trello](https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white) ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white) |
+
+## 🗂️ APIs
+<details>
+<summary>👉 API 바로보기</summary>
+
+| 기능 | 메서드 | URL |
+|------|--------|-----|
+| Main 화면 | GET | / |
+| 검색어 입력 화면 | GET | /search |
+| 큐레이션 추천 화면 이동 | GET | /curation |
+| LLM 추천 화면 이동(질문 입력 화면) | GET | /recommend |
+| 나의 모임 리스트 조회 화면 이동 | GET | /meetings |
+| 북마크 리스트 조회 화면 이동 | GET | /bookmarks |
+| 북마크 랭킹 리스트 조회 화면 이동 | GET | /ranking |
+| 로그인 페이지 이동 | GET | /user/signin |
+| 로그아웃 | POST | /user/logout |
+| 마이페이지 이동 | GET | /mypage |
+| 큐레이션 관리 화면 이동 | GET | /admin/curation |
+| 설문조사 화면 출력 | GET | /surveys |
+| 설문조사 등록 | POST | /surveys |
+| 검색 결과 화면 | POST | /search |
+| 검색 결과 화면 | GET | /search/result |
+| 식당 상세정보 | GET | /restaurant/{restaurantId} |
+| 식당 위치 보기 (Pin) → 식당 상세정보와 함께 조회 | GET | /restaurant/{restaurantId}/location |
+| 식당 북마킹 | POST | api/bookmarks/toggle/{restaurantId} |
+| 식당 북마킹 해제 | DELETE | api/bookmarks/toggle/{restaurantId} |
+| 유저 회원가입 페이지 이동 | GET | /user/signup |
+| 중복 유저 검사 | GET | /api/user/exists/{id} |
+| 회원가입 | POST | /user/signup |
+| 유효성 검사 | POST | /user/signin |
+| 로그아웃 | POST | /mypage/logout |
+| 회원탈퇴 | PATCH | /api/users/{id} |
+| 회원정보 수정 화면 이동 | GET | /mypage/edit-info/{id} |
+| 회원정보 수정 | POST | /mypage/edit-info/{id} |
+| 선호목록 수정 화면 이동 | GET | /mypage/edit-prefer/{id} |
+| 선호목록 수정 | POST | /mypage/edit-prefer/{id} |
+| 관리자 회원가입 페이지 이동 | GET | /admin/signup |
+| 중복 유저 검사 | GET | /api/admin/exists/{id} |
+| 회원가입 | POST | /admin/signup |
+| 사용자 정보 출력 | GET | /admin/users |
+| 사용자 선호 목록 더보기 | GET | api/admin/users/prefer/{userid} |
+| 북마크 더보기 | GET | api/admin/users/bookmark/{userid} |
+| 사용자 검색기능 | GET | api/admin/search/users |
+| 큐레이션 리스트 | GET | /admin/curation/list |
+| 큐레이션 추가 화면 이동 | GET | /admin/curation/register |
+| 큐레이션 추가 | POST | /admin/curation/register |
+| 큐레이션 비활성화 | PATCH | /admin/curation/{curationId} |
+| 큐레이션 검색기능 | GET | /api/admin/search/curation |
+| 모임 관리 화면 이동 | GET | /admin/meetings |
+| 모임 멤버 더보기 | GET | /api/admin/meetingmember/{meetingId} |
+| 모임 검색기능 | GET | /api/admin/search/meeting |
+| 모임 삭제기능 | DELETE | /api/admin/{meetingId} |
+| 모임 상세 화면 이동 (구현 X) | GET | /admin/meetings/{meetingId} |
+| 질문 입력 | POST | /recommend |
+| LLM 추천 리스트 조회 | GET | /recommendList |
+| 모임 생성 화면 이동 | GET | /meetings/regist |
+| 모임 생성 | POST | /meetings/regist |
+| 모임 초대 알림 화면 팝업 | GET | /meetings/modal/alarm-invite.html |
+| 모임 초대 알림 수락 or 거절 | POST | /meetings/modal/alarm-invite.html |
+| 투표 알림 화면 팝업 | GET | /meetings/modal/alarm-vote.html |
+| 모임 상세 화면 이동 | GET | /meetings/detail |
+| 모임 탈퇴 | POST | /meetings/detail |
+| 모임 멤버리스트 화면 이동 | GET | /meetings/modal/meeting-member-list.html |
+| 모임 초대 화면 이동 | GET | /meetings/modal/meeting-invite.html |
+| 모임 초대하기 | POST | /meetings/modal/meeting-invite.html |
+| 투표 등록화면 이동 | GET | /meetings/vote-regist |
+| 투표 등록하기 | POST | /meetings/vote-regist |
+| 모임별 멤버 화면 이동 | GET | /meetings/modal/member-list.html |
+| 투표 만들기 화면 | GET | /meetings/vote-regist |
+| 투표 만들기 | POST | /meetings/vote-regist |
+| 투표하기(화면 조회) | GET | /meetings/vote |
+| 투표하기(투표 행위) | POST | /meetings/vote |
+| 투표 결과 화면 | GET | /meetings/vote-result |
+| 멤버 북마크 리스트 조회 | GET | /users/{userId}/bookmarks |
+
+</details>
 
 ## 📌 페르소나 서비스 조사
 
