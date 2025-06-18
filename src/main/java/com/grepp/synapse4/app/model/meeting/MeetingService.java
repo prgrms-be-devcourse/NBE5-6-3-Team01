@@ -52,7 +52,8 @@ public class MeetingService {
     meeting.setUser(user);
     meetingRepository.save(meeting);
 
-    MeetingMember meetingMember = new MeetingMember();  // -> builder
+    MeetingMember meetingMember = new MeetingMember();
+    meetingMember.setRole(Role.OWNER);
     meetingMember.setState(State.ACCEPT);
     meetingMember.setMeeting(meeting);
     meetingMember.setUser(user);
