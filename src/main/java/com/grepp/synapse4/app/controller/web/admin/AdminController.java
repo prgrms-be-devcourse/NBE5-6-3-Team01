@@ -1,10 +1,13 @@
 package com.grepp.synapse4.app.controller.web.admin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.grepp.synapse4.app.model.llm.CurationResultService;
 import com.grepp.synapse4.app.model.llm.CurationService;
+import com.grepp.synapse4.app.model.llm.RecommendationService;
 import com.grepp.synapse4.app.model.llm.code.*;
 import com.grepp.synapse4.app.model.llm.dto.AdminCurationDto;
 import com.grepp.synapse4.app.model.llm.dto.AdminCurationResultDto;
+import com.grepp.synapse4.app.model.llm.entity.Curation;
 import com.grepp.synapse4.app.model.meeting.MeetingService;
 import com.grepp.synapse4.app.model.meeting.dto.AdminMeetingDto;
 import com.grepp.synapse4.app.model.user.UserService;
@@ -31,6 +34,7 @@ public class AdminController {
     private final MeetingService meetingService;
     private final CurationService curationService;
     private final CurationResultService curationResultService;
+    private final RecommendationService recommendationService;
 
     @GetMapping("/users")
     public String users(Model model) {
@@ -61,8 +65,14 @@ public class AdminController {
     }
 
     @PostMapping("/curation/register")
-    public String curationRegister(@ModelAttribute("form") AdminCurationDto adminCurationDto) {
-        curationService.setCuration(adminCurationDto);
+    public String curationRegister(@ModelAttribute("form") AdminCurationDto adminCurationDto) throws JsonProcessingException {
+        // 1. userId 갖고 오기 - curation은 text 입력과 동시에 curation 저장을 수행하므로, 사용자 아이디가 불필요
+        // 2. 큐레이션 저장
+        Curation curation = curationService.setCuration(adminCurationDto);
+
+        // 3. Gemini 호출 및 결과 파싱 - recommendation 오버로딩(큐레이션 id와 title만 필요하기 때문)
+        recommendationService.recommendation(curation.getId(), curation.getTitle());
+
         return "redirect:/admin/curation/list";
     }
 

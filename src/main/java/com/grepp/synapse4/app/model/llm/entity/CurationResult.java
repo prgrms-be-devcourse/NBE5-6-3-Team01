@@ -10,6 +10,8 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @Setter
 @ToString
+@Builder
+@AllArgsConstructor
 public class CurationResult extends BaseEntity {
 
     @Id
