@@ -3,7 +3,7 @@
 
 ![bapload_icon_resized_200kb](https://github.com/user-attachments/assets/88eb18aa-b7e7-4f8c-9472-ca87d43560ef)
 
-#코드 컨벤션
+## 코드 컨벤션
 스타일 가이드
 https://www.notion.so/20f15a01205481778ececdeee9546ed8
 ### 🏷️ Git 커밋 태그 설명
