@@ -1,7 +1,9 @@
 # NBE5-6-3-Team01
 프로그래머스 백엔드 데브코스 5기 6회차 1팀 3차 프로젝트입니다.
 
-![bapload_icon_resized_200kb](https://github.com/user-attachments/assets/88eb18aa-b7e7-4f8c-9472-ca87d43560ef)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/88eb18aa-b7e7-4f8c-9472-ca87d43560ef" width="300"/>
+</p>
 
 ## 코드 컨벤션
 스타일 가이드
