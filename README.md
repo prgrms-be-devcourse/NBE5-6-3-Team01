@@ -2,6 +2,7 @@
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/88eb18aa-b7e7-4f8c-9472-ca87d43560ef" width="300"/>
+  <img src="https://github.com/user-attachments/assets/c9d786ca-d939-415e-a608-98d299dc7f53" width="300"/>
 </p>
 
 ### 👥 팀원 소개
@@ -66,7 +67,7 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 
 | 분류 | 기술 |
 |------|------|
-| **Language** | ![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=openjdk&logoColor=white) |
+| **Language** | ![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=openjdk&logoColor=white) |  ![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white) |
 | **Backend Framework** | ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white) |
 | **ORM** | ![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-59666C?style=for-the-badge&logo=spring&logoColor=white) |
 | **Template Engine** | ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white) |
@@ -199,6 +200,10 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 ## 📌 로그인 
 
 ![스크린샷 2025-06-18 165855](https://github.com/user-attachments/assets/e3be6978-03dc-4368-9737-160ae49ae330)
+
+## 📌설문조사
+
+![스크린샷 2025-06-19 012508](https://github.com/user-attachments/assets/d3a3c468-ce62-4cd4-bb2e-4a97329ad3a9)
 
 ## 📌 마이페이지
 
