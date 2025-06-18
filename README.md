@@ -74,6 +74,10 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 | **AI** | ![Gemini](https://img.shields.io/badge/Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white) |
 | **협업 도구** | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white) ![Trello](https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white) ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white) |
 
+## 📌 시스템 구성도
+
+![스크린샷 2025-06-18 164109](https://github.com/user-attachments/assets/d21e6c98-43ff-4d1d-aaa4-e4afc6f37f7c)
+
 ## 🗂️ APIs
 <details>
 <summary>👉 API 바로보기</summary>
@@ -154,25 +158,25 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 
 ![스크린샷 2025-06-18 164002](https://github.com/user-attachments/assets/aeb1f589-bf06-4ae6-b284-9baea508e128)
 
-## 📌 시스템 구성도
-
-![스크린샷 2025-06-18 164109](https://github.com/user-attachments/assets/d21e6c98-43ff-4d1d-aaa4-e4afc6f37f7c)
-
 ## 📌 UI 플로우 차트
 
 ![스크린샷 2025-06-18 164155](https://github.com/user-attachments/assets/7e8fe395-dad5-40c2-9b98-f8d23a8b6c7c)
-
-## 📌 ERD
-
-![스크린샷 2025-06-18 164309](https://github.com/user-attachments/assets/7014f845-af5d-41bd-a2cb-ad6101ed2e6f)
 
 ## 📌 화면 설계서
 
 ![스크린샷 2025-06-18 173207](https://github.com/user-attachments/assets/cd786d5c-2c02-4e77-ae24-64d14b47ee3d)
 
+## 📌 ERD
+
+![스크린샷 2025-06-18 164309](https://github.com/user-attachments/assets/7014f845-af5d-41bd-a2cb-ad6101ed2e6f)
+
 -----------------------------------------------------------------------------------------------------------------------
 
-## 📌 밥로드 메인 및 검색
+## 📌 메인화면
+
+![스크린샷 2025-06-18 174543](https://github.com/user-attachments/assets/ffbaa7c5-fca7-4d07-a914-718dc051e547)
+
+## 📌 밥로드 검색
 
 ![스크린샷 2025-06-18 165708](https://github.com/user-attachments/assets/9dcdd428-fcbf-482c-87f2-a785b0c21f54)
 
