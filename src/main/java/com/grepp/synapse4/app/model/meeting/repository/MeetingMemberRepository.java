@@ -1,5 +1,6 @@
 package com.grepp.synapse4.app.model.meeting.repository;
 
+import com.grepp.synapse4.app.model.meeting.code.Role;
 import com.grepp.synapse4.app.model.meeting.code.State;
 import com.grepp.synapse4.app.model.meeting.dto.AdminMeetingMemberDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
@@ -19,8 +20,27 @@ public interface MeetingMemberRepository extends JpaRepository<MeetingMember, Lo
     List<MeetingMember> findAllByUserIdAndState(Long userId, State state);
 
     List<MeetingMember> findAllByMeetingIdAndState(Long meeting_id, State state);
+    // 권한 기준으로 목록 불러오기
+    @Query("""
+      SELECT m FROM MeetingMember m
+      WHERE m.meeting.id = :meetingId
+        AND m.role <> 'OWNER'
+        AND m.state = 'ACCEPT'
+      ORDER BY 
+        CASE m.role 
+          WHEN 'ADMIN' THEN 0
+          WHEN 'MEMBER' THEN 1
+          ELSE 2
+        END
+    """)
+    List<MeetingMember> findAllByMeetingIdAndRole(@Param("meetingId") Long meetingId);
+
 
     Optional<MeetingMember> findByMeetingIdAndUserId(Long meetingId, Long userId);
+
+    // 멤버의 해당 모임 Role 불러오기
+    @Query("SELECT m.role FROM MeetingMember m WHERE m.meeting.id = :meetingId AND m.user.id = :userId")
+    Optional<Role> findRoleByMeetingIdAndUserId(@Param("meetingId") Long meetingId, @Param("userId") Long userId);
 
     Boolean existsAllByMeetingIdAndUserId(Long meetingId, Long userId);
 

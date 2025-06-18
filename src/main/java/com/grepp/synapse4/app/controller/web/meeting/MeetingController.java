@@ -4,6 +4,7 @@ import com.grepp.synapse4.app.controller.web.meeting.payload.meeting.MeetingRegi
 import com.grepp.synapse4.app.model.meeting.MeetingService;
 import com.grepp.synapse4.app.model.meeting.VoteService;
 import com.grepp.synapse4.app.model.meeting.code.Purpose;
+import com.grepp.synapse4.app.model.meeting.code.Role;
 import com.grepp.synapse4.app.model.meeting.code.State;
 import com.grepp.synapse4.app.model.meeting.dto.MeetingDto;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
@@ -84,6 +85,8 @@ public class MeetingController {
     model.addAttribute("meeting", meeting);
     Integer count = meetingService.countMemberByMeeting(id);
     model.addAttribute("count", count);
+    Role role = meetingService.findRoleByMeetingIdAndUserId(id, userId);
+    model.addAttribute("role", role);
 
     List<Vote> upcomingList = voteService.findUpcomingVotesByMeetingId(id);
     model.addAttribute("upcomingList", upcomingList);
@@ -120,6 +123,10 @@ public class MeetingController {
     Meeting meeting = meetingService.findMeetingsById(id);
     model.addAttribute("meeting", meeting);
 
+    Long userId = customUserDetailsService.loadUserIdByAccount();
+    Role role = meetingService.findRoleByMeetingIdAndUserId(id, userId);
+    model.addAttribute("role", role);
+
     List<User> userList = meetingService.findMemberListByMeetingId(id, State.ACCEPT);
     model.addAttribute("userList", userList);
 
@@ -135,6 +142,22 @@ public class MeetingController {
     meetingService.setInviteModel(model, id, null);
 
     return "meetings/modal/meeting-invite";
+  }
+
+  @GetMapping("/modal/meeting-owner/{id}.html")
+  @PreAuthorize("isAuthenticated()")
+  public String meetingGrant(
+      @PathVariable Long id,
+      Model model
+  ){
+    List<MeetingMember> memberList = meetingService.findMemberListByMeetingId(id);
+    List<Role> limitedRoles = List.of(Role.ADMIN, Role.MEMBER);
+
+    model.addAttribute("memberList", memberList);
+    model.addAttribute("roles", limitedRoles);
+    model.addAttribute("id", id);
+
+    return "meetings/modal/meeting-owner";
   }
 
 }

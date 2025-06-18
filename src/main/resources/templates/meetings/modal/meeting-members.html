@@ -12,14 +12,16 @@
     멤버 목록
   </h1>
 </div>
-<div class="invite-button-wrapper">
-  <a class="invite-button" style="text-decoration: none;"
-     th:href="'/meetings/modal/meeting-invite/' + ${meeting.id} + '.html'"
-     target="_blank"
-     onclick="return openPopupWithHref(this);">
-    초대하기
-  </a>
-</div>
+<th:block th:if="${role.name != 'MEMBER'}">
+  <div class="invite-button-wrapper">
+    <a class="invite-button" style="text-decoration: none;"
+       th:href="'/meetings/modal/meeting-invite/' + ${meeting.id} + '.html'"
+       target="_blank"
+       onclick="return openPopupWithHref(this);">
+      초대하기
+    </a>
+  </div>
+</th:block>
 
 <div class="modal" style="width: 60vw;">
   <ul class="notification-list">

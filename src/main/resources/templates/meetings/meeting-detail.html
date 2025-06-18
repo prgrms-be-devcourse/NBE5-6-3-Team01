@@ -19,8 +19,15 @@
       <p th:text="${meeting.description}"></p>
     </div>
     <div class="div-flex" style="gap: 2vw;">
+      <th:block th:if="${role.name == 'OWNER'}">
+        <a class="meeting-button"
+           th:onclick="'openPopup(\'/meetings/modal/meeting-owner/' + ${meeting.id} + '.html\'); return false;'">
+          멤버 관리
+        </a>
+      </th:block>
+
       <a class="meeting-button"
-         th:onclick="'openPopup(' + ${meeting.id} + '); return false;'">
+         th:onclick="'openPopup(\'/meetings/modal/meeting-members/' + ${meeting.id} + '.html\'); return false;'">
         멤버 보기
       </a>
       <form th:action="@{'/meetings/detail/'+${meeting.id}}" method="post" onsubmit="return confirmLeave();" >
@@ -109,7 +116,7 @@
   </div>
 
   <script th:inline="javascript">
-    function openPopup(id) {
+    function openPopup(url) {
       const popupWidth = 1000;
       const popupHeight = 700;
 
@@ -123,7 +130,7 @@
       const top = screenTop + (screenHeight - popupHeight) / 2;
 
       window.open(
-          "/meetings/modal/meeting-members/" + id + ".html",
+          url,
           'popupWindow',
           `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`
       );
