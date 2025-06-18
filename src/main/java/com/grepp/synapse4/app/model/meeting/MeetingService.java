@@ -173,6 +173,13 @@ public class MeetingService {
     meetingRepository.deleteById(meetingId);
   }
 
+  // 유저의 모임 Role 구하기
+  @Transactional(readOnly = true)
+  public Role findRoleByMeetingIdAndUserId(Long meetingId, Long userId) {
+    return meetingMemberRepository.findRoleByMeetingIdAndUserId(meetingId, userId)
+            .orElseThrow(() -> new EntityNotFoundException("데이터를 찾지 못했습니다"));
+  }
+
   // 멤버의 Role 변경
   @Transactional
   public void updateGrantByMember(List<MeetingGrantRequest> request) {

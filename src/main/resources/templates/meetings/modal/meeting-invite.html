@@ -25,7 +25,7 @@
       초대된 유저가 없습니다.
     </div>
     <th:block th:if="${!#lists.isEmpty(invitedList)}">
-      <ul class="invite-list-wrapper">
+      <ul class="invite-list-wrapper scroll-container">
         <li th:each="user:${invitedList}" class="notification-item invite">
           <div class="user">
             <span th:text="${user.nickname}" class="nickname">닉네임</span>

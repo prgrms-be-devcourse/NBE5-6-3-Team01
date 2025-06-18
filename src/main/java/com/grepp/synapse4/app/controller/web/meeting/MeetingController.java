@@ -123,6 +123,10 @@ public class MeetingController {
     Meeting meeting = meetingService.findMeetingsById(id);
     model.addAttribute("meeting", meeting);
 
+    Long userId = customUserDetailsService.loadUserIdByAccount();
+    Role role = meetingService.findRoleByMeetingIdAndUserId(id, userId);
+    model.addAttribute("role", role);
+
     List<User> userList = meetingService.findMemberListByMeetingId(id, State.ACCEPT);
     model.addAttribute("userList", userList);
 
