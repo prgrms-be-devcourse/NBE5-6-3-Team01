@@ -2,10 +2,13 @@ package com.grepp.synapse4.app.model.meeting.repository;
 
 import com.grepp.synapse4.app.model.meeting.code.State;
 import com.grepp.synapse4.app.model.meeting.dto.AdminMeetingMemberDto;
+import com.grepp.synapse4.app.model.meeting.entity.Meeting;
 import com.grepp.synapse4.app.model.meeting.entity.MeetingMember;
 import com.grepp.synapse4.app.model.user.entity.User;
+
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,31 +16,34 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MeetingMemberRepository extends JpaRepository<MeetingMember, Long> {
-  List<MeetingMember> findAllByUserIdAndState(Long userId, State state);
-  List<MeetingMember> findAllByMeetingIdAndState(Long meeting_id, State state);
+    List<MeetingMember> findAllByUserIdAndState(Long userId, State state);
 
-  Optional<MeetingMember> findByMeetingIdAndUserId(Long meetingId, Long userId);
+    List<MeetingMember> findAllByMeetingIdAndState(Long meeting_id, State state);
 
-  Boolean existsAllByMeetingIdAndUserId(Long meetingId, Long userId);
+    Optional<MeetingMember> findByMeetingIdAndUserId(Long meetingId, Long userId);
 
-  Integer countByMeetingIdAndState(Long meetingId, State state);
+    Boolean existsAllByMeetingIdAndUserId(Long meetingId, Long userId);
 
-  Integer countByMeetingId(Long meetingId);
+    Integer countByMeetingIdAndState(Long meetingId, State state);
 
-  // 관리자페이지 모임멤버보기
-  @Query("""
-      select new com.grepp.synapse4.app.model.meeting.dto.AdminMeetingMemberDto(
-        mm.id,
-        mm.meeting.id,
-        mm.user.nickname
-      )
-      from MeetingMember mm
-      where mm.meeting.id = :meetingId
-    """)
-  List<AdminMeetingMemberDto> findUserNicknamesByMeetingId(@Param("meetingId") Long meetingId);
+    Integer countByMeetingId(Long meetingId);
 
-  void deleteByUser(User user);
+    // 관리자페이지 모임멤버보기
+    @Query("""
+              select new com.grepp.synapse4.app.model.meeting.dto.AdminMeetingMemberDto(
+                mm.id,
+                mm.meeting.id,
+                mm.user.nickname
+              )
+              from MeetingMember mm
+              where mm.meeting.id = :meetingId
+            """)
+    List<AdminMeetingMemberDto> findUserNicknamesByMeetingId(@Param("meetingId") Long meetingId);
 
-  List<MeetingMember> findAllByMeetingId(Long meetingId);
+    List<MeetingMember> findAllByMeetingId(Long meetingId);
 
+    List<MeetingMember> findAllByUser(User user);
+
+    // 이게 맞나 싶지만 맞긴 함...
+    Optional<MeetingMember> findTopByMeetingAndUserNotAndStateOrderByCreatedAtAsc(Meeting meeting, User user, State state);
 }

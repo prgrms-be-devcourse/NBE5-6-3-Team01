@@ -11,6 +11,7 @@ import com.grepp.synapse4.app.model.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -83,22 +84,7 @@ public class MeetingService {
     return meetingMemberRepository.countByMeetingIdAndState(id, State.ACCEPT);
   }
 
-  // 모임 탈퇴하기
-  @Transactional
-  public void leaveMeeting(Long id, Long userId) {
-    MeetingMember member = meetingMemberRepository.findByMeetingIdAndUserId(id, userId)
-        .orElseThrow(() -> new RuntimeException("해당 멤버가 없습니다."));
 
-    meetingMemberRepository.delete(member);
-
-    // 멤버가 없을 시 모임 제거
-    int memberCount = meetingMemberRepository.countByMeetingId(id);
-    if(memberCount == 0){
-      Meeting meeting = meetingRepository.findById(id)
-          .orElseThrow(() -> new RuntimeException("모임을 찾지 못했습니다"));
-      meetingRepository.delete(meeting);
-    }
-  }
 
   // 모임 초대하기
   @Transactional
@@ -176,5 +162,77 @@ public class MeetingService {
     List<MeetingMember> members = meetingMemberRepository.findAllByMeetingId(meetingId);
     meetingMemberRepository.deleteAll(members);
     meetingRepository.deleteById(meetingId);
+  }
+
+  @Transactional
+  public void deleteByUser(User user) {
+
+    // 1. meetingMem에서 user가 있는 모든 meeting id값 찾기
+    List<MeetingMember> joinedMeetings = meetingMemberRepository.findAllByUser(user);
+
+    for(MeetingMember joinedMeeting : joinedMeetings){
+      Meeting meeting = joinedMeeting.getMeeting();
+
+      meetingMemberRepository.delete(joinedMeeting);
+      meetingMemberRepository.flush();
+
+      // 2. 해당 meeting의 creatorId가 user인지 확인 후 맞다면 위임 진행
+      delegatingCreator(meeting, user);
+
+    }
+
+    // 3. 모든 meeting 순회 종료 및 위임 또는 미팅 삭제 절차 종료
+    // MeeetingMember에 있는 user 모두 삭제
+//    if(!joinedMeetings.isEmpty()){
+//      meetingMemberRepository.deleteAll(joinedMeetings);
+//    }
+  }
+
+  @Transactional
+  protected void delegatingCreator(Meeting meeting, User user) {
+    if(meeting.getUser().getId().equals(user.getId())){
+      // 맞다면 user를 제외한 가장 오래된 ACCEPT 멤버 찾기
+      Optional<MeetingMember> oldestMember =
+              meetingMemberRepository.findTopByMeetingAndUserNotAndStateOrderByCreatedAtAsc(meeting, user, State.ACCEPT);
+
+      if(oldestMember.isPresent()){
+        // 멤버가 있다면, creatorId 위임
+        User newCreator = oldestMember.get().getUser();
+        meeting.setUser(newCreator);
+        meetingRepository.saveAndFlush(meeting);
+      } else{
+        // 멤버가 없다면, 아무도 없는 것이므로 meeting 자체를 삭제
+        meetingRepository.delete(meeting);
+        meetingRepository.flush();
+      }
+    }
+  }
+
+
+  // 모임 탈퇴하기
+  @Transactional
+  public void leaveMeeting(Long id, Long userId) {
+    MeetingMember member = meetingMemberRepository.findByMeetingIdAndUserId(id, userId)
+            .orElseThrow(() -> new RuntimeException("해당 멤버가 없습니다."));
+
+    Meeting meeting = member.getMeeting();
+    User user = member.getUser();
+
+    // meetingmember에서의 user 삭제
+    meetingMemberRepository.delete(member);
+    meetingMemberRepository.flush();
+
+    // meeting에서의 권한 위임 또는 meeting 삭제
+    delegatingCreator(meeting, user);
+
+
+
+    // 멤버가 없을 시 모임 제거
+//    int memberCount = meetingMemberRepository.countByMeetingId(id);
+//    if(memberCount == 0){
+//      Meeting meeting = meetingRepository.findById(id)
+//          .orElseThrow(() -> new RuntimeException("모임을 찾지 못했습니다"));
+//      meetingRepository.delete(meeting);
+//    }
   }
 }

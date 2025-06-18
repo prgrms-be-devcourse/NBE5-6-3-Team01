@@ -67,10 +67,11 @@
         })
         .then(res => {
           if (res.ok) {
-            window.location.href = "/meetings/vote-result/"+id;
+            alert("투표가 완료되었습니다!");
           } else {
-            alert("투표를 실패했습니다.");
+            alert("마감된 투표로 투표를 실패했습니다.\n모임 화면으로 이동합니다.");
           }
+          window.location.href = "/meetings/vote-result/"+id;
         });
       }
     }

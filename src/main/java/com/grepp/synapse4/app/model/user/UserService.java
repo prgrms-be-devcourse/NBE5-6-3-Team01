@@ -1,24 +1,25 @@
 package com.grepp.synapse4.app.model.user;
 
-import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_ADMIN;
-import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_USER;
-
-import com.grepp.synapse4.app.model.meeting.repository.MeetingMemberRepository;
-import com.grepp.synapse4.app.model.vote.repository.VoteMemberRepository;
+import com.grepp.synapse4.app.model.meeting.MeetingService;
+import com.grepp.synapse4.app.model.meeting.VoteService;
 import com.grepp.synapse4.app.model.user.dto.request.EditInfoRequest;
 import com.grepp.synapse4.app.model.user.dto.request.UserSignUpRequest;
 import com.grepp.synapse4.app.model.user.dto.response.FindIdResponseDto;
 import com.grepp.synapse4.app.model.user.entity.User;
 import com.grepp.synapse4.app.model.user.repository.UserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_ADMIN;
+import static com.grepp.synapse4.app.model.auth.code.Role.ROLE_USER;
 
 @Service
 @Transactional
@@ -29,8 +30,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserValidator userValidator;
     private final MailService mailService;
-    private final MeetingMemberRepository meetingMemberRepository;
-    private final VoteMemberRepository voteMemberRepository;
+    private final MeetingService meetingService;
+    private final VoteService voteService;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -118,8 +119,8 @@ public class UserService {
         user.setActivated(false);
         user.setDeletedAt(LocalDateTime.now());
 
-        meetingMemberRepository.deleteByUser(user);
-        voteMemberRepository.deleteByUser(user);
+        meetingService.deleteByUser(user);
+        voteService.deleteByUser(user);
 
         userRepository.save(user);
     }

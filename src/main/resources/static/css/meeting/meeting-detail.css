@@ -46,8 +46,30 @@ a {
   align-content: center;
 }
 
+.vote-header{
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+.vote-filter-label {
+  cursor: pointer;
+  transition: color 0.2s;
+  color: #666;
+  font-weight: bold;
+  font-size: 15px;
+}
+.vote-filter-label:hover {
+  color: #27a69a;
+}
+.vote-filter-label input[type="radio"]:checked + * {
+  color: #27a69a;
+}
+.vote-filter-label.selected {
+  color: #27a69a;
+}
+
 .scroll-container {
-  max-height: 59vh;
+  max-height: 60vh;
   overflow-y: auto;
 }
 .vote{

@@ -29,57 +29,81 @@
     </div>
   </div>
 
-  <!-- 투표 리스트 -->
   <div>
     <div class="header" style="margin-top: 5vh;">
-      <div style="font-size: 30px; font-weight: bold">투표 리스트</div>
+      <div class="vote-header">
+        <div style="font-size: 30px; font-weight: bold">투표 리스트</div>
+
+        <!-- 투표 리스트 선택 -->
+        <div class="vote-filter">
+          <label class="vote-filter-label">
+            <input type="radio" name="voteFilter" value="upcoming" checked onchange="toggleVoteList(this.value)">
+            진행 중인 투표
+          </label>
+          <label class="vote-filter-label" style="margin-left: 10px;">
+            <input type="radio" name="voteFilter" value="past" onchange="toggleVoteList(this.value)">
+            마감된 투표
+          </label>
+        </div>
+      </div>
       <a th:href="@{'/meetings/vote-regist/'+${meeting.id}}" class="vote-button">투표 만들기</a>
     </div>
 
-    <div class="empty" th:if="${#lists.isEmpty(voteList)}">
-      현재 진행중인 투표가 없습니다.<br/>
-      투표를 만들어서 멤버들과 투표를 진행해 보세요!
-    </div>
 
-    <div class="scroll-container">
-      <div th:each="vote:${voteList}" class="vote">
+    <!-- 진행 중인 투표 리스트 -->
+    <div id="upcomingVoteList" class="scroll-container">
+      <div class="empty" th:if="${#lists.isEmpty(upcomingList)}">
+        현재 진행중인 투표가 없습니다.<br/>
+        투표를 만들어서 멤버들과 투표를 진행해 보세요!
+      </div>
+
+      <div th:each="vote:${upcomingList}" class="vote">
         <div>
           <div th:text="${vote.title}" style="font-size: 25px; font-weight: bold;">투표명</div>
           <div th:text="${vote.description}" style="margin-bottom: 5px;">투표 설명</div>
           <th:block th:if="${meeting.isDutch}">
             <div>더치페이 여부:
-              <span th:if="${vote.isDutch}" th:text="Y">터치페이 여부</span>
-              <span th:unless="${vote.isDutch}" th:text="N">터치페이 여부</span>
+              <span th:if="${vote.isDutch}" th:text="Y"></span>
+              <span th:unless="${vote.isDutch}" th:text="N"></span>
             </div>
           </th:block>
-          <div style="margin-bottom: 2vh;">마감 일자: <span th:text="${#temporals.format(vote.endedAt, 'yyyy년 MM월 dd일 HH시 mm분')}">투표 마감일자</span></div>
-          <div style="font-weight: bold;">모임 일자: <span th:text="${#temporals.format(vote.meetingDate, 'yyyy년 MM월 dd일 HH시 mm분')}">모임 일자</span></div>
+          <div style="margin-bottom: 2vh;">마감 일자: <span th:text="${#temporals.format(vote.endedAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span></div>
+          <div style="font-weight: bold;">모임 일자: <span th:text="${#temporals.format(vote.meetingDate, 'yyyy년 MM월 dd일 HH시 mm분')}"></span></div>
         </div>
 
         <div class="button-wrapper">
-          <th:block th:if="${vote.endedAt.isAfter(T(java.time.LocalDateTime).now())}">
-            <a th:if="${isVotedMap[vote.id] == false}"
-               th:href="@{'/meetings/vote/'+${vote.id}}"
-               class="vote-move">
-              투표하기
-            </a>
-            <a th:if="${isVotedMap[vote.id] == true}"
-               th:href="@{'/meetings/vote/'+${vote.id}}"
-               class="vote-move">
-              수정하기
-            </a>
-            <button th:if="${isVotedMap[vote.id] == null}"
-                    class="vote-move disabled">
-              투표 불가능
-            </button>
-          </th:block>
-          <th:block th:if="${vote.endedAt.isBefore(T(java.time.LocalDateTime).now())}">
-            <button class="vote-move ended">투표 마감</button>
-          </th:block>
-
+          <a th:if="${upcomingMap[vote.id] == false}" th:href="@{'/meetings/vote/'+${vote.id}}" class="vote-move">투표하기</a>
+          <a th:if="${upcomingMap[vote.id] == true}" th:href="@{'/meetings/vote/'+${vote.id}}" class="vote-move">수정하기</a>
+          <button th:if="${upcomingMap[vote.id] == null}" class="vote-move disabled">투표 불가능</button>
           <a th:href="@{'/meetings/vote-result/'+${vote.id}}" class="vote-move">투표 결과보기</a>
         </div>
+      </div>
+    </div>
 
+    <!-- 마감된 투표 리스트 -->
+    <div id="pastVoteList" class="scroll-container" style="display: none;">
+      <div class="empty" th:if="${#lists.isEmpty(pastList)}">
+        마감된 투표가 없습니다.
+      </div>
+
+      <div th:each="vote:${pastList}" class="vote">
+        <div>
+          <div th:text="${vote.title}" style="font-size: 25px; font-weight: bold;">투표명</div>
+          <div th:text="${vote.description}" style="margin-bottom: 5px;">투표 설명</div>
+          <th:block th:if="${meeting.isDutch}">
+            <div>더치페이 여부:
+              <span th:if="${vote.isDutch}" th:text="Y"></span>
+              <span th:unless="${vote.isDutch}" th:text="N"></span>
+            </div>
+          </th:block>
+          <div style="margin-bottom: 2vh;">마감 일자: <span th:text="${#temporals.format(vote.endedAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span></div>
+          <div style="font-weight: bold;">모임 일자: <span th:text="${#temporals.format(vote.meetingDate, 'yyyy년 MM월 dd일 HH시 mm분')}"></span></div>
+        </div>
+
+        <div class="button-wrapper">
+          <button class="vote-move ended">투표 마감</button>
+          <a th:href="@{'/meetings/vote-result/'+${vote.id}}" class="vote-move">투표 결과보기</a>
+        </div>
       </div>
     </div>
   </div>
@@ -103,11 +127,43 @@
           'popupWindow',
           `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`
       );
-    };
+    }
+
+    function toggleVoteList(value) {
+      const upcoming = document.getElementById('upcomingVoteList');
+      const past = document.getElementById('pastVoteList');
+
+      if (value === 'upcoming') {
+        upcoming.style.display = 'block';
+        past.style.display = 'none';
+      } else {
+        upcoming.style.display = 'none';
+        past.style.display = 'block';
+      }
+    }
 
     function confirmLeave() {
       return confirm("정말로 모임을 탈퇴하시겠습니까?");
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const radios = document.querySelectorAll('input[name="voteFilter"]');
+      const labels = document.querySelectorAll('.vote-filter-label');
+
+      function updateSelectedLabel() {
+        labels.forEach(label => label.classList.remove('selected'));
+        const checked = document.querySelector('input[name="voteFilter"]:checked');
+        if (checked) {
+          checked.closest('label').classList.add('selected');
+        }
+      }
+
+      radios.forEach(radio => {
+        radio.addEventListener('change', updateSelectedLabel);
+      });
+
+      updateSelectedLabel(); // 초기 실행
+    });
   </script>
 </main>
 
