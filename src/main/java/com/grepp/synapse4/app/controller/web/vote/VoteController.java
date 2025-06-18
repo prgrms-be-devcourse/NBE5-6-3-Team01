@@ -12,6 +12,7 @@ import com.grepp.synapse4.app.model.user.BookmarkService;
 import com.grepp.synapse4.app.model.user.CustomUserDetailsService;
 import com.grepp.synapse4.app.model.user.entity.Bookmark;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,18 +44,12 @@ public class VoteController {
       @PathVariable Long id,
       Model model
   ){
-    Long userId = customUserDetailsService.loadUserIdByAccount();
-
     Meeting meeting = meetingService.findMeetingsById(id);
     model.addAttribute("isDutch", meeting.getIsDutch());
 
     VoteRegistRequest request = new VoteRegistRequest();
     request.setMeetingId(id);
     model.addAttribute("voteRegistRequest", request);
-
-    // 유저의 북마크 리스트
-    List<Bookmark> bookmarkList = bookmarkService.findByUserId(userId);
-    model.addAttribute("bookmarkList", bookmarkList);
 
     return "meetings/vote/vote-regist";
   }
@@ -74,7 +69,11 @@ public class VoteController {
 
     List<VoteMember> memberList = voteService.registVoteMember(vote, dto.getMeetingId());
 
-    notificationService.memberNotification(memberList);
+    // 마감일자 전 투표일지 알림 생성 X
+    LocalDateTime endedAt = vote.getEndedAt();
+    if(endedAt.isAfter(LocalDateTime.now())){
+      notificationService.memberNotification(memberList);
+    }
 
     return "redirect:/meetings/vote/"+vote.getId();
   }
@@ -115,13 +114,4 @@ public class VoteController {
     return "meetings/vote/vote-result";
   }
 
-  @GetMapping("/modal/alarm-vote.html")
-  @PreAuthorize("isAuthenticated()")
-  public String votePopup(Model model) {
-    Long userId = customUserDetailsService.loadUserIdByAccount();
-    List<VoteMember> votedList = voteService.findVoteListByUserId(userId);
-    model.addAttribute("votedList", votedList);
-
-    return "meetings/modal/alarm-vote";
-  }
 }

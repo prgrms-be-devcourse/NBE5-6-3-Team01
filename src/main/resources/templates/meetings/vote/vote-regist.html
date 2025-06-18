@@ -111,7 +111,8 @@
           const li = document.createElement("li");
           li.className = "restaurant-card";
           li.innerHTML = `
-            <a href="/restaurant/detail/${res.id}" style="display: flex; justify-content: space-between; width: 100%;">
+            <a href="/restaurant/detail/${res.id}" target="_blank"
+                style="display: flex; justify-content: space-between; width: 100%;" >
               <div>
                 <div style="font-size: 20px; font-weight: bold;">${res.name}</div>
                 <div>${res.roadAddress}</div>

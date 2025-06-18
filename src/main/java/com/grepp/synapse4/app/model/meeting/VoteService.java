@@ -71,10 +71,16 @@ public class VoteService {
     return voteMemberList;
   }
 
-  // 해당 모임의 투표 리스트 불러오기
+  // 해당 모임의 진행중인 투표 리스트 불러오기
   @Transactional(readOnly = true)
-  public List<Vote> findVoteListByMeetingId(Long meetingId) {
-    return voteRepository.findAllByMeetingIdOrderByMeetingDate(meetingId);
+  public List<Vote> findUpcomingVotesByMeetingId(Long meetingId) {
+    return voteRepository.findUpcomingVotesByMeetingId(meetingId, LocalDateTime.now());
+  }
+
+  // 해당 모임의 종료된 투표 리스트 불러오기
+  @Transactional(readOnly = true)
+  public List<Vote> findPastVotesByMeetingId(Long meetingId) {
+    return voteRepository.findPastVotesByMeetingId(meetingId, LocalDateTime.now());
   }
 
   // 유저의 투표 알림 리스트 불러오기
@@ -108,14 +114,21 @@ public class VoteService {
 
   // 투표하기
   @Transactional
-  public void vote(Long voteId, Long userId, Boolean isJoined) {
+  public boolean vote(Long voteId, Long userId, Boolean isJoined) {
     VoteMember voteMember = voteMemberRepository.findByVoteIdAndUserId(voteId, userId);
+
+    // 마감된 투표는 false return
+    LocalDateTime endedAt = voteMember.getVote().getEndedAt();
+    if (endedAt.isBefore(LocalDateTime.now())) {
+      return false;
+    }
 
     voteMember.setIsJoined(isJoined);
     voteMember.setIsVoted(true);
     voteMemberRepository.save(voteMember);
-  }
 
+    return true;
+  }
 
   // 투표 별 유저의 투표 상태 불러오기
   @Transactional(readOnly = true)
