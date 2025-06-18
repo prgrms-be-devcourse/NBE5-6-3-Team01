@@ -1,4 +1,4 @@
-# NBE5-6-3-Team01
+![image](https://github.com/user-attachments/assets/64ee4c64-0f86-407c-8103-d36e3218d88f)![image](https://github.com/user-attachments/assets/22e593cc-18f7-49a6-a1f7-d1f8b86bfb03)![image](https://github.com/user-attachments/assets/a5ffc999-b706-4c17-9736-33c03ed7c0fc)# NBE5-6-3-Team01
 프로그래머스 백엔드 데브코스 5기 6회차 1팀 3차 프로젝트입니다.
 
 <p align="center">
@@ -166,7 +166,29 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 
 ![스크린샷 2025-06-18 164309](https://github.com/user-attachments/assets/7014f845-af5d-41bd-a2cb-ad6101ed2e6f)
 
+-----------------------------------------------------------------------------------------------------------------------
 
+## 📌 밥로드 메인 및 검색
 
+![스크린샷 2025-06-18 165708](https://github.com/user-attachments/assets/9dcdd428-fcbf-482c-87f2-a785b0c21f54)
 
+## 📌 큐레이팅
+
+![스크린샷 2025-06-18 165747](https://github.com/user-attachments/assets/45ccd552-77e1-4e65-8bb9-cb5ffc154bd5)
+
+## 📌 로그인 
+
+![스크린샷 2025-06-18 165855](https://github.com/user-attachments/assets/e3be6978-03dc-4368-9737-160ae49ae330)
+
+## 📌 모임
+
+![스크린샷 2025-06-18 170104](https://github.com/user-attachments/assets/fbce6880-90a6-415d-9307-8a2c4c296e31)
+
+## 📌 나의 북마크
+
+![스크린샷 2025-06-18 170209](https://github.com/user-attachments/assets/46c9bcb7-ded2-441f-a1ee-e931afda6cbf)
+
+## 📌 북마크 랭킹
+
+![스크린샷 2025-06-18 170242](https://github.com/user-attachments/assets/a6a0e54a-b854-4aa9-85f9-c30fcf7aab32)
 
