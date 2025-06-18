@@ -68,10 +68,10 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             response.addHeader("Set-Cookie", refreshCookie.toString());
 
             // 설문조사 여부에 따라 리다이렉트 경로 분기
-            String targetUrl = Boolean.TRUE.equals(user.getIsSurvey())
-                ? "/"
-                : "/surveys";
-            response.sendRedirect(targetUrl);
+//            String targetUrl = Boolean.TRUE.equals(user.getIsSurvey())
+//                ? "/"
+//                : "/surveys";
+            response.sendRedirect("/");
             return;
         }
 
