@@ -180,6 +180,14 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 
 ![스크린샷 2025-06-18 172127](https://github.com/user-attachments/assets/ddd08e3a-29ea-4272-9eaa-0748962a62f0)
 
+## 📌 식당 검색 결과
+
+![스크린샷 2025-06-18 173746](https://github.com/user-attachments/assets/6a1f32ec-0b99-4f69-ba19-ebe3eb6269db)
+
+## 📌 식당 상세 화면
+
+![스크린샷 2025-06-18 173845](https://github.com/user-attachments/assets/4c8622cb-fa37-4ef8-8b25-e3d06b1bc03c)
+
 ## 📌 큐레이팅
 
 ![스크린샷 2025-06-18 165747](https://github.com/user-attachments/assets/45ccd552-77e1-4e65-8bb9-cb5ffc154bd5)
