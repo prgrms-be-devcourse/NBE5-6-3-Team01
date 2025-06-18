@@ -1,5 +1,7 @@
 package com.grepp.synapse4.app.model.meeting;
 
+import com.grepp.synapse4.app.controller.web.meeting.payload.meeting.MeetingGrantRequest;
+import com.grepp.synapse4.app.model.meeting.code.Role;
 import com.grepp.synapse4.app.model.meeting.code.State;
 import com.grepp.synapse4.app.model.meeting.dto.*;
 import com.grepp.synapse4.app.model.meeting.entity.Meeting;
@@ -114,6 +116,7 @@ public class MeetingService {
     if (state.equals(State.REJECT)) {
       meetingMemberRepository.delete(member);
     } else if (state.equals(State.ACCEPT)) {
+      member.setRole(Role.MEMBER);
       member.setState(State.ACCEPT);
       meetingMemberRepository.save(member);
     }
@@ -141,6 +144,11 @@ public class MeetingService {
             .collect(Collectors.toList());
   }
 
+  // 모임장을 제외한 멤버 리스트 불러오기
+  @Transactional(readOnly = true)
+  public List<MeetingMember> findMemberListByMeetingId(Long meetingId) {
+    return meetingMemberRepository.findAllByMeetingIdAndRole(meetingId);
+  }
 
   // 멤버 리스트 관련 설정
   public void setInviteModel(Model model, Long meetingId, String errorMessage) {
@@ -163,6 +171,18 @@ public class MeetingService {
     List<MeetingMember> members = meetingMemberRepository.findAllByMeetingId(meetingId);
     meetingMemberRepository.deleteAll(members);
     meetingRepository.deleteById(meetingId);
+  }
+
+  // 멤버의 Role 변경
+  @Transactional
+  public void updateGrantByMember(List<MeetingGrantRequest> request) {
+    for(MeetingGrantRequest grant:request){
+      MeetingMember member = meetingMemberRepository.findById(grant.getMemberId())
+              .orElseThrow(() -> new RuntimeException("모임을 찾지 못했습니다."));
+      member.setRole(grant.getRole());
+
+      meetingMemberRepository.save(member);
+    }
   }
 
   @Transactional
