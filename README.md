@@ -36,5 +36,10 @@
 - 큐레이션 조회 및 식당 활성화 비활성화
 - 큐레이션 추가
 
+### 👥 팀원 소개
 
+| 박현도 | 안세희 | 김찬우 |
+|:------:|:------:|:------:|
+| ![박현도](https://github.com/hyundo0328.png) | ![안세희](https://github.com/ash-be.png) | ![김찬우](https://github.com/happpycw.png) |
+| [@hyundo0328](https://github.com/hyundo0328) | [@ash-be](https://github.com/ash-be) | [@happpycw](https://github.com/happpycw) |
 
