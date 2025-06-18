@@ -38,8 +38,8 @@
 
 ### 👥 팀원 소개
 
-| 박현도 | 안세희 | 김찬우 |
-|:------:|:------:|:------:|
-| ![박현도](https://github.com/hyundo0328.png) | ![안세희](https://github.com/ash-be.png) | ![김찬우](https://github.com/happpycw.png) |
-| [@hyundo0328](https://github.com/hyundo0328) | [@ash-be](https://github.com/ash-be) | [@happpycw](https://github.com/happpycw) |
+| 박현도 | 안세희 | 이인선 | 김찬우 |
+|:------:|:------:|:------:|:------:|
+| ![박현도](https://github.com/hyundo0328.png) | ![안세희](https://github.com/ash-be.png) | ![이인선](https://github.com/Inseoni.png) | ![김찬우](https://github.com/happpycw.png) |
+| [@hyundo0328](https://github.com/hyundo0328) | [@ash-be](https://github.com/ash-be) | [@Inseoni](https://github.com/Inseoni) | [@happpycw](https://github.com/happpycw) |
 
