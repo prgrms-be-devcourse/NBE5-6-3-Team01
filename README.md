@@ -4,9 +4,17 @@
   <img src="https://github.com/user-attachments/assets/88eb18aa-b7e7-4f8c-9472-ca87d43560ef" width="300"/>
 </p>
 
+### 👥 팀원 소개
+
+| 박현도 | 안세희 | 이인선 | 김찬우 |
+|:------:|:------:|:------:|:------:|
+| ![박현도](https://github.com/hyundo0328.png) | ![안세희](https://github.com/ash-be.png) | ![이인선](https://github.com/Inseoni.png) | ![김찬우](https://github.com/happpycw.png) |
+| [@hyundo0328](https://github.com/hyundo0328) | [@ash-be](https://github.com/ash-be) | [@Inseoni](https://github.com/Inseoni) | [@happpycw](https://github.com/happpycw) |
+
 ## 💁‍♂️ 코드 컨벤션
 스타일 가이드
 https://www.notion.so/20f15a01205481778ececdeee9546ed8
+
 ### 🏷️ Git 커밋 태그 설명
 
 | 태그 | 설명 |
@@ -53,13 +61,6 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 - 모임 조회 및 관리
 - 큐레이션 추가
 - 큐레이션 조회 및 식당 관리
-
-### 👥 팀원 소개
-
-| 박현도 | 안세희 | 이인선 | 김찬우 |
-|:------:|:------:|:------:|:------:|
-| ![박현도](https://github.com/hyundo0328.png) | ![안세희](https://github.com/ash-be.png) | ![이인선](https://github.com/Inseoni.png) | ![김찬우](https://github.com/happpycw.png) |
-| [@hyundo0328](https://github.com/hyundo0328) | [@ash-be](https://github.com/ash-be) | [@Inseoni](https://github.com/Inseoni) | [@happpycw](https://github.com/happpycw) |
 
 ### 🛠️ 기술 스택
 
