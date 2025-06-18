@@ -58,7 +58,7 @@ public class User extends BaseEntity {
 
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private Provider provider; // 계정 출처 구분(ex_local, google 등)
 
     @Column
