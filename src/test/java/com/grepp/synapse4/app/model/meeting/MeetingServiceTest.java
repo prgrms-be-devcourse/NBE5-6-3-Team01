@@ -83,7 +83,6 @@ class MeetingServiceTest {
         Meeting meeting = mock(Meeting.class);
         User user = mock(User.class);
 
-        // record 기반 dto
         MeetingMemberDto dto = new MeetingMemberDto(meetingId, userId);
 
         // mocking
