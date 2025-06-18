@@ -166,11 +166,17 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 
 ![스크린샷 2025-06-18 164309](https://github.com/user-attachments/assets/7014f845-af5d-41bd-a2cb-ad6101ed2e6f)
 
+## 📌 화면 설계서
+
 -----------------------------------------------------------------------------------------------------------------------
 
 ## 📌 밥로드 메인 및 검색
 
 ![스크린샷 2025-06-18 165708](https://github.com/user-attachments/assets/9dcdd428-fcbf-482c-87f2-a785b0c21f54)
+
+## 📌 AI (식당)검색 
+
+![스크린샷 2025-06-18 172127](https://github.com/user-attachments/assets/ddd08e3a-29ea-4272-9eaa-0748962a62f0)
 
 ## 📌 큐레이팅
 
@@ -180,9 +186,21 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 
 ![스크린샷 2025-06-18 165855](https://github.com/user-attachments/assets/e3be6978-03dc-4368-9737-160ae49ae330)
 
+## 📌 마이페이지
+
+![스크린샷 2025-06-18 171638](https://github.com/user-attachments/assets/b4831822-bd23-4ba7-9112-5c0435899e25)
+
 ## 📌 모임
 
 ![스크린샷 2025-06-18 170104](https://github.com/user-attachments/assets/fbce6880-90a6-415d-9307-8a2c4c296e31)
+
+## 📌 모임 투표 생성
+
+![스크린샷 2025-06-18 171333](https://github.com/user-attachments/assets/ac41a933-d188-40fd-b94f-d775ae0708ac)
+
+## 📌 모임 실시간 알림
+
+![스크린샷 2025-06-18 171540](https://github.com/user-attachments/assets/98deef32-5c78-4156-b3d2-4c5bb789ad93)
 
 ## 📌 나의 북마크
 
@@ -191,4 +209,9 @@ https://www.notion.so/20f15a01205481778ececdeee9546ed8
 ## 📌 북마크 랭킹
 
 ![스크린샷 2025-06-18 170242](https://github.com/user-attachments/assets/a6a0e54a-b854-4aa9-85f9-c30fcf7aab32)
+
+## 📌 관리자
+
+![스크린샷 2025-06-18 172003](https://github.com/user-attachments/assets/6fe045c5-55ee-4ea2-9250-fd5d8f1b345c)
+
 
